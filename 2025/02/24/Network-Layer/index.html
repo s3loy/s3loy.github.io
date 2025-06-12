@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"s3loy.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":200,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Network Layer网络互连本质是通过ip实现的，传输是以ip数据报为介质。 IP  to be continued   在此过程中有一些功能性报文 ICMP定义+基础格式ICMP：Internet Control Message Protocol ，因特网控制报文协议 方向：主机&#x2F;路由器 -&gt; 源站(发送方)  代码 提供了进一步的描述信息，在此不进一步提供描述信息，即代码">
+  <meta name="description" content="Network Layer 网络互连本质是通过ip实现的，传输是以ip数据报为介质。  IP  [ ] to be continued   在此过程中有一些功能性报文  ICMP  定义+基础格式 ICMP：Internet Control Message Protocol ，因特网控制报文协议 方向：主机&#x2F;路由器 -&gt; 源站(发送方)  代码 提供了进一步的描述信息，在此不进一步提供描述">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Network-Layer">
 <meta property="og:url" content="https://s3loy.github.io/2025/02/24/Network-Layer/index.html">
 <meta property="og:site_name" content="s3loy&#39;s Blog">
-<meta property="og:description" content="Network Layer网络互连本质是通过ip实现的，传输是以ip数据报为介质。 IP  to be continued   在此过程中有一些功能性报文 ICMP定义+基础格式ICMP：Internet Control Message Protocol ，因特网控制报文协议 方向：主机&#x2F;路由器 -&gt; 源站(发送方)  代码 提供了进一步的描述信息，在此不进一步提供描述信息，即代码">
+<meta property="og:description" content="Network Layer 网络互连本质是通过ip实现的，传输是以ip数据报为介质。  IP  [ ] to be continued   在此过程中有一些功能性报文  ICMP  定义+基础格式 ICMP：Internet Control Message Protocol ，因特网控制报文协议 方向：主机&#x2F;路由器 -&gt; 源站(发送方)  代码 提供了进一步的描述信息，在此不进一步提供描述">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s3loy.github.io/2025/02/24/Network-Layer/54070be665d2466175453f2c7153900f-1740404253149-1.jpeg">
 <meta property="og:image" content="https://s3loy.github.io/2025/02/24/Network-Layer/eaba7cf385281339afc9f7083d44ea17-1740404253149-2.jpeg">
@@ -251,20 +251,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Network-Layer"><a href="#Network-Layer" class="headerlink" title="Network Layer"></a>Network Layer</h1><p>网络互连<code>本质</code>是通过<code>ip</code>实现的，<code>传输</code>是以<code>ip数据报</code>为介质。</p>
-<h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><ul>
-<li><input disabled type="checkbox"> to be continued</li>
+        <h1 id="network-layer"><a class="markdownIt-Anchor" href="#network-layer"></a> Network Layer</h1>
+<p>网络互连<code>本质</code>是通过<code>ip</code>实现的，<code>传输</code>是以<code>ip数据报</code>为介质。</p>
+<h2 id="ip"><a class="markdownIt-Anchor" href="#ip"></a> IP</h2>
+<ul>
+<li>[ ] to be continued</li>
 </ul>
 <hr>
 <p>在此过程中有一些功能性报文</p>
-<h2 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h2><h3 id="定义-基础格式"><a href="#定义-基础格式" class="headerlink" title="定义+基础格式"></a>定义+基础格式</h3><p><strong>ICMP</strong>：<code>Internet Control Message Protocol</code> ，因特网控制报文协议</p>
-<p>方向：主机&#x2F;路由器 -&gt; 源站(发送方)</p>
+<h2 id="icmp"><a class="markdownIt-Anchor" href="#icmp"></a> ICMP</h2>
+<h3 id="定义基础格式"><a class="markdownIt-Anchor" href="#定义基础格式"></a> 定义+基础格式</h3>
+<p><strong>ICMP</strong>：<code>Internet Control Message Protocol</code> ，因特网控制报文协议</p>
+<p>方向：主机/路由器 -&gt; 源站(发送方)</p>
 <p><img src="/2025/02/24/Network-Layer/54070be665d2466175453f2c7153900f-1740404253149-1.jpeg" alt="54070be665d2466175453f2c7153900f"></p>
-<p><code>代码</code> 提供了进一步的描述信息，在此不进一步提供描述信息，<del>即代码的代码（？</del>。</p>
+<p><code>代码</code> 提供了进一步的描述信息，在此不进一步提供描述信息，<s>即代码的代码（？</s>。</p>
 <hr>
 <p><strong>However</strong>, 首先想区分一下这边的四个字节vs图上的内容vs十六进制和二进制</p>
-<p>图上的<code>0  8  16  31</code>一共有32位，指的是二进制的32位，这个<code>类型</code>是1字节，2个16进制。也就是在读数据报的时候你看到的是两个十六进制的字符。<del>然而图上很喜欢使用二进制长度来表示</del></p>
-<p><code>8位二进制</code>&#x3D;<code>2位十六进制</code>&#x3D;<code>1字节</code></p>
+<p>图上的<code>0  8  16  31</code>一共有32位，指的是二进制的32位，这个<code>类型</code>是1字节，2个16进制。也就是在读数据报的时候你看到的是两个十六进制的字符。<s>然而图上很喜欢使用二进制长度来表示</s></p>
+<p><code>8位二进制</code>=<code>2位十六进制</code>=<code>1字节</code></p>
 <hr>
 <table>
 <thead>
@@ -273,7 +277,8 @@
 <th>ICMP报文类型</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>0</td>
 <td>回显应答 Echo Reply</td>
 </tr>
@@ -333,41 +338,57 @@
 <td>18</td>
 <td>地址掩码应答 Address Mask Reply</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><code>ICMP</code> 报文分为两大类</p>
 <p><code>差错报告报文</code>和<code>提供信息的报文(询问报文)</code></p>
 <ul>
-<li><p>差错报告报文 (Error Report Messages)</p>
+<li>
+<p>差错报告报文 (Error Report Messages)</p>
 <ul>
-<li><p><code>3</code> 目的不可达 Destination Unreachable</p>
+<li>
+<p><code>3</code> 目的不可达 Destination Unreachable</p>
 </li>
-<li><p><code>4</code> 源抑制 Source Quench</p>
+<li>
+<p><code>4</code> 源抑制 Source Quench</p>
 </li>
-<li><p><code>5</code> 路由重定向 Redirect (change a route)</p>
+<li>
+<p><code>5</code> 路由重定向 Redirect (change a route)</p>
 </li>
-<li><p><code>11</code> 数据报超时 Time Exceeded for a Datagram</p>
+<li>
+<p><code>11</code> 数据报超时 Time Exceeded for a Datagram</p>
 </li>
-<li><p><code>12</code> 数据报参数问题 Parameter Problem on a Datagram</p>
+<li>
+<p><code>12</code> 数据报参数问题 Parameter Problem on a Datagram</p>
 </li>
 </ul>
 </li>
-<li><p>提供信息的报文 (询问报文) (Information Request&#x2F;Inquiry Messages)</p>
+<li>
+<p>提供信息的报文 (询问报文) (Information Request/Inquiry Messages)</p>
 <ul>
-<li><p><code>0</code> 回显应答 Echo Reply</p>
+<li>
+<p><code>0</code> 回显应答 Echo Reply</p>
 </li>
-<li><p><code>8</code> 回显请求 Echo Request</p>
+<li>
+<p><code>8</code> 回显请求 Echo Request</p>
 </li>
-<li><p><code>9</code> 路由器广告 Router Advertisement</p>
+<li>
+<p><code>9</code> 路由器广告 Router Advertisement</p>
 </li>
-<li><p><code>10</code> 路由器请求 Router Solicitation</p>
+<li>
+<p><code>10</code> 路由器请求 Router Solicitation</p>
 </li>
-<li><p><code>13</code> 时间戳请求 Timestamp Request</p>
+<li>
+<p><code>13</code> 时间戳请求 Timestamp Request</p>
 </li>
-<li><p><code>14</code> 时间戳应答 Timestamp Reply</p>
+<li>
+<p><code>14</code> 时间戳应答 Timestamp Reply</p>
 </li>
-<li><p><code>17</code> 地址掩码请求 Address Mask Request</p>
+<li>
+<p><code>17</code> 地址掩码请求 Address Mask Request</p>
 </li>
-<li><p><code>18</code> 地址掩码应答 Address Mask Reply</p>
+<li>
+<p><code>18</code> 地址掩码应答 Address Mask Reply</p>
 </li>
 </ul>
 </li>
@@ -375,7 +396,9 @@
 <p>其中<code>3</code>、<code>11</code>、<code>0</code>、<code>8</code>常用</p>
 <p><code>3</code>、<code>11</code>是<code>差错报告报文</code></p>
 <p><code>0</code>、<code>8</code>是<code>提供信息的报文</code></p>
-<h3 id="几种常用ICMP报文类型"><a href="#几种常用ICMP报文类型" class="headerlink" title="几种常用ICMP报文类型"></a>几种常用ICMP报文类型</h3><h4 id="目的不可达报文（3）"><a href="#目的不可达报文（3）" class="headerlink" title="目的不可达报文（3）"></a>目的不可达报文（3）</h4><p>顾名思义，<code>目的不可达报文</code>就是目的不可达，<code>代码</code>部分进一步阐述</p>
+<h3 id="几种常用icmp报文类型"><a class="markdownIt-Anchor" href="#几种常用icmp报文类型"></a> 几种常用ICMP报文类型</h3>
+<h4 id="目的不可达报文3"><a class="markdownIt-Anchor" href="#目的不可达报文3"></a> 目的不可达报文（3）</h4>
+<p>顾名思义，<code>目的不可达报文</code>就是目的不可达，<code>代码</code>部分进一步阐述</p>
 <p><img src="/2025/02/24/Network-Layer/eaba7cf385281339afc9f7083d44ea17-1740404253149-2.jpeg" alt="eaba7cf385281339afc9f7083d44ea17"></p>
 <p>相当于<code>代码</code>那块就是<code>00</code>,<code>01</code>…这样的十六进制</p>
 <blockquote>
@@ -383,7 +406,8 @@
 <p><code>路径最小MTU</code>影响数据在网络中的传输，尤其在路径中包含不同的网络设备时，如果路径中的任何设备不能处理过大的数据包，它就会丢弃该数据包或将其分片。</p>
 <p>所以<code>“路径最小MTU发现”应用</code>可以实现  MTU探测 和 避免分片</p>
 </blockquote>
-<h4 id="超时报文（11）"><a href="#超时报文（11）" class="headerlink" title="超时报文（11）"></a>超时报文（11）</h4><p><code>代码</code>说明超时的性质：</p>
+<h4 id="超时报文11"><a class="markdownIt-Anchor" href="#超时报文11"></a> 超时报文（11）</h4>
+<p><code>代码</code>说明超时的性质：</p>
 <p><code>00</code>  传输过程中IP TTL（time to live）超时</p>
 <p><code>01</code>   分片重装超时</p>
 <blockquote>
@@ -396,7 +420,8 @@
 </ul>
 </blockquote>
 <p><img src="/2025/02/24/Network-Layer/4c779b318b1952f5114d3ac31802c576_720-1740404253150-3.jpg" alt="4c779b318b1952f5114d3ac31802c576_720"></p>
-<h4 id="回应请求与应答报文（分别是8和0）"><a href="#回应请求与应答报文（分别是8和0）" class="headerlink" title="回应请求与应答报文（分别是8和0）"></a>回应请求与应答报文（分别是8和0）</h4><p><strong>PING（Packet InterNet Groper）</strong></p>
+<h4 id="回应请求与应答报文分别是8和0"><a class="markdownIt-Anchor" href="#回应请求与应答报文分别是8和0"></a> 回应请求与应答报文（分别是8和0）</h4>
+<p><strong>PING（Packet InterNet Groper）</strong></p>
 <p><code>Ping</code></p>
 <ul>
 <li>用来测试两个主机之间的连通性（可到达）。</li>
@@ -421,7 +446,10 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2025/06/07/Fast-Learning-FastAPI/" rel="prev" title="Fast-Learning-FastAPI">
+      <i class="fa fa-chevron-left"></i> Fast-Learning-FastAPI
+    </a></div>
       <div class="post-nav-item">
     <a href="/2025/02/21/CUDA-and-pytorch/" rel="next" title="CUDA-and-pytorch">
       CUDA-and-pytorch <i class="fa fa-chevron-right"></i>
@@ -484,7 +512,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Network-Layer"><span class="nav-number">1.</span> <span class="nav-text">Network Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP"><span class="nav-number">1.1.</span> <span class="nav-text">IP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ICMP"><span class="nav-number">1.2.</span> <span class="nav-text">ICMP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-%E5%9F%BA%E7%A1%80%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">定义+基础格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E5%B8%B8%E7%94%A8ICMP%E6%8A%A5%E6%96%87%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.2.</span> <span class="nav-text">几种常用ICMP报文类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E7%9A%84%E4%B8%8D%E5%8F%AF%E8%BE%BE%E6%8A%A5%E6%96%87%EF%BC%883%EF%BC%89"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">目的不可达报文（3）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B6%85%E6%97%B6%E6%8A%A5%E6%96%87%EF%BC%8811%EF%BC%89"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">超时报文（11）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9E%E5%BA%94%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94%E6%8A%A5%E6%96%87%EF%BC%88%E5%88%86%E5%88%AB%E6%98%AF8%E5%92%8C0%EF%BC%89"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">回应请求与应答报文（分别是8和0）</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network-layer"><span class="nav-number">1.</span> <span class="nav-text"> Network Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ip"><span class="nav-number">1.1.</span> <span class="nav-text"> IP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#icmp"><span class="nav-number">1.2.</span> <span class="nav-text"> ICMP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%9F%BA%E7%A1%80%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text"> 定义+基础格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E5%B8%B8%E7%94%A8icmp%E6%8A%A5%E6%96%87%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.2.</span> <span class="nav-text"> 几种常用ICMP报文类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E7%9A%84%E4%B8%8D%E5%8F%AF%E8%BE%BE%E6%8A%A5%E6%96%873"><span class="nav-number">1.2.2.1.</span> <span class="nav-text"> 目的不可达报文（3）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B6%85%E6%97%B6%E6%8A%A5%E6%96%8711"><span class="nav-number">1.2.2.2.</span> <span class="nav-text"> 超时报文（11）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9E%E5%BA%94%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94%E6%8A%A5%E6%96%87%E5%88%86%E5%88%AB%E6%98%AF8%E5%92%8C0"><span class="nav-number">1.2.2.3.</span> <span class="nav-text"> 回应请求与应答报文（分别是8和0）</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -500,7 +528,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -513,7 +541,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
