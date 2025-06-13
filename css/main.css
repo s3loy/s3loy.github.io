@@ -1242,7 +1242,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #a19808;
+  background: #41135c;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2624,15 +2624,15 @@ body {
   background: url("/images/bg.png") no-repeat center center fixed;
   background-size: cover;
 }
-[data-theme="dark"] code {
+code {
   background-color: #2d2d2d;
   color: #ccc;
   padding: 2px 5px;
-  border-radius: 4px; /* 这里本身就有圆角，予以保留 */
+  border-radius: 4px;
 }
 .sidebar {
   background: transparent !important;
-  border-radius: 10px; /* 新增：为侧边栏容器添加圆角 */
+  border-radius: 10px;
 }
 .content-wrap,
 .header-inner,
@@ -2641,13 +2641,12 @@ body {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: none !important;
-  border-radius: 10px; /* 新增：为主要内容、头部、侧边栏内部容器添加圆角 */
+  border-radius: 10px;
 }
 @media (prefers-color-scheme: dark) {
   .content-wrap,
   .header-inner,
   .sidebar-inner {
     background: rgba(0,0,0,0.5);
-/* 圆角属性会从上面的规则继承，无需重复添加 */
   }
 }
