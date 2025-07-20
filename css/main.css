@@ -1242,7 +1242,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ffa6ff;
+  background: #ffacda;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2621,7 +2621,6 @@ ul.breadcrumb li + li:last-child {
   padding: 0;
 }
 :root {
-/* 日间模式变量定义 */
   --text-color-primary: #000;
   --text-color-secondary: #333;
   --link-color: #000;
@@ -2629,9 +2628,9 @@ ul.breadcrumb li + li:last-child {
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --text-color-primary: #ccc; /* 夜间模式的主要文字颜色 */
-    --text-color-secondary: #adadad; /* 夜间模式的次要文字颜色 */
-    --link-color: #dcdcdc; /* 夜间模式的链接颜色 */
+    --text-color-primary: #ccc;
+    --text-color-secondary: #adadad;
+    --link-color: #dcdcdc;
     --content-bg: rgba(0,0,0,0.5);
   }
 }
@@ -2649,7 +2648,6 @@ code {
   background: transparent !important;
   border-radius: 10px;
 }
-/* 内容区域使用变量 */
 .content-wrap,
 .header-inner,
 .sidebar-inner {
@@ -2660,7 +2658,6 @@ code {
   box-shadow: none !important;
   border-radius: 10px;
 }
-/* 文字颜色使用变量 */
 .site-description {
   color: var(--text-color-primary);
 }
@@ -2670,7 +2667,6 @@ code {
 .post-meta span {
   color: var(--text-color-primary);
 }
-/* 如果有链接，也可以使用变量 */
 a {
   color: var(--link-color);
 }
