@@ -261,16 +261,6 @@
 <p>如果访问的是<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/sast">127.0.0.1:8000/items/sast </a>   ，会发现返回的是<code>&#123;&quot;detail&quot;:[&#123;&quot;type&quot;:&quot;int_parsing&quot;,&quot;loc&quot;:[&quot;path&quot;,&quot;item_id&quot;],&quot;msg&quot;:&quot;Input should be a valid integer, unable to parse string as an integer&quot;,&quot;input&quot;:&quot;sast&quot;&#125;]&#125;</code></p>
 <p>我们在<code>item_id</code>处使用注解要求其为<code>int</code>类型，能看到它会自动检验。</p>
 <p>再向代码中添加</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fake_items_db = [&#123;<span class="string">&quot;item_name&quot;</span>: <span class="string">&quot;Foo&quot;</span>&#125;, &#123;<span class="string">&quot;item_name&quot;</span>: <span class="string">&quot;Bar&quot;</span>&#125;, &#123;<span class="string">&quot;item_name&quot;</span>: <span class="string">&quot;Baz&quot;</span>&#125;]</span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_fake_item</span>(<span class="params">skip: <span class="built_in">int</span> = <span class="number">0</span>, limit: <span class="built_in">int</span> = <span class="number">10</span></span>):</span><br><span class="line">    <span class="keyword">return</span> fake_items_db[skip : skip + limit]</span><br></pre></td></tr></table></figure>
-<p>此时访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/?skip=0&amp;limit=2">http://127.0.0.1:8000/items/?skip=0&amp;limit=2</a>    ，会发现返回是<code>[&#123;&quot;item_name&quot;:&quot;Foo&quot;&#125;,&#123;&quot;item_name&quot;:&quot;Bar&quot;&#125;]</code></p>
-<h2 id="part-2-响应模型"><a class="markdownIt-Anchor" href="#part-2-响应模型"></a> part 2 <strong>响应模型</strong></h2>
-<p><strong>请求体和 Pydantic 模型</strong></p>
-<p>为了定义请求体的结构，FastAPI 使用了 Pydantic 库。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Item</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    name: <span class="built_in">str</span></span><br><span class="line">    description: <span class="built_in">str</span> | <span class="literal">None</span> = <span class="literal">None</span></span><br><span class="line">    price: <span class="built_in">float</span></span><br><span class="line">    tax: <span class="built_in">float</span> | <span class="literal">None</span> = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/items/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">create_item</span>(<span class="params">item: Item</span>):</span><br><span class="line">    <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure>
-<p>然后也可以顺手用<code>requests</code>库来验证一下</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://127.0.0.1:8000/items/&quot;</span></span><br><span class="line"></span><br><span class="line">my_item = &#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;111test&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;null&quot;</span>,</span><br><span class="line">  <span class="string">&quot;price&quot;</span>: <span class="number">1145.14</span>,</span><br><span class="line">  <span class="string">&quot;tax&quot;</span>: <span class="number">666.25</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">response = requests.post(url, json=my_item)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;状态码 (Status Code):&quot;</span>, response.status_code)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;响应内容 (Response JSON):&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response.json())</span><br></pre></td></tr></table></figure>
-<p><code>状态码 (Status Code): 200 响应内容 (Response JSON): &#123;'name': '111test', 'description': 'null', 'price': 1145.14, 'tax': 666.25&#125;</code></p>
-<p>我们可以修改响应结果，为了让部分数据不可见之类的</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Fast-Learning-FastAPI/#more" rel="contents">
@@ -400,21 +390,6 @@
 <li><strong>选项 (<code>Options</code>)</strong> (可变长): 用于一些特殊处理，如记录路由、时间戳等。由于选项会增加首部长度并降低处理效率，因此不常用。如果存在，首部长度字段会大于5。</li>
 </ul>
 <h3 id="ip-分片-fragmentation"><a class="markdownIt-Anchor" href="#ip-分片-fragmentation"></a> IP 分片 (Fragmentation)</h3>
-<p>当一个<code>IP</code>数据报的长度超过了链路的<strong>最大传输单元 (<code>MTU</code>)</strong> 时，路由器就需要将其分割成多个更小的数据报，这个过程称为分片。</p>
-<ul>
-<li>标识、标志和片偏移这三个字段共同协作，以确保分片能够在目的主机被正确地重组。</li>
-<li>所有分片共享相同的标识号。</li>
-<li>除了最后一个分片，其他所有分片的<code>MF</code>标志位都为1。</li>
-<li>片偏移字段记录了每个分片数据在原始数据中的相对位置。</li>
-</ul>
-<hr>
-<h2 id="icmp"><a class="markdownIt-Anchor" href="#icmp"></a> ICMP</h2>
-<p><strong>ICMP</strong>：<code>Internet Control Message Protocol</code> ，因特网控制报文协议</p>
-<p>方向：主机/路由器 -&gt; 源站(发送方)</p>
-<p><img src="/Network-Layer/54070be665d2466175453f2c7153900f-1740404253149-1.jpeg" alt></p>
-<p><code>代码</code> 提供了进一步的描述信息，在此不进一步提供描述信息，<s>即代码的代码（？</s>。</p>
-<hr>
-<p><strong>However</strong>, 首先想区分一下这边的四个字节vs图上的内容vs十六进制和二进制</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Network-Layer/#more" rel="contents">
@@ -521,16 +496,6 @@
 <p><code>Anaconda3-2024.10-1-Windows-x86_64.exe</code>下载好之后打开</p>
 <p>如果不想配置环境变量就选<code>All Users</code>吧。</p>
 <p><img src="/CUDA-and-pytorch/image-20250218235016076-1740145143701-1.png" alt></p>
-<p>然后推荐找个不是C盘的地方下</p>
-<p><img src="/CUDA-and-pytorch/image-20250218235145695-1740145143701-2.png" alt></p>
-<p><img src="/CUDA-and-pytorch/image-20250218235447531-1740145143701-4.png" alt></p>
-<p>安装时间也许会比较长，别急。</p>
-<p>装好之后可以测试一下<code>conda --version</code>,有这样的反应就好，版本不一定一样。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="literal">--version</span></span><br><span class="line">conda <span class="number">25.1</span>.<span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>因为我后面要玩<code>d2l</code>，所以就用<code>conda</code>创建了一个环境</p>
-<p><code>conda create -n d2l python=3.10</code></p>
-<p>这边<code>conda</code>是指令头，<code>-n</code> 是指定新环境的名称，<code>d2l</code> 是你想要为新环境指定的名称,<code>python=3.10</code>这部分指定了<code>python</code>的版本，不过其实不一定要<code>3.10</code>，<code>pytorch</code>官网上提示的是<code>Latest PyTorch requires Python 3.9 or later.</code>，加上学长爱用<code>3.10</code>，那就定了。<s>ps:3.10和3.9到底谁大呢</s></p>
-<p>创建完成会提示的，后面需要激活一下</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/CUDA-and-pytorch/#more" rel="contents">
