@@ -29,7 +29,7 @@
 <meta property="og:description" content="FastAPI pip install fastapi uvicorn  part 1 简单创建 1234567891011121314#hello_world.pyfrom fastapi import FastAPIimport uvicornapp &#x3D; FastAPI()@app.get(&quot;&#x2F;&quot;)async def read_root():    return &amp;#12">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-06-06T21:31:22.000Z">
-<meta property="article:modified_time" content="2025-06-12T08:31:21.048Z">
+<meta property="article:modified_time" content="2025-07-20T16:20:20.152Z">
 <meta property="article:author" content="s3loy">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="FastAPI">
@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-12 16:31:21" itemprop="dateModified" datetime="2025-06-12T16:31:21+08:00">2025-06-12</time>
+                <time title="Modified: 2025-07-21 00:20:20" itemprop="dateModified" datetime="2025-07-21T00:20:20+08:00">2025-07-21</time>
               </span>
 
           <br>
@@ -237,7 +237,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>8.8k</span>
+              <span>8.9k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -260,14 +260,14 @@
 <p><code>pip install fastapi uvicorn</code></p>
 <h2 id="part-1-简单创建"><a class="markdownIt-Anchor" href="#part-1-简单创建"></a> part 1 <strong>简单创建</strong></h2>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#hello_world.py</span></span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">import</span> uvicorn</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_root</span>():</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;Hello&quot;</span>: <span class="string">&quot;World&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    uvicorn.run(app)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#*或者在终端中使用uvicorn main:app --reload</span></span><br></pre></td></tr></table></figure>
-<p>我们添加``@app.get`部分</p>
+<p>我们添加<code>@app.get</code>部分</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&#123;item_id&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_item</span>(<span class="params">item_id: <span class="built_in">int</span></span>):</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;item_id&quot;</span>: item_id&#125;</span><br></pre></td></tr></table></figure>
-<p>此时访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/5%EF%BC%8C%E4%BC%9A%E5%8F%91%E7%8E%B0%E8%BF%94%E5%9B%9E%E4%BA%86%60%7B%22item_id%22:5%7D%60">http://127.0.0.1:8000/items/5，会发现返回了`{“item_id”:5}`</a>,</p>
-<p>如果访问的是<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/sast">127.0.0.1:8000/items/sast</a>，会发现返回的是<code>&#123;&quot;detail&quot;:[&#123;&quot;type&quot;:&quot;int_parsing&quot;,&quot;loc&quot;:[&quot;path&quot;,&quot;item_id&quot;],&quot;msg&quot;:&quot;Input should be a valid integer, unable to parse string as an integer&quot;,&quot;input&quot;:&quot;sast&quot;&#125;]&#125;</code></p>
+<p>此时访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/5">http://127.0.0.1:8000/items/5</a>    ，会发现返回了<code>&#123;&quot;item_id&quot;:5&#125;</code>,</p>
+<p>如果访问的是<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/sast">127.0.0.1:8000/items/sast </a>   ，会发现返回的是<code>&#123;&quot;detail&quot;:[&#123;&quot;type&quot;:&quot;int_parsing&quot;,&quot;loc&quot;:[&quot;path&quot;,&quot;item_id&quot;],&quot;msg&quot;:&quot;Input should be a valid integer, unable to parse string as an integer&quot;,&quot;input&quot;:&quot;sast&quot;&#125;]&#125;</code></p>
 <p>我们在<code>item_id</code>处使用注解要求其为<code>int</code>类型，能看到它会自动检验。</p>
 <p>再向代码中添加</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fake_items_db = [&#123;<span class="string">&quot;item_name&quot;</span>: <span class="string">&quot;Foo&quot;</span>&#125;, &#123;<span class="string">&quot;item_name&quot;</span>: <span class="string">&quot;Bar&quot;</span>&#125;, &#123;<span class="string">&quot;item_name&quot;</span>: <span class="string">&quot;Baz&quot;</span>&#125;]</span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_fake_item</span>(<span class="params">skip: <span class="built_in">int</span> = <span class="number">0</span>, limit: <span class="built_in">int</span> = <span class="number">10</span></span>):</span><br><span class="line">    <span class="keyword">return</span> fake_items_db[skip : skip + limit]</span><br></pre></td></tr></table></figure>
-<p>此时访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/?skip=0&amp;limit=2%EF%BC%8C%E4%BC%9A%E5%8F%91%E7%8E%B0%E8%BF%94%E5%9B%9E%E6%98%AF%60%5B%7B%22item_name%22:%22Foo%22%7D,%7B%22item_name%22:%22Bar%22%7D%5D%60">http://127.0.0.1:8000/items/?skip=0&amp;limit=2，会发现返回是`[{“item_name”:“Foo”},{“item_name”:“Bar”}]`</a></p>
+<p>此时访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/?skip=0&amp;limit=2">http://127.0.0.1:8000/items/?skip=0&amp;limit=2</a>    ，会发现返回是<code>[&#123;&quot;item_name&quot;:&quot;Foo&quot;&#125;,&#123;&quot;item_name&quot;:&quot;Bar&quot;&#125;]</code></p>
 <h2 id="part-2-响应模型"><a class="markdownIt-Anchor" href="#part-2-响应模型"></a> part 2 <strong>响应模型</strong></h2>
 <p><strong>请求体和 Pydantic 模型</strong></p>
 <p>为了定义请求体的结构，FastAPI 使用了 Pydantic 库。</p>
@@ -455,12 +455,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">15k</span>
+    <span title="Symbols count total">23k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">28 mins.</span>
+    <span title="Reading time total">42 mins.</span>
 </div>
 
         
