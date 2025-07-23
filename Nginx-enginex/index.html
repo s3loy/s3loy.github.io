@@ -21,30 +21,34 @@
     var CONFIG = {"hostname":"s3loy.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":200,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Neither emo nor demo.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="s3loy&#39;s Blog">
-<meta property="og:url" content="https://s3loy.github.io/index.html">
+  <meta name="description" content="installation on arch linux 123456789101112131415161718192021222324252627$ sudo pacman -Syu$ sudo pacman -S nginx$ sudo systemctl start nginx.service$ sudo systemctl enable nginx.service# $ sudo syste">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx-enginex">
+<meta property="og:url" content="https://s3loy.github.io/Nginx-enginex/index.html">
 <meta property="og:site_name" content="s3loy&#39;s Blog">
-<meta property="og:description" content="Neither emo nor demo.">
+<meta property="og:description" content="installation on arch linux 123456789101112131415161718192021222324252627$ sudo pacman -Syu$ sudo pacman -S nginx$ sudo systemctl start nginx.service$ sudo systemctl enable nginx.service# $ sudo syste">
 <meta property="og:locale">
+<meta property="article:published_time" content="2025-07-23T15:15:38.000Z">
+<meta property="article:modified_time" content="2025-07-23T17:20:18.537Z">
 <meta property="article:author" content="s3loy">
+<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://s3loy.github.io/">
+<link rel="canonical" href="https://s3loy.github.io/Nginx-enginex/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>s3loy's Blog</title>
+  <title>Nginx-enginex | s3loy's Blog</title>
   
 
 
@@ -186,9 +190,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
@@ -204,10 +209,9 @@
       <meta itemprop="name" content="s3loy's Blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Nginx-enginex/" class="post-title-link" itemprop="url">Nginx-enginex</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Nginx-enginex
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -260,7 +264,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="installation"><a class="markdownIt-Anchor" href="#installation"></a> installation</h2>
+        <h2 id="installation"><a class="markdownIt-Anchor" href="#installation"></a> installation</h2>
 <p><strong>on arch linux</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> pacman -Syu</span><br><span class="line">$ <span class="built_in">sudo</span> pacman -S nginx</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> systemctl start nginx.service</span><br><span class="line">$ <span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> nginx.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># $ sudo systemctl status nginx.service</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">s3loy@archlinux ~]$ ip a</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host noprefixroute </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:0c:29:4f:fa:7f brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    altname enp2s1</span><br><span class="line">    altname enx000c294ffa7f</span><br><span class="line">    inet 192.168.209.128/24 brd 192.168.209.255 scope global dynamic noprefixroute ens33</span><br><span class="line">       valid_lft 1592sec preferred_lft 1367sec</span><br><span class="line">    inet6 fe80::98ef:2b0d:cbd3:648c/64 scope <span class="built_in">link</span> </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">       </span><br><span class="line"> <span class="comment">#  inet 192.168.209.128</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>主机直接访问<a target="_blank" rel="noopener" href="http://192.168.209.128/">http://192.168.209.128/</a>    就可以看到<code>Welcome to nginx!</code></p>
@@ -278,359 +282,131 @@
 <p>访问<a target="_blank" rel="noopener" href="http://192.168.209.128/about.html">http://192.168.209.128/about.html</a>   发现<code>403 Forbidden</code></p>
 <p>此时考虑到文件夹为新建且处于<code>whoami</code>用户下，所以</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ ps aux | grep <span class="string">&quot;nginx: worker process&quot;</span></span><br><span class="line">http        2179  0.0  0.1  15388  5140 ?        S    16:13   0:00 nginx: worker process</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">chmod</span> o+x /home/s3loy</span><br><span class="line">$ <span class="built_in">ls</span> -ld ~/my-website</span><br><span class="line">drwxr-xr-x 3 s3loy s3loy 4096 Jul 23 16:10 /home/s3loy/my-website</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Nginx-enginex/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://s3loy.github.io/Fast-Learning-FastAPI/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/1.jpg">
-      <meta itemprop="name" content="s3loy">
-      <meta itemprop="description" content="Neither emo nor demo.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s3loy's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Fast-Learning-FastAPI/" class="post-title-link" itemprop="url">Fast-Learning-FastAPI</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-06-07 05:31:22" itemprop="dateCreated datePublished" datetime="2025-06-07T05:31:22+08:00">2025-06-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-21 00:20:20" itemprop="dateModified" datetime="2025-07-21T00:20:20+08:00">2025-07-21</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>8.9k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>16 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="fastapi"><a class="markdownIt-Anchor" href="#fastapi"></a> FastAPI</h1>
-<p><code>pip install fastapi uvicorn</code></p>
-<h2 id="part-1-简单创建"><a class="markdownIt-Anchor" href="#part-1-简单创建"></a> part 1 <strong>简单创建</strong></h2>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#hello_world.py</span></span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">import</span> uvicorn</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_root</span>():</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;Hello&quot;</span>: <span class="string">&quot;World&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    uvicorn.run(app)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#*或者在终端中使用uvicorn main:app --reload</span></span><br></pre></td></tr></table></figure>
-<p>我们添加<code>@app.get</code>部分</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&#123;item_id&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_item</span>(<span class="params">item_id: <span class="built_in">int</span></span>):</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;item_id&quot;</span>: item_id&#125;</span><br></pre></td></tr></table></figure>
-<p>此时访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/5">http://127.0.0.1:8000/items/5</a>    ，会发现返回了<code>&#123;&quot;item_id&quot;:5&#125;</code>,</p>
-<p>如果访问的是<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/items/sast">127.0.0.1:8000/items/sast </a>   ，会发现返回的是<code>&#123;&quot;detail&quot;:[&#123;&quot;type&quot;:&quot;int_parsing&quot;,&quot;loc&quot;:[&quot;path&quot;,&quot;item_id&quot;],&quot;msg&quot;:&quot;Input should be a valid integer, unable to parse string as an integer&quot;,&quot;input&quot;:&quot;sast&quot;&#125;]&#125;</code></p>
-<p>我们在<code>item_id</code>处使用注解要求其为<code>int</code>类型，能看到它会自动检验。</p>
-<p>再向代码中添加</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Fast-Learning-FastAPI/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://s3loy.github.io/Network-Layer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/1.jpg">
-      <meta itemprop="name" content="s3loy">
-      <meta itemprop="description" content="Neither emo nor demo.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s3loy's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Network-Layer/" class="post-title-link" itemprop="url">Network-Layer</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-24 21:34:15" itemprop="dateCreated datePublished" datetime="2025-02-24T21:34:15+08:00">2025-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-21 01:16:35" itemprop="dateModified" datetime="2025-07-21T01:16:35+08:00">2025-07-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Computer-Networks/" itemprop="url" rel="index"><span itemprop="name">Computer Networks</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>9.3k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>17 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="network-layer"><a class="markdownIt-Anchor" href="#network-layer"></a> Network Layer</h1>
+<p>直接重返链接就发现页面可以刷新出来了</p>
+<p><strong>当然这也很明显，请不要把网站放在自己的目录当中</strong>。出于隐私和安全考虑，默认权限非常严格</p>
+<p>在<code>arch linux</code>当中，<code>http</code>推荐放在<code>/srv/http</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> -ld /srv/http</span><br><span class="line">drwxr-xr-x 2 root root 4096 May  3 19:26 /srv/http</span><br></pre></td></tr></table></figure>
+<p>在其他很多 <code>Linux</code> 系统上，常用目录是 <code>/var/www/html</code></p>
+<h2 id="feature"><a class="markdownIt-Anchor" href="#feature"></a> feature</h2>
+<h3 id="nginx-的灵魂事件驱动的异步非阻塞架构"><a class="markdownIt-Anchor" href="#nginx-的灵魂事件驱动的异步非阻塞架构"></a> <strong>Nginx 的灵魂</strong>:<strong>事件驱动的异步非阻塞架构</strong></h3>
+<p>我们以这个简单的静态网页为例，当你请求静态文件时，<code>Nginx</code> 的 <code>Worker</code> 进程接收到请求，告诉操作系统内核：“把 <code>~/my-website/index.html</code> 这个文件的数据发给这个用户”。然后 <code>Worker</code> 进程就去处理其他请求了。当内核把文件数据准备好后，会通知 <code>Worker</code> 进程，<code>Worker</code> 进程再把数据发回给浏览器。这个过程极其高效，因为它利用了操作系统的 <code>sendfile</code> 机制，避免了数据在内核和用户空间之间的多次复制，<code>CPU</code> 占用极低。</p>
+<hr>
 <blockquote>
-<p>网络层是<code>OSI</code>模型中的第三层，它负责在不同网络之间（端到端）提供数据包的路由和转发。网络互联的本质是通过<code>IP</code>协议实现的，而数据传输的基本单元是<code>IP</code>数据报。本章将详细介绍网络层的核心协议与技术。</p>
+<p><code>sendfile</code>机制</p>
 </blockquote>
-<p>网络互连<code>本质</code>是通过<code>ip</code>实现的，<code>传输</code>是以<code>ip数据报</code>为介质。</p>
-<h2 id="ip"><a class="markdownIt-Anchor" href="#ip"></a> IP</h2>
-<p><code>IP</code>协议是无连接、不可靠的数据报服务。</p>
+<p><strong>用户空间 (<code>User Space</code>)</strong> 和 <strong>内核空间 (<code>Kernel Space</code>)</strong>。</p>
 <ul>
-<li><strong>无连接 (<code>Connectionless</code>)</strong>：发送方在发送数据前，不需要与接收方建立连接。每个数据报都是独立传输的，因此到达顺序、完整性都不能保证。</li>
-<li><strong>不可靠 (<code>Unreliable</code>)</strong>：<code>IP</code>协议不提供错误恢复或重传机制。如果数据报在传输中丢失或损坏，<code>IP</code>层本身不会处理，而是交由上层协议（如<code>TCP</code>）来确保可靠性。</li>
+<li><strong>用户空间：</strong> 你的应用程序（如 <code>Nginx</code> 进程）运行的地方。</li>
+<li><strong>内核空间：</strong> 操作系统内核运行的地方，它能直接操作硬件（如磁盘、网卡）。</li>
 </ul>
-<h3 id="ipv4-数据报格式"><a class="markdownIt-Anchor" href="#ipv4-数据报格式"></a> IPv4 数据报格式</h3>
-<p>一个<code>IP</code>数据报由<code>首部 (Header)</code>和<code>数据 (Data)</code>两部分组成。首部通常为20字节，包含了路由和转发所需的所有关键信息。</p>
+<h4 id="传统-read-write-方式"><a class="markdownIt-Anchor" href="#传统-read-write-方式"></a> 传统 read() + write() 方式</h4>
+<p>当 <code>Nginx</code> 需要发送一个静态文件给客户端时，传统的 I/O 流程如下：</p>
+<ol>
+<li><strong><code>read()</code> 系统调用：</strong> <code>Nginx</code> 进程发起 <code>read() </code>系统调用，请求读取文件。这会导致一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
+<li><strong>第一次数据复制 (<code>DMA</code>)：</strong> <code>CPU</code> 指示 <code>DMA </code>控制器将文件内容从磁盘读取到<strong>内核空间的缓冲区</strong>。</li>
+<li><strong>第二次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据从<strong>内核空间缓冲区</strong>复制到<strong>用户空间的 <code>Nginx </code>缓冲区</strong>。<code>read()</code> 调用返回，发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
+<li><strong><code>write()</code> 系统调用：</strong> <code>Nginx</code> 进程拿到数据后，发起 <code>write() </code>系统调用，请求发送数据。再次发生一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
+<li><strong>第三次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据从<strong>用户空间的<code>Nginx</code>缓冲区</strong>复制到<strong>内核空间的 <code>Socket </code>缓冲区</strong>（与网卡关联）。</li>
+<li><strong>第四次数据复制 (<code>DMA</code>)：</strong> <code>DMA</code> 控制器将数据从<strong>内核空间的 <code>Socket</code> 缓冲区</strong>复制到网卡硬件中，然后发送出去。<code>write() </code>调用返回，再次发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
+</ol>
+<h4 id="sendfile-方式"><a class="markdownIt-Anchor" href="#sendfile-方式"></a> sendfile() 方式</h4>
+<p><code>sendfile()</code> 是一个系统调用，它把上述过程大大简化了。</p>
+<ol>
+<li><strong><code>sendfile() </code>系统调用：</strong> <code>Nginx</code> 进程发起<code>sendfile()</code>系统调用，它包含了输入（文件描述符）和输出（<code>Socket </code>描述符）的信息。发生一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
+<li><strong>第一次数据复制 (<code>DMA</code>)：</strong> <code>DMA</code> 控制器将文件内容从磁盘读取到<strong>内核空间的缓冲区</strong>。</li>
+<li><strong>第二次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据<strong>直接从内核空间的读缓冲区复制到内核空间的<code>Socket</code>缓冲区</strong>。数据完全没有进入过用户空间！</li>
+<li><strong>第三次数据复制 (<code>DMA</code>)：</strong> <code>DMA </code>控制器将数据从<strong>内核空间的 <code>Socket </code>缓冲区</strong>复制到网卡硬件中。<code>sendfile() </code>调用返回，发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
+</ol>
+<p>总结一下高效之处：</p>
 <ul>
-<li><strong>版本 (<code>Version</code>)</strong> (4位): 指示<code>IP</code>协议的版本，对于<code>IPv4</code>，该值为 4。</li>
-<li><strong>首部长度 (<code>IHL - Internet Header Length</code>)</strong> (4位): 表示整个<code>IP</code>首部的长度，单位是 <strong>4字节</strong>（32位）。例如，如果该值为5，则首部长度为 5 * 4 = 20 字节。最小值为5（20字节），最大值为15（60字节）。</li>
-<li><strong>服务类型 (<code>ToS - Type of Service</code>)</strong> (8位): 用于指定数据报的优先级和服务质量（<code>QoS</code>）要求，例如最小延迟、最大吞吐量等。</li>
-<li><strong>总长度 (<code>Total Length</code>)</strong> (16位): 指示整个<code>IP</code>数据报（包括首部和数据）的总长度，单位是字节。最大长度为 <code>65535</code> 字节。</li>
-<li><strong>标识 (<code>Identification</code>)</strong> (16位): 该字段唯一标识一个数据报。当数据报因为过大而被分片时，所有分片都将拥有相同的标识号，以便接收方能够将它们重新组装。</li>
-<li><strong>标志 (<code>Flags</code>)</strong> (3位):
+<li><strong>2 次上下文切换</strong>：减少了一半。</li>
+<li><strong>3 次数据复制</strong>：更重要的是，<strong>CPU 驱动的数据复制只有 1 次，且完全在内核空间内完成</strong>，避免了数据在内核和用户空间之间的拷贝。</li>
+</ul>
+<p><strong>真正的“零拷贝” (<code>Zero-Copy</code>)：</strong><br>
+在更现代的硬件上，<code>sendfile()</code> 还能做到更极致的优化。如果网卡支持 “<code>Scatter-gather DMA</code>” 功能，那么第 3 步的 <code>CPU </code>复制也可以省掉。内核只需要把数据在缓冲区的位置和长度等描述信息传递给网卡，网卡就可以自己去内核缓冲区里拉取数据。此时，数据复制就只剩两次<code> DMA</code> 操作，<code>CPU </code>完全不参与数据拷贝，这就是真正的“零拷贝”。</p>
+<blockquote>
+<p><code>sendfile</code> 在<code>http</code>块中，可自行寻找。<code>/etc/nginx/nginx.conf</code></p>
+</blockquote>
+<h3 id="master-worker"><a class="markdownIt-Anchor" href="#master-worker"></a> Master-Worker</h3>
+<p>虽然我们用 <code>sudo</code> 来启动和管理 <code>Nginx</code>，但为了安全，<code>Nginx</code> 的 <code>Master </code>进程在启动后，会创建一些低权限的 <strong><code>Worker</code> 进程</strong>。真正去处理用户请求、读取网站文件的，正是这些 <code>Worker</code> 进程。</p>
+<p>在 <code>Arch Linux</code> 上，这个低权限用户通常是<code> http</code>。在其他系统（如 <code>Debian/Ubuntu</code>）上可能是 <code>www-data</code>,可以把<code> Nginx</code> 的 <code>Worker</code> 进程想象成一个名叫 <code>http</code> 的普通访客。</p>
+<p><code>403 Forbidden</code> 就是因为这个访客在某个环节被拦住了</p>
+<h4 id="master-process"><a class="markdownIt-Anchor" href="#master-process"></a> Master Process</h4>
+<p><code>Master</code> 进程是 <code>Nginx </code>的入口和管理者，它以<code> root</code> 用户权限启动，因为它需要执行一些特权操作。它的核心职责包括：</p>
 <ul>
-<li>第1位：保留，必须为0。</li>
-<li>第2位：<strong><code>DF (Don't Fragment)</code></strong>。如果设为1，则禁止路由器对该数据报进行分片。如果数据报过大而无法通过，路由器将丢弃它并返回一个<code>ICMP</code>错误消息。</li>
-<li>第3位：<strong><code>MF (More Fragments)</code></strong>。如果设为1，表示后面还有更多的分片；如果为0，表示这是最后一个分片（或未分片）。</li>
+<li><strong>读取和验证配置：</strong> 启动时，它会读取 <code>nginx.conf </code>并检查语法是否正确。</li>
+<li><strong>绑定特权端口：</strong> 监听低于 <code>1024</code> 的端口（如 <code>80</code>, <code>443</code>）需要 <code>root</code> 权限。<code>Master</code> 进程负责绑定这些端口。</li>
+<li><strong>创建和管理 Worker 进程：</strong> 根据配置 (<code>worker_processes</code>) 创建指定数量的 <code>Worker</code> 进程。这些 <code>Worker </code>进程会<strong>继承</strong>已经打开的监听端口。</li>
+<li><strong>以低权限运行 Worker：</strong> 出于安全考虑，<code>Master</code> 进程会以一个普通用户（如<code>http</code>或 <code>www-data</code>）的身份来启动 <code>Worker</code> 进程。这样，即使 <code>Worker</code> 进程被嘿壳利用，其破坏能力也被限制在该用户的权限范围内。🤔</li>
+<li><strong>处理控制信号：</strong> <code>Master</code> 进程负责响应来自管理员的指令，例如：
+<ul>
+<li><code>nginx -s reload</code>: 平滑重载配置。</li>
+<li><code>nginx -s quit</code>: 优雅地关闭。</li>
+<li><code>nginx -s stop</code>: 快速关闭。</li>
 </ul>
 </li>
-<li><strong>片偏移 (<code>Fragment Offset</code>)</strong> (13位): 指示当前分片在原始数据报中的位置。偏移量以 <strong><code>8字节</code></strong> 为单位。</li>
-<li><strong>生存时间 (<code>TTL - Time to Live</code>)</strong> (8位): 设置数据报在网络中可以存活的最大跳数（经过的路由器数）。每经过一个路由器，<code>TTL</code>值减1。当<code>TTL</code>减为0时，路由器将丢弃该数据报，并向源主机发送一个<code>ICMP</code>超时消息。这可以防止数据报在网络中无限循环。</li>
-<li><strong>协议 (<code>Protocol</code>)</strong> (8位): 指示<code>IP</code>数据报的数据部分承载的是哪个上层协议。例如，<code>6 </code>代表<code>TCP</code>，<code>17 </code>代表<code>UDP</code>，1 代表<code>ICMP</code>。</li>
-<li><strong>首部检验和 (<code>Header Checksum</code>)</strong> (16位): 用于校验<code>IP</code>首部在传输过程中是否出错。它只对首部进行计算，不包括数据部分。</li>
-<li><strong>源IP地址 (<code>Source IP Address</code>)</strong> (32位): 发送方设备的<code>IP</code>地址。</li>
-<li><strong>目的IP地址 (<code>Destination IP Address</code>)</strong> (32位): 接收方设备的<code>IP</code>地址。</li>
-<li><strong>选项 (<code>Options</code>)</strong> (可变长): 用于一些特殊处理，如记录路由、时间戳等。由于选项会增加首部长度并降低处理效率，因此不常用。如果存在，首部长度字段会大于5。</li>
+<li><strong>监控 Worker 状态：</strong> 持续监控 <code>Worker</code> 进程的健康状况，如果某个 <code>Worker</code> 异常退出，<code>Master </code>会立即重新启动一个新的 <code>Worker</code> 来替代它。</li>
+<li><strong>日志文件管理：</strong> 负责打开日志文件。</li>
 </ul>
-<h3 id="ip-分片-fragmentation"><a class="markdownIt-Anchor" href="#ip-分片-fragmentation"></a> IP 分片 (Fragmentation)</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Network-Layer/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+<p><strong>关键点：</strong> <code>Master</code> 进程不处理任何客户端的请求。它只做管理工作。</p>
+<h4 id="2-worker-processes"><a class="markdownIt-Anchor" href="#2-worker-processes"></a> 2. Worker Processes</h4>
+<p>Worker 进程是真正处理业务的“劳动力”。它们由 Master 进程创建，并以低权限用户运行。</p>
+<p><strong>核心工作机制：事件驱动 + 异步非阻塞 I/O</strong></p>
+<ol>
+<li><strong>共享监听套接字 (<code>Shared Listening Sockets</code>):</strong><br>
+所有 <code>Worker</code> 进程都从 <code>Master</code> 进程继承了同一个监听套接字（<code>listening socket</code>）。当一个新的客户端连接请求到达时，操作系统会唤醒这些正在等待的 <code>Worker</code> 进程。</li>
+<li><strong>争抢连接 (<code>accept_mutex</code>):</strong><br>
+为了避免多个 <code>Worker</code> 同时去处理同一个新连接（即“惊群效应” <code>Thundering Herd</code>），<code>Nginx </code>内部有一个 <code>accept_mutex</code> 锁。只有一个 <code>Worker </code>能成功获取到这个锁，然后调用 <code>accept() </code>来建立连接。这保证了连接处理的负载在多个 <code>Worker</code> 之间是相对均衡的。</li>
+<li><strong>事件循环和 <code>epoll</code>:</strong><br>
+每个 <code>Worker</code> 进程内部都有一个高效的<strong>事件循环</strong>。它利用操作系统的 <code>epoll</code> (在<code> Linux</code> 上) 或 <code>kqueue</code> (在 <code>BSD/macOS</code> 上) 这样的 <code>I/O</code> 多路复用技术。
+<ul>
+<li><strong>注册事件：</strong> 当一个 <code>Worker</code> 接受一个新连接后，它不会傻等客户端发数据。它只是把这个连接（<code>socket</code>）注册到<code>epoll</code>实例上，并告诉 <code>epoll</code>：“当这个连接上有数据可读时，请通知我。”</li>
+<li><strong>等待事件：</strong> 然后，<code>Worker</code> 进程就调用 <code>epoll_wait()</code>，把自己“挂起”，等待 <code>epoll</code> 的通知。它不消耗 <code>CPU</code>。</li>
+<li><strong>处理就绪事件：</strong> 当一个或多个连接上的事件就绪时（比如，客户端发来了数据，或者发送缓冲区变空可以继续写入了），<code>epoll_wait()</code> 会被唤醒，并返回一个“就绪事件”的列表。</li>
+<li><strong>处理与再注册：</strong> <code>Worker</code> 进程遍历这个列表，对每个就绪的连接执行相应的<strong>非阻塞操作</strong>（如 <code>read()</code> 读取数据，<code>write()</code> 或 <code>sendfile()</code> 发送数据）。处理完一个连接后，它会再次向 <code>epol</code>l 更新这个连接需要监听的下一个事件。</li>
+</ul>
+</li>
+</ol>
+<p><strong>流程的关键优势：</strong></p>
+<ul>
+<li><strong>单线程高效处理：</strong> 每个 Worker 进程是单线程的，避免了线程切换的开销和锁的复杂性。</li>
+<li><strong>永不阻塞</strong></li>
+<li><strong>连接数与内存消耗解耦：</strong> 一个 Worker 可以轻松维护数万个连接</li>
+</ul>
+<hr>
+<ul>
+<li>[ ] to be continued</li>
+</ul>
+
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://s3loy.github.io/CUDA-and-pytorch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/1.jpg">
-      <meta itemprop="name" content="s3loy">
-      <meta itemprop="description" content="Neither emo nor demo.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s3loy's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
           
-            <a href="/CUDA-and-pytorch/" class="post-title-link" itemprop="url">CUDA-and-pytorch</a>
-        </h2>
+          <div class="post-tags">
+              <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
+              <a href="/tags/web/" rel="tag"><i class="fa fa-tag"></i> web</a>
+          </div>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-21 21:38:20" itemprop="dateCreated datePublished" datetime="2025-02-21T21:38:20+08:00">2025-02-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-21 01:17:23" itemprop="dateModified" datetime="2025-07-21T01:17:23+08:00">2025-07-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>4.8k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>9 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="在win系统上安装pytorch"><a class="markdownIt-Anchor" href="#在win系统上安装pytorch"></a> 在win系统上安装pytorch</h1>
-<h2 id="step-1-安装conda"><a class="markdownIt-Anchor" href="#step-1-安装conda"></a> Step 1 安装Conda</h2>
-<p><a target="_blank" rel="noopener" href="https://www.anaconda.com/download/success">Download Now | Anaconda</a></p>
-<p><code>Anaconda</code>和<code>Miniconda</code>都可以，前者东西全一些，后者更为轻便。</p>
-<p>展示的是<code>Anaconda</code></p>
-<p><s>此处下载推荐使用魔法</s></p>
-<blockquote>
-<p>如果网络不支持那就使用<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/?C=M&amp;O=D">Index of /anaconda/archive/ | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
-</blockquote>
-<p><code>Anaconda3-2024.10-1-Windows-x86_64.exe</code>下载好之后打开</p>
-<p>如果不想配置环境变量就选<code>All Users</code>吧。</p>
-<p><img src="/CUDA-and-pytorch/image-20250218235016076-1740145143701-1.png" alt></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/CUDA-and-pytorch/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/Fast-Learning-FastAPI/" rel="next" title="Fast-Learning-FastAPI">
+      Fast-Learning-FastAPI <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -683,6 +459,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#installation"><span class="nav-number">1.</span> <span class="nav-text"> installation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feature"><span class="nav-number">2.</span> <span class="nav-text"> feature</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-%E7%9A%84%E7%81%B5%E9%AD%82%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%BC%82%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9E%E6%9E%B6%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text"> Nginx 的灵魂:事件驱动的异步非阻塞架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F-read-write-%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 传统 read() + write() 方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sendfile-%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.2.</span> <span class="nav-text"> sendfile() 方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#master-worker"><span class="nav-number">2.2.</span> <span class="nav-text"> Master-Worker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#master-process"><span class="nav-number">2.2.1.</span> <span class="nav-text"> Master Process</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-worker-processes"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 2. Worker Processes</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
