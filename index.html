@@ -192,6 +192,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://s3loy.github.io/My-Fedora-Journey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.jpg">
+      <meta itemprop="name" content="s3loy">
+      <meta itemprop="description" content="Neither emo nor demo.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s3loy's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/My-Fedora-Journey/" class="post-title-link" itemprop="url">My-Fedora-Journey</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-10-10 21:27:57 / Modified: 21:33:03" itemprop="dateCreated datePublished" datetime="2025-10-10T21:27:57+08:00">2025-10-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>19 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>冷知识:</p>
+<ul>
+<li>F2是翼龙开bios的按键</li>
+<li>fedora是rpm系，可以直接用dnf install xxx.rpm</li>
+<li>fedora不是arch</li>
+</ul>
+</blockquote>
+<h2 id="桌面"><a class="markdownIt-Anchor" href="#桌面"></a> 桌面</h2>
+<p>前端本来用的是默认的<code>GNOME</code>，因为没有桌面很难受所以换成了<code>KDE plasma</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> dnf install @kde-desktop-environment</span><br></pre></td></tr></table></figure>
+<p>后面可以在登录页面切换桌面前端</p>
+<h2 id="中文输入法"><a class="markdownIt-Anchor" href="#中文输入法"></a> 中文输入法</h2>
+<p>一开始使用了<code>IBus</code><br>
+其中碰到的问题例如Obsidian不能使用中文输入法<br>
+在启动命令行参数里面添加了<br>
+<code>--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime</code><br>
+<mark>但是修改之后qq又不能输入了</mark><br>
+然后又换回了<code>Fcitx</code></p>
+<h2 id="rust-环境配置"><a class="markdownIt-Anchor" href="#rust-环境配置"></a> rust 环境配置</h2>
+<p><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  </code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">curl --proto <span class="string">&#x27;=https&#x27;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh</span>  </span><br><span class="line">info: downloading installer  </span><br><span class="line">  </span><br><span class="line">Welcome to Rust!  </span><br><span class="line">  </span><br><span class="line">This will download and install the official compiler for the Rust  </span><br><span class="line">programming language, and its package manager, Cargo.  </span><br><span class="line">  </span><br><span class="line">Rustup metadata and toolchains will be installed into the Rustup  </span><br><span class="line">home directory, located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.rustup  </span><br><span class="line">  </span><br><span class="line">This can be modified with the RUSTUP_HOME environment variable.  </span><br><span class="line">  </span><br><span class="line">The Cargo home directory is located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.cargo  </span><br><span class="line">  </span><br><span class="line">This can be modified with the CARGO_HOME environment variable.  </span><br><span class="line">  </span><br><span class="line">The cargo, rustc, rustup and other commands will be added to  </span><br><span class="line">Cargo&#x27;s bin directory, located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.cargo/bin  </span><br><span class="line">  </span><br><span class="line">This path will then be added to your PATH environment variable by  </span><br><span class="line">modifying the profile files located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.profile  </span><br><span class="line"> /home/s3loy/.bash_profile  </span><br><span class="line"> /home/s3loy/.bashrc  </span><br><span class="line"> /home/s3loy/.config/fish/conf.d/rustup.fish  </span><br><span class="line">  </span><br><span class="line">You can uninstall at any time with rustup self uninstall and  </span><br><span class="line">these changes will be reverted.  </span><br><span class="line">  </span><br><span class="line">Current installation options:  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  default host triple: x86_64-unknown-linux-gnu  </span><br><span class="line">    default toolchain: stable (default)  </span><br><span class="line">              profile: default  </span><br><span class="line"> modify PATH variable: yes  </span><br><span class="line">  </span><br><span class="line">1) Proceed with standard installation (default - just press enter)  </span><br><span class="line">2) Customize installation  </span><br><span class="line">3) Cancel installation</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/My-Fedora-Journey/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://s3loy.github.io/Nginx-enginex/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -698,20 +808,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -749,12 +859,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">30k</span>
+    <span title="Symbols count total">41k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">55 mins.</span>
+    <span title="Reading time total">1:14</span>
 </div>
 
         

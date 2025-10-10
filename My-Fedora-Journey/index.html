@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s3loy.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":200,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="冷知识:  F2是翼龙开bios的按键 fedora是rpm系，可以直接用dnf install xxx.rpm fedora不是arch    桌面 前端本来用的是默认的GNOME，因为没有桌面很难受所以换成了KDE plasma 1$ sudo dnf install @kde-desktop-environment 后面可以在登录页面切换桌面前端  中文输入法 一开始使用了IBus 其中碰">
+<meta property="og:type" content="article">
+<meta property="og:title" content="My-Fedora-Journey">
+<meta property="og:url" content="https://s3loy.github.io/My-Fedora-Journey/index.html">
+<meta property="og:site_name" content="s3loy&#39;s Blog">
+<meta property="og:description" content="冷知识:  F2是翼龙开bios的按键 fedora是rpm系，可以直接用dnf install xxx.rpm fedora不是arch    桌面 前端本来用的是默认的GNOME，因为没有桌面很难受所以换成了KDE plasma 1$ sudo dnf install @kde-desktop-environment 后面可以在登录页面切换桌面前端  中文输入法 一开始使用了IBus 其中碰">
+<meta property="og:locale">
+<meta property="og:image" content="https://s3loy.github.io/My-Fedora-Journey/desktop.png">
+<meta property="article:published_time" content="2025-10-10T13:27:57.000Z">
+<meta property="article:modified_time" content="2025-10-10T13:33:03.652Z">
+<meta property="article:author" content="s3loy">
+<meta property="article:tag" content="fedora">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3loy.github.io/My-Fedora-Journey/desktop.png">
+
+<link rel="canonical" href="https://s3loy.github.io/My-Fedora-Journey/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>My-Fedora-Journey | s3loy's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s3loy's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://s3loy.github.io/My-Fedora-Journey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.jpg">
+      <meta itemprop="name" content="s3loy">
+      <meta itemprop="description" content="Neither emo nor demo.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s3loy's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          My-Fedora-Journey
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-10-10 21:27:57 / Modified: 21:33:03" itemprop="dateCreated datePublished" datetime="2025-10-10T21:27:57+08:00">2025-10-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>19 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>冷知识:</p>
+<ul>
+<li>F2是翼龙开bios的按键</li>
+<li>fedora是rpm系，可以直接用dnf install xxx.rpm</li>
+<li>fedora不是arch</li>
+</ul>
+</blockquote>
+<h2 id="桌面"><a class="markdownIt-Anchor" href="#桌面"></a> 桌面</h2>
+<p>前端本来用的是默认的<code>GNOME</code>，因为没有桌面很难受所以换成了<code>KDE plasma</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> dnf install @kde-desktop-environment</span><br></pre></td></tr></table></figure>
+<p>后面可以在登录页面切换桌面前端</p>
+<h2 id="中文输入法"><a class="markdownIt-Anchor" href="#中文输入法"></a> 中文输入法</h2>
+<p>一开始使用了<code>IBus</code><br>
+其中碰到的问题例如Obsidian不能使用中文输入法<br>
+在启动命令行参数里面添加了<br>
+<code>--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime</code><br>
+<mark>但是修改之后qq又不能输入了</mark><br>
+然后又换回了<code>Fcitx</code></p>
+<h2 id="rust-环境配置"><a class="markdownIt-Anchor" href="#rust-环境配置"></a> rust 环境配置</h2>
+<p><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  </code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">curl --proto <span class="string">&#x27;=https&#x27;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh</span>  </span><br><span class="line">info: downloading installer  </span><br><span class="line">  </span><br><span class="line">Welcome to Rust!  </span><br><span class="line">  </span><br><span class="line">This will download and install the official compiler for the Rust  </span><br><span class="line">programming language, and its package manager, Cargo.  </span><br><span class="line">  </span><br><span class="line">Rustup metadata and toolchains will be installed into the Rustup  </span><br><span class="line">home directory, located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.rustup  </span><br><span class="line">  </span><br><span class="line">This can be modified with the RUSTUP_HOME environment variable.  </span><br><span class="line">  </span><br><span class="line">The Cargo home directory is located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.cargo  </span><br><span class="line">  </span><br><span class="line">This can be modified with the CARGO_HOME environment variable.  </span><br><span class="line">  </span><br><span class="line">The cargo, rustc, rustup and other commands will be added to  </span><br><span class="line">Cargo&#x27;s bin directory, located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.cargo/bin  </span><br><span class="line">  </span><br><span class="line">This path will then be added to your PATH environment variable by  </span><br><span class="line">modifying the profile files located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.profile  </span><br><span class="line"> /home/s3loy/.bash_profile  </span><br><span class="line"> /home/s3loy/.bashrc  </span><br><span class="line"> /home/s3loy/.config/fish/conf.d/rustup.fish  </span><br><span class="line">  </span><br><span class="line">You can uninstall at any time with rustup self uninstall and  </span><br><span class="line">these changes will be reverted.  </span><br><span class="line">  </span><br><span class="line">Current installation options:  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  default host triple: x86_64-unknown-linux-gnu  </span><br><span class="line">    default toolchain: stable (default)  </span><br><span class="line">              profile: default  </span><br><span class="line"> modify PATH variable: yes  </span><br><span class="line">  </span><br><span class="line">1) Proceed with standard installation (default - just press enter)  </span><br><span class="line">2) Customize installation  </span><br><span class="line">3) Cancel installation</span><br></pre></td></tr></table></figure>
+<p>直接回车就好了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">info: default toolchain <span class="built_in">set</span> to <span class="string">&#x27;stable-x86_64-unknown-linux-gnu&#x27;</span>  </span><br><span class="line">  </span><br><span class="line"> stable-x86_64-unknown-linux-gnu installed - rustc 1.90.0 (1159e78c4 2025-09-14)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">Rust is installed now. Great!  </span><br><span class="line">  </span><br><span class="line">To get started you may need to restart your current shell.  </span><br><span class="line">This would reload your PATH environment variable to include  </span><br><span class="line">Cargo<span class="string">&#x27;s bin directory ($HOME/.cargo/bin).  </span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">To configure your current shell, you need to source  </span></span><br><span class="line"><span class="string">the corresponding env file under $HOME/.cargo.  </span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">This is usually done by running one of the following (note the leading DOT):  </span></span><br><span class="line"><span class="string">. &quot;$HOME/.cargo/env&quot;            # For sh/bash/zsh/ash/dash/pdksh  </span></span><br><span class="line"><span class="string">source &quot;$HOME/.cargo/env.fish&quot;  # For fish  </span></span><br><span class="line"><span class="string">source $&quot;($nu.home-path)/.cargo/env.nu&quot;  # For nushell</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">s3loy@fedora:~$ rustc --version</span><br><span class="line">rustc 1.90.0 (1159e78c4 2025-09-14)</span><br><span class="line">s3loy@fedora:~$ cargo --version</span><br><span class="line">cargo 1.90.0 (840b83a10 2025-07-30)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="vscode安装"><a class="markdownIt-Anchor" href="#vscode安装"></a> vscode安装</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> rpm --import https://packages.microsoft.com/keys/microsoft.asc</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> sh -c <span class="string">&#x27;echo -e &quot;[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc&quot; &gt; /etc/yum.repos.d/vscode.repo&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf check-update</span><br><span class="line"><span class="built_in">sudo</span> dnf install code</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="cc环境配置"><a class="markdownIt-Anchor" href="#cc环境配置"></a> c/c++环境配置</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">s3loy@fedora:~$ dnf group list</span><br><span class="line">仓库更新和加载中:</span><br><span class="line">仓库加载完成。</span><br><span class="line">ID                          Name                                        Installed</span><br><span class="line">milkymist                   Milkymist                                          no</span><br><span class="line">freeipa-server              FreeIPA Server                                     no</span><br><span class="line">headless-management         Headless Management                                no</span><br><span class="line">kde-apps                    KDE Applications                                   no</span><br><span class="line">kde-education               KDE Educational applications                       no</span><br><span class="line">kde-media                   KDE Multimedia support                             no</span><br><span class="line">kde-mobile                  KDE Mobile                                         no</span><br><span class="line">kde-mobile-apps             KDE Mobile Apps                                    no</span><br><span class="line">kde-office                  KDE Office                                         no</span><br><span class="line">kde-pim                     KDE PIM                                            no</span><br><span class="line">kde-software-development    KDE Software Development                           no</span><br><span class="line">kf6-software-development    KDE Frameworks 6 Software Development              no</span><br><span class="line">mate-applications           MATE Applications                                  no</span><br><span class="line">engineering-and-scientific  Engineering and Scientific                         no</span><br><span class="line">network-server              Network Servers                                    no</span><br><span class="line">neuron-modelling-simulators Neuron Modelling Simulators                        no</span><br><span class="line">office                      Office/Productivity                                no</span><br><span class="line">python-classroom            Python Classroom                                   no</span><br><span class="line">python-science              Python Science                                     no</span><br><span class="line">robotics-suite              Robotics                                           no</span><br><span class="line">rpm-development-tools       RPM Development Tools                              no</span><br><span class="line">security-lab                Security Lab                                       no</span><br><span class="line">swaywm-extended             Sway Window Manager (supplemental packages)        no</span><br><span class="line">text-internet               Text-based Internet                                no</span><br><span class="line">vlc                         VideoLAN Client                                    no</span><br><span class="line">window-managers             Window Managers                                    no</span><br><span class="line">games                       Games and Entertainment                            no</span><br><span class="line">kde-desktop                 KDE                                               <span class="built_in">yes</span></span><br><span class="line">libreoffice                 LibreOffice                                       <span class="built_in">yes</span></span><br><span class="line">3d-printing                 3D Printing                                        no</span><br><span class="line">admin-tools                 Administration Tools                               no</span><br><span class="line">audio                       Audio Production                                   no</span><br><span class="line">authoring-and-publishing    Authoring and Publishing                           no</span><br><span class="line">budgie-desktop              Budgie                                             no</span><br><span class="line">budgie-desktop-apps         Budgie Desktop Applications                        no</span><br><span class="line">c-development               C Development Tools and Libraries                  no</span><br><span class="line">cloud-infrastructure        Cloud Infrastructure                               no</span><br><span class="line">cloud-management            Cloud Management Tools                             no</span><br><span class="line">container-management        Container Management                              <span class="built_in">yes</span></span><br><span class="line">desktop-accessibility       Desktop accessibility                             <span class="built_in">yes</span></span><br><span class="line">sound-and-video             Sound and Video                                    no</span><br><span class="line">system-tools                System Tools                                       no</span><br><span class="line">compiz                      Compiz                                             no</span><br><span class="line">cosmic-desktop              COSMIC Desktop                                     no</span><br><span class="line">cosmic-desktop-apps         COSMIC Desktop Supplementary Applications          no</span><br><span class="line">d-development               D Development Tools and Libraries                  no</span><br><span class="line">design-suite                Design Suite                                       no</span><br><span class="line">development-tools           Development Tools                                  no</span><br><span class="line">domain-client               Domain Membership                                  no</span><br><span class="line">editors                     Editors                                            no</span><br><span class="line">education                   Educational Software                               no</span><br><span class="line">electronic-lab              Electronic Lab                                     no</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf group install development-tools</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf install gcc-c++</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">s3loy@fedora:~$ gdb --version</span><br><span class="line">GNU gdb (Fedora Linux) 16.3-1.fc42</span><br><span class="line">Copyright (C) 2024 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.</span><br><span class="line">s3loy@fedora:~$ g++ --version</span><br><span class="line">g++ (GCC) 15.2.1 20250808 (Red Hat 15.2.1-1)</span><br><span class="line">Copyright © 2025 Free Software Foundation, Inc.</span><br><span class="line">本程序是自由软件；请参看源代码的版权声明。本软件没有任何担保；</span><br><span class="line">包括没有适销性和某一专用目的下的适用性担保。</span><br><span class="line">s3loy@fedora:~$ gcc --version</span><br><span class="line">gcc (GCC) 15.2.1 20250808 (Red Hat 15.2.1-1)</span><br><span class="line">Copyright © 2025 Free Software Foundation, Inc.</span><br><span class="line">本程序是自由软件；请参看源代码的版权声明。本软件没有任何担保；</span><br><span class="line">包括没有适销性和某一专用目的下的适用性担保。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf install cmake</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf install qt6-qtbase-devel qt6-qtsvg-devel qt6-qttools-devel</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf install qt-creator</span><br></pre></td></tr></table></figure>
+<h2 id="front-end环境"><a class="markdownIt-Anchor" href="#front-end环境"></a> Front-end环境</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf install nodejs npm</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf install google-chrome</span><br><span class="line"></span><br><span class="line">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"></span><br><span class="line">nvm install --lts</span><br><span class="line">nvm use --lts</span><br><span class="line">nvm <span class="built_in">alias</span> default lts/*</span><br><span class="line"></span><br><span class="line">npm install -g pnpm@latest-10</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">s3loy@fedora:~$ pnpm -v</span><br><span class="line">10.17.1</span><br><span class="line">s3loy@fedora:~$ npm -v</span><br><span class="line">11.6.1</span><br><span class="line">s3loy@fedora:~$ nvm -v</span><br><span class="line">0.39.7</span><br><span class="line">s3loy@fedora:~$ node -v</span><br><span class="line">v22.20.0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="终端优化"><a class="markdownIt-Anchor" href="#终端优化"></a> 终端优化</h2>
+<p>默认的终端应用是<code>konsole</code>,有一点不满意，于是换成了<strong>wezTerm</strong>+<strong>fish</strong>+<strong>oh my fish</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf copr <span class="built_in">enable</span> wezfurlong/wezterm-nightly</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf install wezterm</span><br><span class="line"></span><br><span class="line">chsh -s /usr/bin/fish</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在<a target="_blank" rel="noopener" href="https://www.nerdfonts.com/font-downloads">nerd fonts</a><br>
+下载了FiraCode Nerd Font,解压到了<code>~/.fonts</code>文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fc-cache -fv</span><br><span class="line"></span><br><span class="line">nano ~/.wezterm.lua</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">local wezterm = require &#x27;wezterm&#x27;</span><br><span class="line">local config = &#123;&#125;</span><br><span class="line">if wezterm.config_builder then</span><br><span class="line">  config = wezterm.config_builder()</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">config.font = wezterm.font_with_fallback(&#123;</span><br><span class="line">  &#x27;FiraCode Nerd Font&#x27;,</span><br><span class="line">  &#x27;Noto Color Emoji&#x27;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">config.harfbuzz_features = &#123;&#x27;calt=1&#x27;, &#x27;clig=1&#x27;, &#x27;liga=1&#x27;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">config.color_scheme = &#x27;Catppuccin Mocha&#x27;</span><br><span class="line"></span><br><span class="line">config.window_background_opacity = 0.95</span><br><span class="line"></span><br><span class="line">config.window_padding = &#123;</span><br><span class="line">  left = 15,</span><br><span class="line">  right = 15,</span><br><span class="line">  top = 15,</span><br><span class="line">  bottom = 10,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">config.hide_tab_bar_if_only_one_tab = true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">config.default_cursor_style = &#x27;BlinkingBar&#x27;</span><br><span class="line">config.enable_scroll_bar = false</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">config.keys = &#123;</span><br><span class="line">  -- 关闭当前窗格 (Pane)</span><br><span class="line">  &#123;</span><br><span class="line">    key = &#x27;w&#x27;,</span><br><span class="line">    mods = &#x27;ALT&#x27;,</span><br><span class="line">    action = wezterm.action.CloseCurrentPane &#123; confirm = true &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  -- 关闭当前标签页 (Tab)</span><br><span class="line">  &#123;</span><br><span class="line">    key = &#x27;w&#x27;,</span><br><span class="line">    mods = &#x27;CTRL|SHIFT&#x27;,</span><br><span class="line">    action = wezterm.action.CloseCurrentTab &#123; confirm = false &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  -- 水平分割窗格 (左右)</span><br><span class="line">  &#123;</span><br><span class="line">    key = &#x27;-&#x27;,</span><br><span class="line">    mods = &#x27;ALT&#x27;,</span><br><span class="line">    action = wezterm.action.SplitHorizontal &#123; domain = &#x27;CurrentPaneDomain&#x27; &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  -- 垂直分割窗格 (上下)</span><br><span class="line">  &#123;</span><br><span class="line">    key = &#x27;=&#x27;,</span><br><span class="line">    mods = &#x27;ALT&#x27;,</span><br><span class="line">    action = wezterm.action.SplitVertical &#123; domain = &#x27;CurrentPaneDomain&#x27; &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">return config</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish</span><br><span class="line"></span><br><span class="line">omf install scorphish</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf install fzf</span><br><span class="line"><span class="built_in">sudo</span> dnf install grc</span><br><span class="line"></span><br><span class="line">omf install fzf</span><br><span class="line">omf install grc</span><br><span class="line">omf install nvm</span><br><span class="line">omf install z</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>主题还有待考察</p>
+<h2 id="sudo"><a class="markdownIt-Anchor" href="#sudo"></a> sudo</h2>
+<p>因为每次用<code>sudo</code>都需要密码觉得太麻烦了，所以修改了一下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> visudo</span><br></pre></td></tr></table></figure>
+<p>修改了这一行<br>
+<code>%wheel ALL=(ALL)       NOPASSWD: ALL</code><br>
+然后保存就行了，因为本身用户就在wheel用户组内</p>
+<h2 id="开机自动登录"><a class="markdownIt-Anchor" href="#开机自动登录"></a> 开机自动登录</h2>
+<p>系统设置-外观和样式-颜色和主题-全局主题-登录屏幕(SDDM)-右上角的“行为…”-自动登录 选择账户和前端并输入密码</p>
+<h2 id="wine"><a class="markdownIt-Anchor" href="#wine"></a> wine</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf install wine</span><br></pre></td></tr></table></figure>
+<ul>
+<li>[ ] to be continued</li>
+</ul>
+<h2 id="super快捷方式"><a class="markdownIt-Anchor" href="#super快捷方式"></a> super快捷方式</h2>
+<p><code>~/.local/share/applications/feishu.desktop</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Desktop Entry]</span><br><span class="line">Version=1.0</span><br><span class="line">Name=飞书</span><br><span class="line">Comment=Feishu | Lark, a work collaboration platform</span><br><span class="line">Exec=/opt/bytedance/feishu/feishu %U</span><br><span class="line">Icon=/opt/bytedance/feishu/product_logo_256.png</span><br><span class="line">Terminal=false</span><br><span class="line">Type=Application</span><br><span class="line">Categories=Network;Office;InstantMessaging;</span><br></pre></td></tr></table></figure>
+<h2 id="docker"><a class="markdownIt-Anchor" href="#docker"></a> docker</h2>
+<p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/fedora/">Install Docker Engine on Fedora</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf upgrade --refresh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf -y install dnf-plugins-core</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-selinux \</span><br><span class="line">                  docker-engine-selinux \</span><br><span class="line">                  docker-engine</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf -y install dnf-plugins-core</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br><span class="line"></span><br><span class="line"><span class="comment"># sudo systemctl enable --now docker </span></span><br><span class="line"><span class="comment"># 如果你要自启用这个</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start docker</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> docker run hello-world</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">»»»» <span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> --now docker                               0|15:40:52</span><br><span class="line">Created symlink <span class="string">&#x27;/etc/systemd/system/multi-user.target.wants/docker.service&#x27;</span> → <span class="string">&#x27;/usr/lib/systemd/system/docker.service&#x27;</span>.</span><br><span class="line">[~/下载|3.13.7] ⚡️ 1.164s</span><br><span class="line">»»»» <span class="built_in">sudo</span> systemctl start docker                                      0|15:41:08</span><br><span class="line">[~/下载|3.13.7] ⚡️ 0.277s</span><br><span class="line">»»»» <span class="built_in">sudo</span> docker run hello-world                                      0|15:42:13</span><br><span class="line">Unable to find image <span class="string">&#x27;hello-world:latest&#x27;</span> locally</span><br><span class="line">latest: Pulling from library/hello-world</span><br><span class="line">17eec7bbc9d7: Pull complete</span><br><span class="line">Digest: sha256:54e66cc1dd1fcb1c3c58bd8017914dbed8701e2d8c74d9262e26bd9cc1642d31</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> hello-world:latest</span><br><span class="line"></span><br><span class="line">Hello from Docker!</span><br><span class="line">This message shows that your installation appears to be working correctly.</span><br><span class="line"></span><br><span class="line">To generate this message, Docker took the following steps:</span><br><span class="line"> 1. The Docker client contacted the Docker daemon.</span><br><span class="line"> 2. The Docker daemon pulled the <span class="string">&quot;hello-world&quot;</span> image from the Docker Hub.</span><br><span class="line">    (amd64)</span><br><span class="line"> 3. The Docker daemon created a new container from that image <span class="built_in">which</span> runs the</span><br><span class="line">    executable that produces the output you are currently reading.</span><br><span class="line"> 4. The Docker daemon streamed that output to the Docker client, <span class="built_in">which</span> sent it</span><br><span class="line">    to your terminal.</span><br><span class="line"></span><br><span class="line">To try something more ambitious, you can run an Ubuntu container with:</span><br><span class="line"> $ docker run -it ubuntu bash</span><br><span class="line"></span><br><span class="line">Share images, automate workflows, and more with a free Docker ID:</span><br><span class="line"> https://hub.docker.com/</span><br><span class="line"></span><br><span class="line">For more examples and ideas, visit:</span><br><span class="line"> https://docs.docker.com/get-started/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="wayland-docker-osx"><a class="markdownIt-Anchor" href="#wayland-docker-osx"></a> Wayland-Docker-OSX</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">docker run -it \                                                           </span><br><span class="line">             --device /dev/kvm \</span><br><span class="line">             -p 50922:10022 \</span><br><span class="line">             -e XDG_RUNTIME_DIR=/tmp \</span><br><span class="line">             -e WAYLAND_DISPLAY=<span class="variable">$WAYLAND_DISPLAY</span> \</span><br><span class="line">             -v <span class="variable">$XDG_RUNTIME_DIR</span>/<span class="variable">$WAYLAND_DISPLAY</span>:/tmp/<span class="variable">$WAYLAND_DISPLAY</span>  \</span><br><span class="line">             -e GENERATE_UNIQUE=<span class="literal">true</span> \</span><br><span class="line">             -e MASTER_PLIST_URL=<span class="string">&#x27;https://raw.githubusercontent.com/sickcodes/osx-serial-generator/master/config-custom.plist&#x27;</span> \</span><br><span class="line">             -e SHORTNAME=sonoma \</span><br><span class="line">             sickcodes/docker-osx:latest</span><br><span class="line">             </span><br></pre></td></tr></table></figure>
+<p>还没有成功，死在了盘都装好了打不开来，但因为<code>wayland</code>的<code>display</code>和<code>x11</code>有所区别,所以得参考<code>github</code>内<code>issues</code></p>
+<h2 id="桌面预览"><a class="markdownIt-Anchor" href="#桌面预览"></a> 桌面预览</h2>
+<p><img src="/My-Fedora-Journey/desktop.png" alt="desktop"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/fedora/" rel="tag"><i class="fa fa-tag"></i> fedora</a>
+              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/Nginx-enginex/" rel="next" title="Nginx-enginex">
+      Nginx-enginex <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%8C%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text"> 桌面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text"> 中文输入法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rust-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text"> rust 环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vscode%E5%AE%89%E8%A3%85"><span class="nav-number">4.</span> <span class="nav-text"> vscode安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cc%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text"> c&#x2F;c++环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#front-end%E7%8E%AF%E5%A2%83"><span class="nav-number">6.</span> <span class="nav-text"> Front-end环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E4%BC%98%E5%8C%96"><span class="nav-number">7.</span> <span class="nav-text"> 终端优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sudo"><span class="nav-number">8.</span> <span class="nav-text"> sudo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%9C%BA%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95"><span class="nav-number">9.</span> <span class="nav-text"> 开机自动登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wine"><span class="nav-number">10.</span> <span class="nav-text"> wine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#super%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F"><span class="nav-number">11.</span> <span class="nav-text"> super快捷方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker"><span class="nav-number">12.</span> <span class="nav-text"> docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wayland-docker-osx"><span class="nav-number">13.</span> <span class="nav-text"> Wayland-Docker-OSX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%8C%E9%9D%A2%E9%A2%84%E8%A7%88"><span class="nav-number">14.</span> <span class="nav-text"> 桌面预览</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s3loy"
+      src="/images/1.jpg">
+  <p class="site-author-name" itemprop="name">s3loy</p>
+  <div class="site-description" itemprop="description">Neither emo nor demo.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s3loy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s3loy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="author" itemprop="copyrightHolder">s3loy</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">41k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">1:14</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
