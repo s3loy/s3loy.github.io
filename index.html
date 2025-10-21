@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-10-13 22:11:29" itemprop="dateModified" datetime="2025-10-13T22:11:29+08:00">2025-10-13</time>
+                <time title="Modified: 2025-10-21 22:18:52" itemprop="dateModified" datetime="2025-10-21T22:18:52+08:00">2025-10-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,14 +241,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>20k</span>
+              <span>24k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>36 mins.</span>
+              <span>43 mins.</span>
             </span>
 
         </div>
@@ -268,20 +268,19 @@
 <li>fedora不是arch</li>
 </ul>
 </blockquote>
-<h2 id="桌面"><a class="markdownIt-Anchor" href="#桌面"></a> 桌面</h2>
+<h2 id="desktopkde-plasmastop-using-gnome"><a class="markdownIt-Anchor" href="#desktopkde-plasmastop-using-gnome"></a> Desktop(KDE plasma)::stop using GNOME!</h2>
 <p>前端本来用的是默认的<code>GNOME</code>，因为没有桌面很难受所以换成了<code>KDE plasma</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf install @kde-desktop-environment</span></span><br></pre></td></tr></table></figure>
 <p>后面可以在登录页面切换桌面前端</p>
-<h2 id="中文输入法"><a class="markdownIt-Anchor" href="#中文输入法"></a> 中文输入法</h2>
-<p>一开始使用了<code>IBus</code><br>
-其中碰到的问题例如Obsidian不能使用中文输入法<br>
-在启动命令行参数里面添加了<br>
-<code>--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime</code><br>
-但是修改之后qq又不能输入了<br>
-然后又换回了<code>Fcitx</code></p>
-<h2 id="rust-环境配置"><a class="markdownIt-Anchor" href="#rust-环境配置"></a> rust 环境配置</h2>
-<p><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  </code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">curl --proto <span class="string">&#x27;=https&#x27;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh</span>  </span><br><span class="line">info: downloading installer  </span><br><span class="line">  </span><br><span class="line">Welcome to Rust!  </span><br><span class="line">  </span><br><span class="line">This will download and install the official compiler for the Rust  </span><br><span class="line">programming language, and its package manager, Cargo.  </span><br><span class="line">  </span><br><span class="line">Rustup metadata and toolchains will be installed into the Rustup  </span><br><span class="line">home directory, located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.rustup  </span><br><span class="line">  </span><br><span class="line">This can be modified with the RUSTUP_HOME environment variable.  </span><br><span class="line">  </span><br><span class="line">The Cargo home directory is located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.cargo  </span><br><span class="line">  </span><br><span class="line">This can be modified with the CARGO_HOME environment variable.  </span><br><span class="line">  </span><br><span class="line">The cargo, rustc, rustup and other commands will be added to  </span><br><span class="line">Cargo&#x27;s bin directory, located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.cargo/bin  </span><br><span class="line">  </span><br><span class="line">This path will then be added to your PATH environment variable by  </span><br><span class="line">modifying the profile files located at:  </span><br><span class="line">  </span><br><span class="line"> /home/s3loy/.profile  </span><br><span class="line"> /home/s3loy/.bash_profile  </span><br><span class="line"> /home/s3loy/.bashrc  </span><br><span class="line"> /home/s3loy/.config/fish/conf.d/rustup.fish  </span><br><span class="line">  </span><br><span class="line">You can uninstall at any time with rustup self uninstall and  </span><br><span class="line">these changes will be reverted.  </span><br><span class="line">  </span><br><span class="line">Current installation options:  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  default host triple: x86_64-unknown-linux-gnu  </span><br><span class="line">    default toolchain: stable (default)  </span><br><span class="line">              profile: default  </span><br><span class="line"> modify PATH variable: yes  </span><br><span class="line">  </span><br><span class="line">1) Proceed with standard installation (default - just press enter)  </span><br><span class="line">2) Customize installation  </span><br><span class="line">3) Cancel installation</span><br></pre></td></tr></table></figure>
+<h2 id="bootrefinduefi-boot-manager"><a class="markdownIt-Anchor" href="#bootrefinduefi-boot-manager"></a> Boot(rEFInd)::UEFI Boot Manager</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf install rEFInd</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> refind-install</span></span><br><span class="line">ShimSource is none</span><br><span class="line">Installing rEFInd on Linux....</span><br><span class="line">ESP was found at /boot/efi using vfat</span><br><span class="line"></span><br><span class="line">CAUTION: Your computer appears to be booted with Secure Boot, but you haven&#x27;t</span><br><span class="line">specified a valid shim.efi file source. Chances are you should re-run with</span><br><span class="line">the --shim option. You can read more about this topic at</span><br><span class="line">http://www.rodsbooks.com/refind/secureboot.html.</span><br><span class="line"></span><br><span class="line">Do you want to proceed with installation (Y/N)? n</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在这看出来问题了，脚本并不能自主识别本地efi在哪个地方<br>
+因此使用了<code>sudo refind-install --shim /boot/efi/EFI/fedora/shimx64.efi</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> refind-install --shim /boot/efi/EFI/fedora/shimx64.efi</span></span><br><span class="line">ShimSource is /boot/efi/EFI/fedora/shimx64.efi</span><br><span class="line">Installing rEFInd on Linux....</span><br><span class="line">ESP was found at /boot/efi using vfat</span><br><span class="line">Installing driver for ext4 (ext4_x64.efi)</span><br><span class="line">Storing copies of rEFInd Secure Boot public keys in //etc/refind.d/keys</span><br><span class="line">Copied rEFInd binary files</span><br><span class="line"></span><br><span class="line">Copying sample configuration file as refind.conf; edit this file to configure</span><br><span class="line">rEFInd.</span><br><span class="line"></span><br><span class="line">Creating new NVRAM entry</span><br><span class="line">rEFInd is set as the default boot manager.</span><br><span class="line">Creating //boot/refind_linux.conf; edit it to adjust kernel options.</span><br><span class="line">The appropriate Secure Boot key is already enrolled.</span><br><span class="line"></span><br><span class="line">Installation has completed successfully.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这边看起来说都弄好了，结果我到MoK那边去找的时候傻眼了，发现这个keys目录是空的啊！<br>
+折腾死了，最后还是选择关掉了<code>Secure Boot</code><br>
+目前配置仍有问题，自动的识别会多出来很多的启动项<br>
+不过确实可以自动扫到windows和fedora,能统一启动是事实，但目前体验感不好</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/My-Fedora-Journey/#more" rel="contents">
@@ -865,12 +864,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">50k</span>
+    <span title="Symbols count total">54k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:31</span>
+    <span title="Reading time total">1:38</span>
 </div>
 
         
