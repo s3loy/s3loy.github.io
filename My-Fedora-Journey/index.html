@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://s3loy.github.io/My-Fedora-Journey/pure.png">
 <meta property="og:image" content="https://s3loy.github.io/My-Fedora-Journey/desktop.png">
 <meta property="article:published_time" content="2025-10-10T13:27:57.000Z">
-<meta property="article:modified_time" content="2025-10-21T14:18:52.129Z">
+<meta property="article:modified_time" content="2025-10-25T07:40:21.250Z">
 <meta property="article:author" content="s3loy">
 <meta property="article:tag" content="fedora">
 <meta property="article:tag" content="linux">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-10-21 22:18:52" itemprop="dateModified" datetime="2025-10-21T22:18:52+08:00">2025-10-21</time>
+                <time title="Modified: 2025-10-25 15:40:21" itemprop="dateModified" datetime="2025-10-25T15:40:21+08:00">2025-10-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>24k</span>
+              <span>27k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>43 mins.</span>
+              <span>49 mins.</span>
             </span>
 
         </div>
@@ -288,13 +288,111 @@
 折腾死了，最后还是选择关掉了<code>Secure Boot</code><br>
 目前配置仍有问题，自动的识别会多出来很多的启动项<br>
 不过确实可以自动扫到windows和fedora,能统一启动是事实，但目前体验感不好</p>
+<blockquote>
+<p>最新消息：<br>
+使用默认主题选到不需要的启动项可以使用Del按键选择隐藏，因此可以修改好之后再启动</p>
+</blockquote>
+<p>同时如果类似fedora这种可以扫出来很多内容，要注意保留的是什么，我就用我自己扫到的举个例子</p>
+<ul>
+<li>Boot Microsoft EFI boot from EFI System Partition</li>
+<li>Boot EFI\fedora\grubx64.efi from EFI System Partition</li>
+<li>Boot EFI\fedora\gcdx64.efi from EFI System Partition</li>
+<li>Boot Fallback boot loader from EFI System Partition</li>
+<li>Boot vmlinuz-6.16.12-200.fc42.x86_64 from 1024 MiB ext4 Volume</li>
+</ul>
+<p>这边只需要保留<code>Microsoft EFI boot</code>和最后一个 <code>vmlinuz</code></p>
 <p>使用的主题是<br>
 <a target="_blank" rel="noopener" href="https://github.com/catppuccin/refind">GitHub - catppuccin/refind: 🔄 Soothing pastel theme for rEFInd</a></p>
-<h2 id="systemfedoramaybe-u-should-know-something-about-this"><a class="markdownIt-Anchor" href="#systemfedoramaybe-u-should-know-something-about-this"></a> System(fedora)::maybe U should know something about this</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf update</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf autoremove    <span class="comment"># 删除孤立的依赖包</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf clean all    <span class="comment"># 清理 DNF 缓存</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> journalctl --vacuum-time=2weeks   <span class="comment"># 仅保留两周日志</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">flatpak uninstall --unused  <span class="comment"># flatpak 不使用的包</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">du</span> -sh ~/.cache</span></span><br><span class="line">6.2G    /home/s3loy/.cache</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">rm</span> -rf ~/.cache/*</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>知识拓展</p>
+</blockquote>
+<h3 id="uefi-bios"><a class="markdownIt-Anchor" href="#uefi-bios"></a> UEFI &amp; BIOS</h3>
+<p>BIOS(<strong>Basic Input/Output System</strong>)</p>
+<ol>
+<li><strong>POST (Power-On Self-Test，开机自检)</strong>：
 <ul>
-<li>[ ] To be continued</li>
+<li>它会先清点一遍家当，快速检查所有核心硬件是否连接正常并能工作。如果发现严重问题（比如没插内存条），它就会通过鸣叫来报警。</li>
 </ul>
+</li>
+<li><strong>寻找“交接手册”</strong>：
+<ul>
+<li>自检通过后，老管家需要找到操作系统的“启动说明书”。它不知道 Windows 或 Linux 是什么，但它知道要去一个<strong>固定的地方</strong>找。这个地方就是硬盘的<strong>第一个扇区</strong>，一个仅有 512 字节的微小空间，被称为<strong>主引导记录 (MBR - Master Boot Record)</strong>。</li>
+</ul>
+</li>
+<li><strong>加载并执行</strong>：
+<ul>
+<li>BIOS 会把 MBR 里的这段代码加载到内存中，然后把计算机的控制权完全交给它。BIOS 的任务到此基本结束。</li>
+</ul>
+</li>
+<li><strong>交接班</strong>：
+<ul>
+<li>从 MBR 开始，后续的引导加载程序会一步步接力，最终将整个操作系统加载到内存中并运行起来。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>在几十年的时间里，BIOS 工作得非常出色。它简单、可靠、标准化。但随着计算机技术爆炸式发展，这位老管家开始显得力不从心，他的几个“老毛病”越来越严重：</p>
+</blockquote>
+<ul>
+<li><strong>视野太窄（2.2TB 硬盘限制）</strong>：MBR 使用 32 位地址来记录分区，这导致它能管理的最大硬盘容量只有 2.2TB。在今天 4TB、8TB 硬盘普及的时代，这成了一个无法逾越的障碍。</li>
+<li><strong>启动太慢</strong>：BIOS 只能以 16 位的“老模式”运行，内存寻址能力只有 1MB，并且它是一个个地初始化硬件，效率低下。</li>
+<li><strong>不够安全</strong>：BIOS 没有任何安全校验机制。黑客可以制造一种叫“Bootkit”的病毒，在操作系统启动前就感染 MBR，从而获得最高控制权，极难被发现和清除。</li>
+<li><strong>界面古老</strong></li>
+</ul>
+<p>在老式的 BIOS 启动方式下，电脑启动时会去硬盘的主引导记录 MBR 寻找启动代码，这种方法较为死板，因此聪明的人们就想到了另一种启动方式：UEFI<br>
+UEFI 统一可扩展固件接口启动方式，它不依赖于某个固定位置，而是规定硬盘上必须有一个特殊的小分区，这就是 ESP(<strong>EFI System Partition</strong>)</p>
+<p>ESP的特点：</p>
+<ul>
+<li><strong>格式特殊</strong>：它必须是 FAT32 格式。这是为了确保所有操作系统和 UEFI 固件都能无障碍地读写它</li>
+<li><strong>功能专一</strong>：它的唯一作用就是存放<strong>引导加载程序 (Bootloader)</strong></li>
+</ul>
+<p><strong>ESP 是所有已安装操作系统的启动程序的存放地和调度中心</strong></p>
+<p>UEFI 的革命性优势</p>
+<ol>
+<li><strong>全新的启动方式：GPT 分区与 ESP 分区</strong>
+<ul>
+<li><strong>告别 MBR，拥抱 GPT</strong>：UEFI 不再使用 MBR，而是使用全新的 <strong>GPT (GUID Partition Table)</strong> 分区方案。GPT 使用 64 位地址，理论上可以支持高达 9.4 ZB (94 亿 TB) 的硬盘，彻底解决了容量限制问题。同时，它还支持多达 128 个主分区。</li>
+<li><strong>告别固定位置，启用 ESP</strong>：UEFI 不再去硬盘的第一个扇区找启动代码。而是在硬盘上建立一个标准化的 <strong>EFI 系统分区 (ESP)</strong>。所有操作系统的引导加载程序（.efi 文件）都以普通文件的形式存放在这个分区里。UEFI 固件会扫描并读取这些文件，生成一个启动菜单。这就像从“在门缝下塞纸条”升级到了“拥有一个标准的公告板”。</li>
+</ul>
+</li>
+<li>**安全启动 (Secure Boot)
+<ul>
+<li>这是 UEFI 最核心的优势之一。它建立了一个“信任链”。主板固件内置了一些受信任的公钥（通常是微软和硬件厂商的）。</li>
+<li>在启动时，UEFI 会校验引导加载程序（如 gcdx64.efi）的数字签名。如果签名无效或被篡改，UEFI 会拒绝执行它，从而从根源上杜绝了 Bootkit 病毒的入侵。</li>
+</ul>
+</li>
+<li><strong>现代化的人机交互</strong>
+<ul>
+<li>UEFI 拥有<strong>图形化界面</strong>，支持鼠标操作，分辨率更高，设置选项也更丰富、更人性化。</li>
+<li>它是一个可扩展的平台，主板厂商可以在 UEFI 界面中内置各种高级功能，比如硬件诊断工具、在线固件更新，甚至是一个简易的网页浏览器。</li>
+</ul>
+</li>
+<li><strong>无与伦比的性能和速度</strong>
+<ul>
+<li>UEFI 以 32 位或 64 位模式运行，可以访问全部系统内存，没有 1MB 的限制。</li>
+<li>它可以并行初始化硬件设备，大大缩短了开机自检时间，实现了“秒速开机”。</li>
+</ul>
+</li>
+<li><strong>强大的扩展性</strong>
+<ul>
+<li>UEFI 可以加载独立的硬件驱动程序。这意味着它在操作系统启动前就能识别并使用更多的硬件，比如网卡（实现网络启动或远程诊断）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="efi里面的xdx"><a class="markdownIt-Anchor" href="#efi里面的xdx"></a> efi里面的xdx</h3>
+<p>Boot EFI\fedora\grubx64.efi from EFI System Partition<br>
+我们以这个为例子，这是grub，Fedora 的主要引导加载程序 GRUB2(<em>GRand Unified Bootloader</em>)</p>
+<p>Boot EFI\fedora\gcdx64.efi from EFI System Partition<br>
+这个是为了兼容<strong>Secure Boot</strong> 功能而存在的特殊程序<strong>Secure Boot Shim</strong>。安全启动是 UEFI 的一个安全特性，它要求所有启动代码都必须有受信任的数字签名，以防止恶意软件在操作系统启动前运行<br>
+grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时候这个都是默认的启动方式</p>
+<p>Boot Fallback boot loader from EFI System Partition<br>
+这是<strong>备用/应急引导加载程序</strong>，UEFI 规范定义了一个标准的、通用的启动路径：EFI\BOOT\BOOTX64.EFI。如果因为某些原因（比如系统配置错误、NVRAM 记录丢失），UEFI 找不到为系统设置的特定启动项，它会最后尝试去寻找这个“备用路径”。</p>
+<p>Boot vmlinuz-6.16.12-200.fc42.x86_64 from 1024 MiB ext4 Volume<br>
+这是直接从 Linux 文件系统启动 Linux 内核。现代 Linux 内核支持一种叫 EFISTUB 的技术，允许 UEFI 固件像运行一个 .efi 程序一样，直接加载并运行内核文件<br>
+我目前开机使用的就是这个，因为它确实快一些</p>
+<h2 id="systemfedoramaybe-u-should-know-something-about-this"><a class="markdownIt-Anchor" href="#systemfedoramaybe-u-should-know-something-about-this"></a> System(fedora)::maybe U should know something about this</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf update</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf upgrade --refresh</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf search htop <span class="comment"># 搜索包</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf remove htop <span class="comment"># 删除</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf list installed <span class="comment"># 查看安装的包</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf autoremove    <span class="comment"># 删除孤立的依赖包</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf clean all    <span class="comment"># 清理 DNF 缓存</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> -lha <span class="comment"># 以更易读的格式 (-h) 显示详细信息 (-l)，包括隐藏文件 (-a)。</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> /etc/nginx <span class="comment"># cd .. cd ~ or cd：</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">pwd</span> <span class="comment"># 康康你在哪里口牙</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> Projects</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cp</span> source.txt destination.txt</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cp</span> -r source_folder/ destination_folder/：-r 表示递归复制整个文件夹。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> journalctl --vacuum-time=2weeks   <span class="comment"># 仅保留两周日志</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">flatpak uninstall --unused  <span class="comment"># flatpak 不使用的包</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">du</span> -sh ~/.cache</span></span><br><span class="line">6.2G    /home/s3loy/.cache</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">rm</span> -rf ~/.cache/*</span></span><br></pre></td></tr></table></figure>
+<p>别急</p>
 <h2 id="toolneofetchshow-your-os"><a class="markdownIt-Anchor" href="#toolneofetchshow-your-os"></a> Tool(neofetch)::Show your OS</h2>
 <p><code>fedora</code>的官方仓库里面是没有neofetch的，但是可以<br>
 <code>sudo dnf install fastfetch</code><br>
@@ -468,11 +566,25 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf install snapper python3-dnf-plugin-snapper</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> snapper -c root create-config /</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">它会自动进行备份</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> snapper list</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">│ 类型   │ 前期 <span class="comment"># │ 日期                               │ 用户 │ 清空     │ 描述</span></span></span><br><span class="line">     │ 用户数据</span><br><span class="line">──┼────────┼────────┼────────────────────────────────────┼──────┼──────────┼──────────┼─────────</span><br><span class="line">0 │ single │        │                                    │ root │          │ current  │</span><br><span class="line">1 │ single │        │ 2025年10月21日 星期二 19时00分00秒 │ root │ timeline │ timeline │</span><br><span class="line">2 │ single │        │ 2025年10月21日 星期二 20时00分00秒 │ root │ timeline │ timeline │</span><br><span class="line">3 │ single │        │ 2025年10月21日 星期二 21时00分00秒 │ root │ timeline │ timeline │</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>可以参考<a target="_blank" rel="noopener" href="https://documentation.suse.com/zh-cn/sles/12-SP5/html/SLES-all/cha-snapper.html">通过 Snapper 进行系统恢复和快照管理 | 管理指南 | SLES 12 SP5</a></p>
 <p><code>sudo snapper create --description &quot;进行重要操作前的备份&quot;</code></p>
+<h2 id="tooltermiusssh-helper"><a class="markdownIt-Anchor" href="#tooltermiusssh-helper"></a> Tool(Termius)::ssh helper</h2>
+<p>官方只提供了<code>.deb</code>包，因此使用snap仓库内的包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> snap install termius-app</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此处不推荐使用flatpak,因为文件不共享会导致SFTP不好用</p>
+</blockquote>
+<p>然后就可以去应用程序那边找到了<br>
+<code>termius</code> 可以白嫖学生认证，用github账户关联下就可以了</p>
+<p>ssh 连接服务器，然后爽用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> dnf install openssh-server</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> systemctl start sshd</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> sshd</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl daemon-reload</span></span><br></pre></td></tr></table></figure>
 <h2 id="trickmtu-testnetwork"><a class="markdownIt-Anchor" href="#trickmtu-testnetwork"></a> Trick(MTU test)::Network</h2>
 <p>因为发现向<code>google drive</code>上传的时候很慢，刚刚好看一下是不是这一块的问题</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ping -c 3 -M <span class="keyword">do</span> -s 1453 8.8.8.8</span></span><br><span class="line">ping: sendmsg: 消息过长</span><br><span class="line">PING 8.8.8.8 (8.8.8.8) 1453(1481) 字节的数据。</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ping -c 3 -M <span class="keyword">do</span> -s 1452 8.8.8.8</span></span><br><span class="line">PING 8.8.8.8 (8.8.8.8) 1452(1480) 字节的数据。</span><br><span class="line">1460 字节，来自 8.8.8.8: icmp_seq=1 ttl=112 时间=45.7 毫秒</span><br></pre></td></tr></table></figure>
 <p>尝试出来发现最大MTU是<strong>1480</strong><br>
 因此<code>clash-verge</code>里面设置的1500超过了限度，有时候会出问题，可以手动修改，顺手把<code>tun</code>模式换成了<code>System</code>,因为<code>System</code>快啊</p>
+<blockquote>
+<p>好像是因为ICMP和TCP的区别，刚好少了20的头，那好像其实1500也是合理的<br>
+呜呜有没有大神教我计网</p>
+</blockquote>
 <h2 id="previewdesktop嘿嘿嘿"><a class="markdownIt-Anchor" href="#previewdesktop嘿嘿嘿"></a> Preview(Desktop)::嘿嘿嘿</h2>
 <p><img src="/My-Fedora-Journey/desktop.png" alt="desktop"><br>
 <s>我不是福瑞控🐾</s></p>
@@ -558,7 +670,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#desktopkde-plasmastop-using-gnome"><span class="nav-number">1.</span> <span class="nav-text"> Desktop(KDE plasma)::stop using GNOME!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bootrefinduefi-boot-manager"><span class="nav-number">2.</span> <span class="nav-text"> Boot(rEFInd)::UEFI Boot Manager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#systemfedoramaybe-u-should-know-something-about-this"><span class="nav-number">3.</span> <span class="nav-text"> System(fedora)::maybe U should know something about this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolneofetchshow-your-os"><span class="nav-number">4.</span> <span class="nav-text"> Tool(neofetch)::Show your OS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolbleachbitrubbish-sorting"><span class="nav-number">5.</span> <span class="nav-text"> Tool(bleachbit)::Rubbish Sorting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gaminggamemodegames-optimize"><span class="nav-number">6.</span> <span class="nav-text"> Gaming(gamemode)::Games optimize</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sideloadinglegacy-ios-kit"><span class="nav-number">7.</span> <span class="nav-text"> Sideloading(legacy-ios-kit)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolfcitx5input-method"><span class="nav-number">8.</span> <span class="nav-text"> Tool(Fcitx5)::Input method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentrust%E5%8A%A0%E5%85%A5rust%E7%A5%9E%E6%95%99%E5%96%B5%E5%96%B5%E5%8A%A0%E5%85%A5rust%E7%A5%9E%E6%95%99"><span class="nav-number">9.</span> <span class="nav-text"> Environment(rust)::加入rust神教喵喵加入rust神教</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolvscode%E7%B1%B3%E5%A5%87%E5%A6%99%E5%A6%99%E7%89%A9"><span class="nav-number">10.</span> <span class="nav-text"> Tool(vscode)::米奇妙妙物</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentccnjupt-wanted"><span class="nav-number">11.</span> <span class="nav-text"> Environment(c&#x2F;c++)::NJUPT wanted</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentfront-endnonononode_module"><span class="nav-number">12.</span> <span class="nav-text"> Environment(Front-end)::nonononode_module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolweztermfishcome-and-use-wezterm"><span class="nav-number">13.</span> <span class="nav-text"> Tool(wezTerm+fish)::Come and use wezTerm!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationsudousing-sudo-without-password"><span class="nav-number">14.</span> <span class="nav-text"> Optimization(sudo)::using sudo without password</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationauto-loginlogin-without-password"><span class="nav-number">15.</span> <span class="nav-text"> Optimization(auto login)::login without password</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolwinerunning-exe-on-linux"><span class="nav-number">16.</span> <span class="nav-text"> Tool(wine)::Running exe on linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationsuper-desktop%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F%E4%B9%A6%E5%86%99"><span class="nav-number">17.</span> <span class="nav-text"> Optimization(super .desktop)::快捷方式书写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentdockercontainer"><span class="nav-number">18.</span> <span class="nav-text"> Environment(docker)::Container</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trickwayland-docker-osxbuilding-macos-with-docker"><span class="nav-number">19.</span> <span class="nav-text"> Trick(Wayland-Docker-OSX)::Building macOS with docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolk8scontainer"><span class="nav-number">20.</span> <span class="nav-text"> Tool(k8s)::Container</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#k8s%E7%AE%80%E5%8D%95%E5%AE%9E%E9%AA%8Cnginx%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">20.1.</span> <span class="nav-text"> k8s简单实验：nginx服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k8s%E6%A6%82%E5%BF%B5%E7%AE%80%E5%8D%95%E8%A7%A3%E6%9E%90%E5%92%8Cminikube%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">20.2.</span> <span class="nav-text"> k8s概念简单解析和minikube使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#k8s%E5%86%85%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">20.2.1.</span> <span class="nav-text"> k8s内重要概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kubectl"><span class="nav-number">20.2.2.</span> <span class="nav-text"> kubectl</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#workshopobsidiangdrivercloneworking-with-different-workspaces"><span class="nav-number">21.</span> <span class="nav-text"> Workshop(Obsidian+Gdrive+rclone)::working with different workspaces</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationbluemanbluetooth"><span class="nav-number">22.</span> <span class="nav-text"> Optimization(blueman)::Bluetooth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolvirtualizationvisual-machine"><span class="nav-number">23.</span> <span class="nav-text"> Tool(virtualization)::Visual Machine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationtlpbattery"><span class="nav-number">24.</span> <span class="nav-text"> Optimization(tlp)::Battery</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tricksystemd-analyze-blameoptimization"><span class="nav-number">25.</span> <span class="nav-text"> Trick(systemd-analyze blame)::Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolsnapperbackup"><span class="nav-number">26.</span> <span class="nav-text"> Tool(snapper)::Backup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trickmtu-testnetwork"><span class="nav-number">27.</span> <span class="nav-text"> Trick(MTU test)::Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#previewdesktop%E5%98%BF%E5%98%BF%E5%98%BF"><span class="nav-number">28.</span> <span class="nav-text"> Preview(Desktop)::嘿嘿嘿</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#desktopkde-plasmastop-using-gnome"><span class="nav-number">1.</span> <span class="nav-text"> Desktop(KDE plasma)::stop using GNOME!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bootrefinduefi-boot-manager"><span class="nav-number">2.</span> <span class="nav-text"> Boot(rEFInd)::UEFI Boot Manager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uefi-bios"><span class="nav-number">2.1.</span> <span class="nav-text"> UEFI &amp; BIOS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#efi%E9%87%8C%E9%9D%A2%E7%9A%84xdx"><span class="nav-number">2.2.</span> <span class="nav-text"> efi里面的xdx</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#systemfedoramaybe-u-should-know-something-about-this"><span class="nav-number">3.</span> <span class="nav-text"> System(fedora)::maybe U should know something about this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolneofetchshow-your-os"><span class="nav-number">4.</span> <span class="nav-text"> Tool(neofetch)::Show your OS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolbleachbitrubbish-sorting"><span class="nav-number">5.</span> <span class="nav-text"> Tool(bleachbit)::Rubbish Sorting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gaminggamemodegames-optimize"><span class="nav-number">6.</span> <span class="nav-text"> Gaming(gamemode)::Games optimize</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sideloadinglegacy-ios-kit"><span class="nav-number">7.</span> <span class="nav-text"> Sideloading(legacy-ios-kit)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolfcitx5input-method"><span class="nav-number">8.</span> <span class="nav-text"> Tool(Fcitx5)::Input method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentrust%E5%8A%A0%E5%85%A5rust%E7%A5%9E%E6%95%99%E5%96%B5%E5%96%B5%E5%8A%A0%E5%85%A5rust%E7%A5%9E%E6%95%99"><span class="nav-number">9.</span> <span class="nav-text"> Environment(rust)::加入rust神教喵喵加入rust神教</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolvscode%E7%B1%B3%E5%A5%87%E5%A6%99%E5%A6%99%E7%89%A9"><span class="nav-number">10.</span> <span class="nav-text"> Tool(vscode)::米奇妙妙物</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentccnjupt-wanted"><span class="nav-number">11.</span> <span class="nav-text"> Environment(c&#x2F;c++)::NJUPT wanted</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentfront-endnonononode_module"><span class="nav-number">12.</span> <span class="nav-text"> Environment(Front-end)::nonononode_module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolweztermfishcome-and-use-wezterm"><span class="nav-number">13.</span> <span class="nav-text"> Tool(wezTerm+fish)::Come and use wezTerm!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationsudousing-sudo-without-password"><span class="nav-number">14.</span> <span class="nav-text"> Optimization(sudo)::using sudo without password</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationauto-loginlogin-without-password"><span class="nav-number">15.</span> <span class="nav-text"> Optimization(auto login)::login without password</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolwinerunning-exe-on-linux"><span class="nav-number">16.</span> <span class="nav-text"> Tool(wine)::Running exe on linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationsuper-desktop%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F%E4%B9%A6%E5%86%99"><span class="nav-number">17.</span> <span class="nav-text"> Optimization(super .desktop)::快捷方式书写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environmentdockercontainer"><span class="nav-number">18.</span> <span class="nav-text"> Environment(docker)::Container</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trickwayland-docker-osxbuilding-macos-with-docker"><span class="nav-number">19.</span> <span class="nav-text"> Trick(Wayland-Docker-OSX)::Building macOS with docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolk8scontainer"><span class="nav-number">20.</span> <span class="nav-text"> Tool(k8s)::Container</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#k8s%E7%AE%80%E5%8D%95%E5%AE%9E%E9%AA%8Cnginx%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">20.1.</span> <span class="nav-text"> k8s简单实验：nginx服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k8s%E6%A6%82%E5%BF%B5%E7%AE%80%E5%8D%95%E8%A7%A3%E6%9E%90%E5%92%8Cminikube%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">20.2.</span> <span class="nav-text"> k8s概念简单解析和minikube使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#k8s%E5%86%85%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">20.2.1.</span> <span class="nav-text"> k8s内重要概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kubectl"><span class="nav-number">20.2.2.</span> <span class="nav-text"> kubectl</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#workshopobsidiangdrivercloneworking-with-different-workspaces"><span class="nav-number">21.</span> <span class="nav-text"> Workshop(Obsidian+Gdrive+rclone)::working with different workspaces</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationbluemanbluetooth"><span class="nav-number">22.</span> <span class="nav-text"> Optimization(blueman)::Bluetooth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolvirtualizationvisual-machine"><span class="nav-number">23.</span> <span class="nav-text"> Tool(virtualization)::Visual Machine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizationtlpbattery"><span class="nav-number">24.</span> <span class="nav-text"> Optimization(tlp)::Battery</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tricksystemd-analyze-blameoptimization"><span class="nav-number">25.</span> <span class="nav-text"> Trick(systemd-analyze blame)::Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toolsnapperbackup"><span class="nav-number">26.</span> <span class="nav-text"> Tool(snapper)::Backup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tooltermiusssh-helper"><span class="nav-number">27.</span> <span class="nav-text"> Tool(Termius)::ssh helper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trickmtu-testnetwork"><span class="nav-number">28.</span> <span class="nav-text"> Trick(MTU test)::Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#previewdesktop%E5%98%BF%E5%98%BF%E5%98%BF"><span class="nav-number">29.</span> <span class="nav-text"> Preview(Desktop)::嘿嘿嘿</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -587,7 +699,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -625,12 +737,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">54k</span>
+    <span title="Symbols count total">57k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:38</span>
+    <span title="Reading time total">1:44</span>
 </div>
 
         
