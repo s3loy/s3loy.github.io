@@ -1,6 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CUDA-and-pytorch</title>
+    <url>/CUDA-and-pytorch/</url>
+    <content><![CDATA[<details>
+  <summary>索引</summary>
+<ul>
+<li><a href="#1-%E5%9C%A8win%E7%B3%BB%E7%BB%9F%E4%B8%8A%E5%AE%89%E8%A3%85pytorch">1. 在win系统上安装pytorch</a>
+<ul>
+<li><a href="#11-step-1-%E5%AE%89%E8%A3%85conda">1.1. Step 1 安装Conda</a></li>
+<li><a href="#12-step-2-cuda">1.2. Step 2 CUDA</a></li>
+<li><a href="#13-step-3-%E5%AE%89%E8%A3%85pytorch">1.3. Step 3 安装Pytorch</a></li>
+</ul>
+</li>
+</ul>
+</details>
+<h1 id="1-在win系统上安装pytorch"><a class="markdownIt-Anchor" href="#1-在win系统上安装pytorch"></a> 1. 在win系统上安装pytorch</h1>
+<h2 id="11-step-1-安装conda"><a class="markdownIt-Anchor" href="#11-step-1-安装conda"></a> 1.1. Step 1 安装Conda</h2>
+<p><a href="https://www.anaconda.com/download/success">Download Now | Anaconda</a></p>
+<p><code>Anaconda</code>和<code>Miniconda</code>都可以，前者东西全一些，后者更为轻便。</p>
+<p>展示的是<code>Anaconda</code></p>
+<p><s>此处下载推荐使用魔法</s></p>
+<blockquote>
+<p>如果网络不支持那就使用<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/?C=M&amp;O=D">Index of /anaconda/archive/ | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+</blockquote>
+<p><code>Anaconda3-2024.10-1-Windows-x86_64.exe</code>下载好之后打开</p>
+<p>如果不想配置环境变量就选<code>All Users</code>吧。</p>
+<p><img src="/CUDA-and-pytorch/image-20250218235016076-1740145143701-1.png" alt></p>
+<p>然后推荐找个不是C盘的地方下</p>
+<p><img src="/CUDA-and-pytorch/image-20250218235145695-1740145143701-2.png" alt></p>
+<p><img src="/CUDA-and-pytorch/image-20250218235447531-1740145143701-4.png" alt></p>
+<p>安装时间也许会比较长，别急。</p>
+<p>装好之后可以测试一下<code>conda --version</code>,有这样的反应就好，版本不一定一样。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">conda <span class="literal">--version</span></span><br><span class="line">conda <span class="number">25.1</span>.<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>因为我后面要玩<code>d2l</code>，所以就用<code>conda</code>创建了一个环境</p>
+<p><code>conda create -n d2l python=3.10</code></p>
+<p>这边<code>conda</code>是指令头，<code>-n</code> 是指定新环境的名称，<code>d2l</code> 是你想要为新环境指定的名称,<code>python=3.10</code>这部分指定了<code>python</code>的版本，不过其实不一定要<code>3.10</code>，<code>pytorch</code>官网上提示的是<code>Latest PyTorch requires Python 3.9 or later.</code>，加上学长爱用<code>3.10</code>，那就定了。<s>ps:3.10和3.9到底谁大呢</s></p>
+<p>创建完成会提示的，后面需要激活一下</p>
+<p><code>conda activate d2l</code></p>
+<p>顺利的话就能看到<code>(d2l)</code>在输入的前面。</p>
+<p>用的差不多之后要回到原来的环境的话就</p>
+<p><code>conda deactivate</code></p>
+<p>这样就回去了，不过你直接关掉重开也不是不行（</p>
+<h2 id="12-step-2-cuda"><a class="markdownIt-Anchor" href="#12-step-2-cuda"></a> 1.2. Step 2 CUDA</h2>
+<p>笔记本电脑的GPU是<code>Nvidia 4060 laptop</code></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">&gt;nvidia-smi</span><br><span class="line">Wed Feb <span class="number">19</span> <span class="number">00</span>:<span class="number">07</span>:<span class="number">11</span> <span class="number">2025</span></span><br><span class="line">+-----------------------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI <span class="number">571</span>.<span class="number">96</span>                 Driver Version: <span class="number">571</span>.<span class="number">96</span>         CUDA Version: <span class="number">12</span>.<span class="number">8</span>     |</span><br><span class="line">|-----------------------------------------+------------------------+----------------------+</span><br><span class="line">| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                                         |                        |               MIG M. |</span><br><span class="line">|=========================================+========================+======================|</span><br><span class="line">|   <span class="number">0</span>  NVIDIA GeForce RTX <span class="number">4060</span> ...  WDDM  |   <span class="number">00000000</span>:<span class="number">01</span>:<span class="number">00</span>.<span class="number">0</span>  On |                  N/A |</span><br><span class="line">| N/A   <span class="number">39</span>C    P8              <span class="number">3</span>W /  <span class="number">115</span>W |    <span class="number">1533</span>MiB /   <span class="number">8188</span>MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                                         |                        |                  N/A |</span><br><span class="line">+-----------------------------------------+------------------------+----------------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这边可以看到CUDA的版本</p>
+<p>到<a href="https://developer.nvidia.com/cuda-downloads%E9%87%8C%E9%9D%A2%E5%8E%BB">https://developer.nvidia.com/cuda-downloads里面去</a></p>
+<p><img src="/CUDA-and-pytorch/image-20250219000853416-1740145143701-3.png" alt></p>
+<p>然后根据版本选一下，本地跑别乱选<code>network</code></p>
+<p>然后点<code>Download</code>就行了</p>
+<p><img src="/CUDA-and-pytorch/image-20250219001030527-1740145143701-5.png" alt></p>
+<p>下载好的ok就行了，这步只是解压不是安装。</p>
+<p>网上看教程说</p>
+<p><img src="/CUDA-and-pytorch/image-20250219001140813-1740145143701-6.png" alt></p>
+<p>我确实没勾这个，但是我下面的几个选项还是都装了。</p>
+<p>安装好之后理论上环境变量是在的，可以先验证一下</p>
+<p>在C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8  (你安装的位置，默认是这样)打开终端</p>
+<p>按顺序输入</p>
+<p><code>cd .\extras\demo_suite</code></p>
+<p><code>.\bandwidthTest.exe</code></p>
+<p><code>.\deviceQuery.exe</code></p>
+<p>回车测试</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd .\extras\demo_suite</span></span><br><span class="line"><span class="comment"># .\bandwidthTest.exe</span></span><br><span class="line">[<span class="type">CUDA</span> <span class="type">Bandwidth</span> <span class="type">Test</span>] - Starting...</span><br><span class="line">Running on...</span><br><span class="line"></span><br><span class="line"> Device <span class="number">0</span>: NVIDIA GeForce RTX <span class="number">4060</span> Laptop GPU</span><br><span class="line"> Quick Mode</span><br><span class="line"></span><br><span class="line"> Host to Device Bandwidth, <span class="number">1</span> Device(s)</span><br><span class="line"> PINNED Memory Transfers</span><br><span class="line">   Transfer Size (Bytes)        Bandwidth(MB/s)</span><br><span class="line">   <span class="number">33554432</span>                     <span class="number">12883.8</span></span><br><span class="line"></span><br><span class="line"> Device to Host Bandwidth, <span class="number">1</span> Device(s)</span><br><span class="line"> PINNED Memory Transfers</span><br><span class="line">   Transfer Size (Bytes)        Bandwidth(MB/s)</span><br><span class="line">   <span class="number">33554432</span>                     <span class="number">12835.4</span></span><br><span class="line"></span><br><span class="line"> Device to Device Bandwidth, <span class="number">1</span> Device(s)</span><br><span class="line"> PINNED Memory Transfers</span><br><span class="line">   Transfer Size (Bytes)        Bandwidth(MB/s)</span><br><span class="line">   <span class="number">33554432</span>                     <span class="number">196311.5</span></span><br><span class="line"></span><br><span class="line">Result = PASS</span><br><span class="line"></span><br><span class="line">NOTE: The CUDA Samples are not meant <span class="keyword">for</span> performance measurements. Results may vary when GPU Boost is enabled.</span><br><span class="line"><span class="comment"># .\deviceQuery.exe</span></span><br><span class="line">C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.<span class="number">8</span>\extras\demo_suite\deviceQuery.exe Starting...</span><br><span class="line"></span><br><span class="line"> CUDA Device Query (Runtime API)</span><br><span class="line"></span><br><span class="line">Detected <span class="number">1</span> CUDA Capable device(s)</span><br><span class="line"></span><br><span class="line">Device <span class="number">0</span>: <span class="string">&quot;NVIDIA GeForce RTX 4060 Laptop GPU&quot;</span></span><br><span class="line">  CUDA Driver Version / Runtime Version          <span class="number">12.8</span> / <span class="number">12.8</span></span><br><span class="line">  CUDA Capability Major/Minor version number:    <span class="number">8.9</span></span><br><span class="line">  Total amount of global memory:                 <span class="number">8188</span> MBytes (<span class="number">8585216000</span> bytes)</span><br><span class="line">MapSMtoCores <span class="keyword">for</span> SM <span class="number">8.9</span> is undefined.  Default to use <span class="number">128</span> Cores/SM</span><br><span class="line">MapSMtoCores <span class="keyword">for</span> SM <span class="number">8.9</span> is undefined.  Default to use <span class="number">128</span> Cores/SM</span><br><span class="line">  (<span class="number">24</span>) Multiprocessors, (<span class="number">128</span>) CUDA Cores/<span class="built_in">MP</span>:     <span class="number">3072</span> CUDA Cores</span><br><span class="line">  GPU Max Clock rate:                            <span class="number">2370</span> MHz (<span class="number">2.37</span> GHz)</span><br><span class="line">  Memory Clock rate:                             <span class="number">8001</span> Mhz</span><br><span class="line">  Memory Bus Width:                              <span class="number">128</span><span class="literal">-bit</span></span><br><span class="line">  L2 Cache Size:                                 <span class="number">33554432</span> bytes</span><br><span class="line">  Maximum Texture Dimension Size (x,y,z)         <span class="number">1</span>D=(<span class="number">131072</span>), <span class="number">2</span>D=(<span class="number">131072</span>, <span class="number">65536</span>), <span class="number">3</span>D=(<span class="number">16384</span>, <span class="number">16384</span>, <span class="number">16384</span>)</span><br><span class="line">  Maximum Layered <span class="number">1</span>D Texture Size, (num) layers  <span class="number">1</span>D=(<span class="number">32768</span>), <span class="number">2048</span> layers</span><br><span class="line">  Maximum Layered <span class="number">2</span>D Texture Size, (num) layers  <span class="number">2</span>D=(<span class="number">32768</span>, <span class="number">32768</span>), <span class="number">2048</span> layers</span><br><span class="line">  Total amount of constant memory:               zu bytes</span><br><span class="line">  Total amount of shared memory per block:       zu bytes</span><br><span class="line">  Total number of registers available per block: <span class="number">65536</span></span><br><span class="line">  Warp size:                                     <span class="number">32</span></span><br><span class="line">  Maximum number of threads per multiprocessor:  <span class="number">1536</span></span><br><span class="line">  Maximum number of threads per block:           <span class="number">1024</span></span><br><span class="line">  Max dimension size of a thread block (x,y,z): (<span class="number">1024</span>, <span class="number">1024</span>, <span class="number">64</span>)</span><br><span class="line">  Max dimension size of a grid size    (x,y,z): (<span class="number">2147483647</span>, <span class="number">65535</span>, <span class="number">65535</span>)</span><br><span class="line">  Maximum memory pitch:                          zu bytes</span><br><span class="line">  Texture alignment:                             zu bytes</span><br><span class="line">  Concurrent <span class="built_in">copy</span> and kernel execution:          Yes with <span class="number">1</span> <span class="built_in">copy</span> engine(s)</span><br><span class="line">  Run time limit on kernels:                     Yes</span><br><span class="line">  Integrated GPU sharing Host Memory:            No</span><br><span class="line">  Support host page<span class="literal">-locked</span> memory mapping:       Yes</span><br><span class="line">  Alignment requirement <span class="keyword">for</span> Surfaces:            Yes</span><br><span class="line">  Device has ECC support:                        Disabled</span><br><span class="line">  CUDA Device Driver Mode (TCC or WDDM):         WDDM (Windows Display Driver Model)</span><br><span class="line">  Device supports Unified Addressing (UVA):      Yes</span><br><span class="line">  Device supports Compute Preemption:            Yes</span><br><span class="line">  Supports Cooperative Kernel Launch:            Yes</span><br><span class="line">  Supports MultiDevice Co<span class="literal">-op</span> Kernel Launch:      No</span><br><span class="line">  Device PCI Domain ID / Bus ID / location ID:   <span class="number">0</span> / <span class="number">1</span> / <span class="number">0</span></span><br><span class="line">  Compute Mode:</span><br><span class="line">     &lt; Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) &gt;</span><br><span class="line"></span><br><span class="line">deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = <span class="number">12.8</span>, CUDA Runtime Version = <span class="number">12.8</span>, NumDevs = <span class="number">1</span>, Device0 = NVIDIA GeForce RTX <span class="number">4060</span> Laptop GPU</span><br><span class="line">Result = PASS</span><br></pre></td></tr></table></figure>
+<p>如果有这样的就说明成功了</p>
+<p>试一下<code>nvcc -V</code></p>
+<p><img src="/CUDA-and-pytorch/876ee5e3b3266e2d56bdd5b30a2809cf-1739898997106-5-1740145143702-7.png" alt></p>
+<h2 id="13-step-3-安装pytorch"><a class="markdownIt-Anchor" href="#13-step-3-安装pytorch"></a> 1.3. Step 3 安装Pytorch</h2>
+<p>这个安装靠的是<code>conda</code>虚拟环境下的<code>pip3</code>安装的完整<code>pytorch</code>,并没有使用<code>docker</code>镜像来部署,不过如果到了需要租显卡的时候，就需要再去学习使用<code>docker</code>来部署了。</p>
+<p>先<code>conda activate d2l</code> 激活一下自己的环境  <em>别笨到自己环境名字都没改，当然你也叫d2l那我没意见</em></p>
+<p><a href="https://pytorch.org/">PyTorch</a>打开这个网站，</p>
+<p><img src="/CUDA-and-pytorch/image-20250219004200322-1740145143702-9.png" alt></p>
+<p>选好要下载的，复制好下面这个<code>Run this Command</code></p>
+<p>到前面准备好的<code>conda</code>环境去安装</p>
+<p><s>需要魔法，否则可能会给你装疯，而且在查阅资料的时候发现用镜像有概率不能识别pytorch，即使你的pytorch是你的pytorch，但是你的pytorch不是你的pytorch</s></p>
+<p><img src="/CUDA-and-pytorch/6dbdeed45283dcad3a1c1f91a769f6b3-1740145143702-8.png" alt></p>
+<p>报警告不用慌张，不影响使用。如果是这样就安装好了。</p>
+<p>下面就测试一下<code>pytorch</code>的使用情况</p>
+<p><code>python</code></p>
+<p><code>&gt;&gt;&gt; import torch</code></p>
+<p>第一次应该会等很久，别乱动就是了</p>
+<p><code>&gt;&gt;&gt; torch.cuda.is_available()</code></p>
+<p>返回<code>true</code></p>
+<p><code>&gt;&gt;&gt; import torch</code></p>
+<p><code>&gt;&gt;&gt; torch.cuda.device_count()</code></p>
+<p>返回<code>1</code></p>
+<p>代表识别到一张显卡</p>
+<p>大概就活了。</p>
+<p><img src="/CUDA-and-pytorch/28dcd3a09bb512143de46b300b9d95e7-1740145143702-10.png" alt></p>
+<p><code>exit()</code>退出去</p>
+<p>简单的<code>pytorch</code>就装好了</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>pytorch</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Fast-Learning-FastAPI</title>
     <url>/Fast-Learning-FastAPI/</url>
     <content><![CDATA[<h1 id="fastapi"><a class="markdownIt-Anchor" href="#fastapi"></a> FastAPI</h1>
@@ -59,170 +158,6 @@
       <tags>
         <tag>python</tag>
         <tag>backend</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lua-and-FFI</title>
-    <url>/Lua-and-FFI/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>CUDA-and-pytorch</title>
-    <url>/CUDA-and-pytorch/</url>
-    <content><![CDATA[<ul>
-<li><a href="#%E5%9C%A8win%E7%B3%BB%E7%BB%9F%E4%B8%8A%E5%AE%89%E8%A3%85pytorch">在win系统上安装pytorch</a>
-<ul>
-<li><a href="#step-1-%E5%AE%89%E8%A3%85conda">Step 1 安装Conda</a></li>
-<li><a href="#step-2-cuda">Step 2 CUDA</a></li>
-<li><a href="#step-3-%E5%AE%89%E8%A3%85pytorch">Step 3 安装Pytorch</a></li>
-</ul>
-</li>
-</ul>
-<h1 id="在win系统上安装pytorch"><a class="markdownIt-Anchor" href="#在win系统上安装pytorch"></a> 在win系统上安装pytorch</h1>
-<h2 id="step-1-安装conda"><a class="markdownIt-Anchor" href="#step-1-安装conda"></a> Step 1 安装Conda</h2>
-<p><a href="https://www.anaconda.com/download/success">Download Now | Anaconda</a></p>
-<p><code>Anaconda</code>和<code>Miniconda</code>都可以，前者东西全一些，后者更为轻便。</p>
-<p>展示的是<code>Anaconda</code></p>
-<p><s>此处下载推荐使用魔法</s></p>
-<blockquote>
-<p>如果网络不支持那就使用<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/?C=M&amp;O=D">Index of /anaconda/archive/ | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
-</blockquote>
-<p><code>Anaconda3-2024.10-1-Windows-x86_64.exe</code>下载好之后打开</p>
-<p>如果不想配置环境变量就选<code>All Users</code>吧。</p>
-<p><img src="/CUDA-and-pytorch/image-20250218235016076-1740145143701-1.png" alt></p>
-<p>然后推荐找个不是C盘的地方下</p>
-<p><img src="/CUDA-and-pytorch/image-20250218235145695-1740145143701-2.png" alt></p>
-<p><img src="/CUDA-and-pytorch/image-20250218235447531-1740145143701-4.png" alt></p>
-<p>安装时间也许会比较长，别急。</p>
-<p>装好之后可以测试一下<code>conda --version</code>,有这样的反应就好，版本不一定一样。</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">conda <span class="literal">--version</span></span><br><span class="line">conda <span class="number">25.1</span>.<span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>因为我后面要玩<code>d2l</code>，所以就用<code>conda</code>创建了一个环境</p>
-<p><code>conda create -n d2l python=3.10</code></p>
-<p>这边<code>conda</code>是指令头，<code>-n</code> 是指定新环境的名称，<code>d2l</code> 是你想要为新环境指定的名称,<code>python=3.10</code>这部分指定了<code>python</code>的版本，不过其实不一定要<code>3.10</code>，<code>pytorch</code>官网上提示的是<code>Latest PyTorch requires Python 3.9 or later.</code>，加上学长爱用<code>3.10</code>，那就定了。<s>ps:3.10和3.9到底谁大呢</s></p>
-<p>创建完成会提示的，后面需要激活一下</p>
-<p><code>conda activate d2l</code></p>
-<p>顺利的话就能看到<code>(d2l)</code>在输入的前面。</p>
-<p>用的差不多之后要回到原来的环境的话就</p>
-<p><code>conda deactivate</code></p>
-<p>这样就回去了，不过你直接关掉重开也不是不行（</p>
-<h2 id="step-2-cuda"><a class="markdownIt-Anchor" href="#step-2-cuda"></a> Step 2 CUDA</h2>
-<p>笔记本电脑的GPU是<code>Nvidia 4060 laptop</code></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">&gt;nvidia-smi</span><br><span class="line">Wed Feb <span class="number">19</span> <span class="number">00</span>:<span class="number">07</span>:<span class="number">11</span> <span class="number">2025</span></span><br><span class="line">+-----------------------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI <span class="number">571</span>.<span class="number">96</span>                 Driver Version: <span class="number">571</span>.<span class="number">96</span>         CUDA Version: <span class="number">12</span>.<span class="number">8</span>     |</span><br><span class="line">|-----------------------------------------+------------------------+----------------------+</span><br><span class="line">| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                                         |                        |               MIG M. |</span><br><span class="line">|=========================================+========================+======================|</span><br><span class="line">|   <span class="number">0</span>  NVIDIA GeForce RTX <span class="number">4060</span> ...  WDDM  |   <span class="number">00000000</span>:<span class="number">01</span>:<span class="number">00</span>.<span class="number">0</span>  On |                  N/A |</span><br><span class="line">| N/A   <span class="number">39</span>C    P8              <span class="number">3</span>W /  <span class="number">115</span>W |    <span class="number">1533</span>MiB /   <span class="number">8188</span>MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                                         |                        |                  N/A |</span><br><span class="line">+-----------------------------------------+------------------------+----------------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>这边可以看到CUDA的版本</p>
-<p>到<a href="https://developer.nvidia.com/cuda-downloads%E9%87%8C%E9%9D%A2%E5%8E%BB">https://developer.nvidia.com/cuda-downloads里面去</a></p>
-<p><img src="/CUDA-and-pytorch/image-20250219000853416-1740145143701-3.png" alt></p>
-<p>然后根据版本选一下，本地跑别乱选<code>network</code></p>
-<p>然后点<code>Download</code>就行了</p>
-<p><img src="/CUDA-and-pytorch/image-20250219001030527-1740145143701-5.png" alt></p>
-<p>下载好的ok就行了，这步只是解压不是安装。</p>
-<p>网上看教程说</p>
-<p><img src="/CUDA-and-pytorch/image-20250219001140813-1740145143701-6.png" alt></p>
-<p>我确实没勾这个，但是我下面的几个选项还是都装了。</p>
-<p>安装好之后理论上环境变量是在的，可以先验证一下</p>
-<p>在C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8  (你安装的位置，默认是这样)打开终端</p>
-<p>按顺序输入</p>
-<p><code>cd .\extras\demo_suite</code></p>
-<p><code>.\bandwidthTest.exe</code></p>
-<p><code>.\deviceQuery.exe</code></p>
-<p>回车测试</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd .\extras\demo_suite</span></span><br><span class="line"><span class="comment"># .\bandwidthTest.exe</span></span><br><span class="line">[<span class="type">CUDA</span> <span class="type">Bandwidth</span> <span class="type">Test</span>] - Starting...</span><br><span class="line">Running on...</span><br><span class="line"></span><br><span class="line"> Device <span class="number">0</span>: NVIDIA GeForce RTX <span class="number">4060</span> Laptop GPU</span><br><span class="line"> Quick Mode</span><br><span class="line"></span><br><span class="line"> Host to Device Bandwidth, <span class="number">1</span> Device(s)</span><br><span class="line"> PINNED Memory Transfers</span><br><span class="line">   Transfer Size (Bytes)        Bandwidth(MB/s)</span><br><span class="line">   <span class="number">33554432</span>                     <span class="number">12883.8</span></span><br><span class="line"></span><br><span class="line"> Device to Host Bandwidth, <span class="number">1</span> Device(s)</span><br><span class="line"> PINNED Memory Transfers</span><br><span class="line">   Transfer Size (Bytes)        Bandwidth(MB/s)</span><br><span class="line">   <span class="number">33554432</span>                     <span class="number">12835.4</span></span><br><span class="line"></span><br><span class="line"> Device to Device Bandwidth, <span class="number">1</span> Device(s)</span><br><span class="line"> PINNED Memory Transfers</span><br><span class="line">   Transfer Size (Bytes)        Bandwidth(MB/s)</span><br><span class="line">   <span class="number">33554432</span>                     <span class="number">196311.5</span></span><br><span class="line"></span><br><span class="line">Result = PASS</span><br><span class="line"></span><br><span class="line">NOTE: The CUDA Samples are not meant <span class="keyword">for</span> performance measurements. Results may vary when GPU Boost is enabled.</span><br><span class="line"><span class="comment"># .\deviceQuery.exe</span></span><br><span class="line">C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.<span class="number">8</span>\extras\demo_suite\deviceQuery.exe Starting...</span><br><span class="line"></span><br><span class="line"> CUDA Device Query (Runtime API)</span><br><span class="line"></span><br><span class="line">Detected <span class="number">1</span> CUDA Capable device(s)</span><br><span class="line"></span><br><span class="line">Device <span class="number">0</span>: <span class="string">&quot;NVIDIA GeForce RTX 4060 Laptop GPU&quot;</span></span><br><span class="line">  CUDA Driver Version / Runtime Version          <span class="number">12.8</span> / <span class="number">12.8</span></span><br><span class="line">  CUDA Capability Major/Minor version number:    <span class="number">8.9</span></span><br><span class="line">  Total amount of global memory:                 <span class="number">8188</span> MBytes (<span class="number">8585216000</span> bytes)</span><br><span class="line">MapSMtoCores <span class="keyword">for</span> SM <span class="number">8.9</span> is undefined.  Default to use <span class="number">128</span> Cores/SM</span><br><span class="line">MapSMtoCores <span class="keyword">for</span> SM <span class="number">8.9</span> is undefined.  Default to use <span class="number">128</span> Cores/SM</span><br><span class="line">  (<span class="number">24</span>) Multiprocessors, (<span class="number">128</span>) CUDA Cores/<span class="built_in">MP</span>:     <span class="number">3072</span> CUDA Cores</span><br><span class="line">  GPU Max Clock rate:                            <span class="number">2370</span> MHz (<span class="number">2.37</span> GHz)</span><br><span class="line">  Memory Clock rate:                             <span class="number">8001</span> Mhz</span><br><span class="line">  Memory Bus Width:                              <span class="number">128</span><span class="literal">-bit</span></span><br><span class="line">  L2 Cache Size:                                 <span class="number">33554432</span> bytes</span><br><span class="line">  Maximum Texture Dimension Size (x,y,z)         <span class="number">1</span>D=(<span class="number">131072</span>), <span class="number">2</span>D=(<span class="number">131072</span>, <span class="number">65536</span>), <span class="number">3</span>D=(<span class="number">16384</span>, <span class="number">16384</span>, <span class="number">16384</span>)</span><br><span class="line">  Maximum Layered <span class="number">1</span>D Texture Size, (num) layers  <span class="number">1</span>D=(<span class="number">32768</span>), <span class="number">2048</span> layers</span><br><span class="line">  Maximum Layered <span class="number">2</span>D Texture Size, (num) layers  <span class="number">2</span>D=(<span class="number">32768</span>, <span class="number">32768</span>), <span class="number">2048</span> layers</span><br><span class="line">  Total amount of constant memory:               zu bytes</span><br><span class="line">  Total amount of shared memory per block:       zu bytes</span><br><span class="line">  Total number of registers available per block: <span class="number">65536</span></span><br><span class="line">  Warp size:                                     <span class="number">32</span></span><br><span class="line">  Maximum number of threads per multiprocessor:  <span class="number">1536</span></span><br><span class="line">  Maximum number of threads per block:           <span class="number">1024</span></span><br><span class="line">  Max dimension size of a thread block (x,y,z): (<span class="number">1024</span>, <span class="number">1024</span>, <span class="number">64</span>)</span><br><span class="line">  Max dimension size of a grid size    (x,y,z): (<span class="number">2147483647</span>, <span class="number">65535</span>, <span class="number">65535</span>)</span><br><span class="line">  Maximum memory pitch:                          zu bytes</span><br><span class="line">  Texture alignment:                             zu bytes</span><br><span class="line">  Concurrent <span class="built_in">copy</span> and kernel execution:          Yes with <span class="number">1</span> <span class="built_in">copy</span> engine(s)</span><br><span class="line">  Run time limit on kernels:                     Yes</span><br><span class="line">  Integrated GPU sharing Host Memory:            No</span><br><span class="line">  Support host page<span class="literal">-locked</span> memory mapping:       Yes</span><br><span class="line">  Alignment requirement <span class="keyword">for</span> Surfaces:            Yes</span><br><span class="line">  Device has ECC support:                        Disabled</span><br><span class="line">  CUDA Device Driver Mode (TCC or WDDM):         WDDM (Windows Display Driver Model)</span><br><span class="line">  Device supports Unified Addressing (UVA):      Yes</span><br><span class="line">  Device supports Compute Preemption:            Yes</span><br><span class="line">  Supports Cooperative Kernel Launch:            Yes</span><br><span class="line">  Supports MultiDevice Co<span class="literal">-op</span> Kernel Launch:      No</span><br><span class="line">  Device PCI Domain ID / Bus ID / location ID:   <span class="number">0</span> / <span class="number">1</span> / <span class="number">0</span></span><br><span class="line">  Compute Mode:</span><br><span class="line">     &lt; Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) &gt;</span><br><span class="line"></span><br><span class="line">deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = <span class="number">12.8</span>, CUDA Runtime Version = <span class="number">12.8</span>, NumDevs = <span class="number">1</span>, Device0 = NVIDIA GeForce RTX <span class="number">4060</span> Laptop GPU</span><br><span class="line">Result = PASS</span><br></pre></td></tr></table></figure>
-<p>如果有这样的就说明成功了</p>
-<p>试一下<code>nvcc -V</code></p>
-<p><img src="/CUDA-and-pytorch/876ee5e3b3266e2d56bdd5b30a2809cf-1739898997106-5-1740145143702-7.png" alt></p>
-<h2 id="step-3-安装pytorch"><a class="markdownIt-Anchor" href="#step-3-安装pytorch"></a> Step 3 安装Pytorch</h2>
-<p>这个安装靠的是<code>conda</code>虚拟环境下的<code>pip3</code>安装的完整<code>pytorch</code>,并没有使用<code>docker</code>镜像来部署,不过如果到了需要租显卡的时候，就需要再去学习使用<code>docker</code>来部署了。</p>
-<p>先<code>conda activate d2l</code> 激活一下自己的环境  <em>别笨到自己环境名字都没改，当然你也叫d2l那我没意见</em></p>
-<p><a href="https://pytorch.org/">PyTorch</a>打开这个网站，</p>
-<p><img src="/CUDA-and-pytorch/image-20250219004200322-1740145143702-9.png" alt></p>
-<p>选好要下载的，复制好下面这个<code>Run this Command</code></p>
-<p>到前面准备好的<code>conda</code>环境去安装</p>
-<p><s>需要魔法，否则可能会给你装疯，而且在查阅资料的时候发现用镜像有概率不能识别pytorch，即使你的pytorch是你的pytorch，但是你的pytorch不是你的pytorch</s></p>
-<p><img src="/CUDA-and-pytorch/6dbdeed45283dcad3a1c1f91a769f6b3-1740145143702-8.png" alt></p>
-<p>报警告不用慌张，不影响使用。如果是这样就安装好了。</p>
-<p>下面就测试一下<code>pytorch</code>的使用情况</p>
-<p><code>python</code></p>
-<p><code>&gt;&gt;&gt; import torch</code></p>
-<p>第一次应该会等很久，别乱动就是了</p>
-<p><code>&gt;&gt;&gt; torch.cuda.is_available()</code></p>
-<p>返回<code>true</code></p>
-<p><code>&gt;&gt;&gt; import torch</code></p>
-<p><code>&gt;&gt;&gt; torch.cuda.device_count()</code></p>
-<p>返回<code>1</code></p>
-<p>代表识别到一张显卡</p>
-<p>大概就活了。</p>
-<p><img src="/CUDA-and-pytorch/28dcd3a09bb512143de46b300b9d95e7-1740145143702-10.png" alt></p>
-<p><code>exit()</code>退出去</p>
-<p>简单的<code>pytorch</code>就装好了</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pytorch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux-From-Scratch</title>
-    <url>/Linux-From-Scratch/</url>
-    <content><![CDATA[<details>
-  <summary>索引</summary>
-<ul>
-<li><a href="#1-what-is-linux-from-scratch">1. What is Linux From Scratch</a>
-<ul>
-<li><a href="#11-prerequisites-%E5%85%88%E5%86%B3%E6%9D%A1%E4%BB%B6">1.1. Prerequisites 先决条件</a>
-<ul>
-<li><a href="#111-building-and-installing-software-packages-for-linux">1.1.1. Building and Installing Software Packages for Linux</a>
-<ul>
-<li><a href="#1111-unpacking-the-files">1.1.1.1. Unpacking the Files</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</details>
-<h2 id="1-what-is-linux-from-scratch"><a class="markdownIt-Anchor" href="#1-what-is-linux-from-scratch"></a> 1. What is Linux From Scratch</h2>
-<blockquote>
-<p>Linux From Scratch (LFS) is a project that provides you with step-by-step instructions for building your own customized Linux system entirely from source.<br>
--<a href="https://wiki.linuxfromscratch.org/lfs/">LFS Trac</a></p>
-</blockquote>
-<p>不多说了，直接开始吧<br>
-<a href="https://www.linuxfromscratch.org/lfs/read.html">Read LFS Online</a><br>
-在 LFS 的官方网站上，提供了两个主要的版本供在线阅读：</p>
-<ul>
-<li><strong>Current Stable</strong>：这是最新的稳定发行版 LFS book，被认为是稳定的。对于大多数人来说，这是推荐阅读的版本。</li>
-<li><strong>Current Development</strong>：这是 LFS book 目前的开发版本。虽然它可能比稳定版提供更多的功能和更新的软件包，但也更容易出现错误和安全漏洞。<br>
-当然也可以看中文版的</li>
-</ul>
-<p>这是英文版目录(<a href="https://www.linuxfromscratch.org/lfs/view/stable/">Linux From Scratch</a>)</p>
-<p>In particular, as an absolute minimum, you should already know how to use the command line (shell) to copy or move files and directories, list directory and file contents, and change the current directory. It is also expected that you know how to use and install Linux software.</p>
-<h3 id="11-prerequisites-先决条件"><a class="markdownIt-Anchor" href="#11-prerequisites-先决条件"></a> 1.1. Prerequisites 先决条件</h3>
-<h4 id="111-building-and-installing-software-packages-for-linux"><a class="markdownIt-Anchor" href="#111-building-and-installing-software-packages-for-linux"></a> 1.1.1. <a href="https://tldp.org/HOWTO/Software-Building-HOWTO.html">Building and Installing Software Packages for Linux</a></h4>
-<h5 id="1111-unpacking-the-files"><a class="markdownIt-Anchor" href="#1111-unpacking-the-files"></a> 1.1.1.1. Unpacking the Files</h5>
-<p>下下来的软件要解压<br>
-Most likely it is archived (<em>tarred</em>) and compressed (<em>gzipped</em>), in <code>.tar.gz</code> or <code>.tgz</code> form (familiarly known as a “tarball”).</p>
-<p><code>tar xzvf filename</code><br>
-x:<strong>extract</strong> (提取)<br>
-z:<strong>gzip</strong> (gzip 压缩)<br>
-v:<strong>verbose</strong> (详细模式)<br>
-f:<strong>file</strong> (文件)</p>
-<p>上面语句和下面语句是完全等价的<br>
-<code>gzip -cd filename | tar xvf -</code><br>
--d:<strong>decompress</strong> (解压缩)<br>
--c:<code>to standard output</code>(输出到标准输出)</p>
-<p>但很明显第二种更符合 Linux 的底层工作逻辑</p>
-<blockquote>
-<p>解压源代码的位置不是随意的</p>
-<p>有些软件包的安装脚本被设计为只能在特定位置运行。如果你在错误的目录下解压并尝试编译，脚本可能会因为找不到预期的文件或路径而出错。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -602,152 +537,8 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>fedora</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Nginx-enginex</title>
-    <url>/Nginx-enginex/</url>
-    <content><![CDATA[<ul>
-<li><a href="#installation">installation</a></li>
-<li><a href="#feature">feature</a>
-<ul>
-<li><a href="#nginx-%E7%9A%84%E7%81%B5%E9%AD%82%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%BC%82%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9E%E6%9E%B6%E6%9E%84"><strong>Nginx 的灵魂</strong>:<strong>事件驱动的异步非阻塞架构</strong></a>
-<ul>
-<li><a href="#%E4%BC%A0%E7%BB%9F-read--write-%E6%96%B9%E5%BC%8F">传统 read() + write() 方式</a></li>
-<li><a href="#sendfile-%E6%96%B9%E5%BC%8F">sendfile() 方式</a></li>
-</ul>
-</li>
-<li><a href="#master-worker">Master-Worker</a>
-<ul>
-<li><a href="#master-process">Master Process</a></li>
-<li><a href="#2-worker-processes">2. Worker Processes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="installation"><a class="markdownIt-Anchor" href="#installation"></a> installation</h2>
-<p><strong>on arch linux</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> pacman -Syu</span><br><span class="line">$ <span class="built_in">sudo</span> pacman -S nginx</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> systemctl start nginx.service</span><br><span class="line">$ <span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> nginx.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># $ sudo systemctl status nginx.service</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">s3loy@archlinux ~]$ ip a</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host noprefixroute </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:0c:29:4f:fa:7f brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    altname enp2s1</span><br><span class="line">    altname enx000c294ffa7f</span><br><span class="line">    inet 192.168.209.128/24 brd 192.168.209.255 scope global dynamic noprefixroute ens33</span><br><span class="line">       valid_lft 1592sec preferred_lft 1367sec</span><br><span class="line">    inet6 fe80::98ef:2b0d:cbd3:648c/64 scope <span class="built_in">link</span> </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">       </span><br><span class="line"> <span class="comment">#  inet 192.168.209.128</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>主机直接访问<a href="http://192.168.209.128/">http://192.168.209.128/</a>    就可以看到<code>Welcome to nginx!</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> /etc/nginx/nginx.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#user http;</span></span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line"><span class="comment">#error_log  logs/error.log;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Load all installed modules</span></span><br><span class="line">include modules.d/*.conf;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  logs/access.log  main;</span></span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    <span class="comment">#tcp_nopush     on;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#keepalive_timeout  0;</span></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#gzip  on;</span></span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  localhost;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#charset koi8-r;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   /usr/share/nginx/html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#error_page  404              /404.html;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   /usr/share/nginx/html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">        <span class="comment">#    proxy_pass   http://127.0.0.1;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">        <span class="comment">#    root           html;</span></span><br><span class="line">        <span class="comment">#    fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line">        <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">        <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span></span><br><span class="line">        <span class="comment">#    include        fastcgi_params;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># deny access to .htaccess files, if Apache&#x27;s document root</span></span><br><span class="line">        <span class="comment"># concurs with nginx&#x27;s one</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ /\.ht &#123;</span></span><br><span class="line">        <span class="comment">#    deny  all;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server &#123;</span></span><br><span class="line">    <span class="comment">#    listen       8000;</span></span><br><span class="line">    <span class="comment">#    listen       somename:8080;</span></span><br><span class="line">    <span class="comment">#    server_name  somename  alias  another.alias;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / &#123;</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># HTTPS server</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server &#123;</span></span><br><span class="line">    <span class="comment">#    listen       443 ssl;</span></span><br><span class="line">    <span class="comment">#    server_name  localhost;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_certificate      cert.pem;</span></span><br><span class="line">    <span class="comment">#    ssl_certificate_key  cert.key;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_session_cache    shared:SSL:1m;</span></span><br><span class="line">    <span class="comment">#    ssl_session_timeout  5m;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span></span><br><span class="line">    <span class="comment">#    ssl_prefer_server_ciphers  on;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / &#123;</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>block</code>
-<ul>
-<li><code>http { ... }</code>: 配置 <code>HTTP </code>相关功能的顶级块。几乎所有的 Web 服务配置都在这里面。</li>
-<li><code>server { ... }</code>: 定义一个“虚拟主机”,可以在一个 <code>Nginx</code> 里配置多个 <code>server</code> 块，来托管不同的网站</li>
-<li><code>location / { ... }</code>: 定义当请求的 URL 匹配某个路径时，应该如何处理。<code>location / </code>表示匹配所有请求。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> -p ~/my-website/images</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;&lt;h1&gt;hello,this is our first website&lt;/h1&gt;&quot;</span> &gt; ~/my-website/index.html</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;&lt;p&gt;this is about&lt;/p&gt;&quot;</span> &gt; ~/my-website/about.html</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> <span class="built_in">cp</span> /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak</span><br><span class="line"><span class="comment"># backup</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> vim /etc/nginx/nginx.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"><span class="comment"># ... http 块内部 ...</span></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  localhost; </span><br><span class="line">    <span class="comment"># ... 其他配置 ...</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /home/s3loy/my-website;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># ... 其他配置 ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> nginx -t</span><br><span class="line"><span class="comment">#配置成功即可</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> systemctl reload nginx</span><br></pre></td></tr></table></figure>
-<p>访问<a href="http://192.168.209.128/about.html">http://192.168.209.128/about.html</a>   发现<code>403 Forbidden</code></p>
-<p>此时考虑到文件夹为新建且处于<code>whoami</code>用户下，所以</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ps aux | grep <span class="string">&quot;nginx: worker process&quot;</span></span><br><span class="line">http        2179  0.0  0.1  15388  5140 ?        S    16:13   0:00 nginx: worker process</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">chmod</span> o+x /home/s3loy</span><br><span class="line">$ <span class="built_in">ls</span> -ld ~/my-website</span><br><span class="line">drwxr-xr-x 3 s3loy s3loy 4096 Jul 23 16:10 /home/s3loy/my-website</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>直接重返链接就发现页面可以刷新出来了</p>
-<p><strong>当然这也很明显，请不要把网站放在自己的目录当中</strong>。出于隐私和安全考虑，默认权限非常严格</p>
-<p>在<code>arch linux</code>当中，<code>http</code>推荐放在<code>/srv/http</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> -ld /srv/http</span><br><span class="line">drwxr-xr-x 2 root root 4096 May  3 19:26 /srv/http</span><br></pre></td></tr></table></figure>
-<p>在其他很多 <code>Linux</code> 系统上，常用目录是 <code>/var/www/html</code></p>
-<h2 id="feature"><a class="markdownIt-Anchor" href="#feature"></a> feature</h2>
-<h3 id="nginx-的灵魂事件驱动的异步非阻塞架构"><a class="markdownIt-Anchor" href="#nginx-的灵魂事件驱动的异步非阻塞架构"></a> <strong>Nginx 的灵魂</strong>:<strong>事件驱动的异步非阻塞架构</strong></h3>
-<p>我们以这个简单的静态网页为例，当你请求静态文件时，<code>Nginx</code> 的 <code>Worker</code> 进程接收到请求，告诉操作系统内核：“把 <code>~/my-website/index.html</code> 这个文件的数据发给这个用户”。然后 <code>Worker</code> 进程就去处理其他请求了。当内核把文件数据准备好后，会通知 <code>Worker</code> 进程，<code>Worker</code> 进程再把数据发回给浏览器。这个过程极其高效，因为它利用了操作系统的 <code>sendfile</code> 机制，避免了数据在内核和用户空间之间的多次复制，<code>CPU</code> 占用极低。</p>
-<hr>
-<blockquote>
-<p><code>sendfile</code>机制</p>
-</blockquote>
-<p><strong>用户空间 (<code>User Space</code>)</strong> 和 <strong>内核空间 (<code>Kernel Space</code>)</strong>。</p>
-<ul>
-<li><strong>用户空间：</strong> 你的应用程序（如 <code>Nginx</code> 进程）运行的地方。</li>
-<li><strong>内核空间：</strong> 操作系统内核运行的地方，它能直接操作硬件（如磁盘、网卡）。</li>
-</ul>
-<h4 id="传统-read-write-方式"><a class="markdownIt-Anchor" href="#传统-read-write-方式"></a> 传统 read() + write() 方式</h4>
-<p>当 <code>Nginx</code> 需要发送一个静态文件给客户端时，传统的 I/O 流程如下：</p>
-<ol>
-<li><strong><code>read()</code> 系统调用：</strong> <code>Nginx</code> 进程发起 <code>read() </code>系统调用，请求读取文件。这会导致一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
-<li><strong>第一次数据复制 (<code>DMA</code>)：</strong> <code>CPU</code> 指示 <code>DMA </code>控制器将文件内容从磁盘读取到<strong>内核空间的缓冲区</strong>。</li>
-<li><strong>第二次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据从<strong>内核空间缓冲区</strong>复制到<strong>用户空间的 <code>Nginx </code>缓冲区</strong>。<code>read()</code> 调用返回，发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
-<li><strong><code>write()</code> 系统调用：</strong> <code>Nginx</code> 进程拿到数据后，发起 <code>write() </code>系统调用，请求发送数据。再次发生一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
-<li><strong>第三次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据从<strong>用户空间的<code>Nginx</code>缓冲区</strong>复制到<strong>内核空间的 <code>Socket </code>缓冲区</strong>（与网卡关联）。</li>
-<li><strong>第四次数据复制 (<code>DMA</code>)：</strong> <code>DMA</code> 控制器将数据从<strong>内核空间的 <code>Socket</code> 缓冲区</strong>复制到网卡硬件中，然后发送出去。<code>write() </code>调用返回，再次发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
-</ol>
-<h4 id="sendfile-方式"><a class="markdownIt-Anchor" href="#sendfile-方式"></a> sendfile() 方式</h4>
-<p><code>sendfile()</code> 是一个系统调用，它把上述过程大大简化了。</p>
-<ol>
-<li><strong><code>sendfile() </code>系统调用：</strong> <code>Nginx</code> 进程发起<code>sendfile()</code>系统调用，它包含了输入（文件描述符）和输出（<code>Socket </code>描述符）的信息。发生一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
-<li><strong>第一次数据复制 (<code>DMA</code>)：</strong> <code>DMA</code> 控制器将文件内容从磁盘读取到<strong>内核空间的缓冲区</strong>。</li>
-<li><strong>第二次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据<strong>直接从内核空间的读缓冲区复制到内核空间的<code>Socket</code>缓冲区</strong>。数据完全没有进入过用户空间！</li>
-<li><strong>第三次数据复制 (<code>DMA</code>)：</strong> <code>DMA </code>控制器将数据从<strong>内核空间的 <code>Socket </code>缓冲区</strong>复制到网卡硬件中。<code>sendfile() </code>调用返回，发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
-</ol>
-<p>总结一下高效之处：</p>
-<ul>
-<li><strong>2 次上下文切换</strong>：减少了一半。</li>
-<li><strong>3 次数据复制</strong>：更重要的是，<strong>CPU 驱动的数据复制只有 1 次，且完全在内核空间内完成</strong>，避免了数据在内核和用户空间之间的拷贝。</li>
-</ul>
-<p><strong>真正的“零拷贝” (<code>Zero-Copy</code>)：</strong><br>
-在更现代的硬件上，<code>sendfile()</code> 还能做到更极致的优化。如果网卡支持 “<code>Scatter-gather DMA</code>” 功能，那么第 3 步的 <code>CPU </code>复制也可以省掉。内核只需要把数据在缓冲区的位置和长度等描述信息传递给网卡，网卡就可以自己去内核缓冲区里拉取数据。此时，数据复制就只剩两次<code> DMA</code> 操作，<code>CPU </code>完全不参与数据拷贝，这就是真正的“零拷贝”。</p>
-<blockquote>
-<p><code>sendfile</code> 在<code>http</code>块中，可自行寻找。<code>/etc/nginx/nginx.conf</code></p>
-</blockquote>
-<h3 id="master-worker"><a class="markdownIt-Anchor" href="#master-worker"></a> Master-Worker</h3>
-<p>虽然我们用 <code>sudo</code> 来启动和管理 <code>Nginx</code>，但为了安全，<code>Nginx</code> 的 <code>Master </code>进程在启动后，会创建一些低权限的 <strong><code>Worker</code> 进程</strong>。真正去处理用户请求、读取网站文件的，正是这些 <code>Worker</code> 进程。</p>
-<p>在 <code>Arch Linux</code> 上，这个低权限用户通常是<code> http</code>。在其他系统（如 <code>Debian/Ubuntu</code>）上可能是 <code>www-data</code>,可以把<code> Nginx</code> 的 <code>Worker</code> 进程想象成一个名叫 <code>http</code> 的普通访客。</p>
-<p><code>403 Forbidden</code> 就是因为这个访客在某个环节被拦住了</p>
-<h4 id="master-process"><a class="markdownIt-Anchor" href="#master-process"></a> Master Process</h4>
-<p><code>Master</code> 进程是 <code>Nginx </code>的入口和管理者，它以<code> root</code> 用户权限启动，因为它需要执行一些特权操作。它的核心职责包括：</p>
-<ul>
-<li><strong>读取和验证配置：</strong> 启动时，它会读取 <code>nginx.conf </code>并检查语法是否正确。</li>
-<li><strong>绑定特权端口：</strong> 监听低于 <code>1024</code> 的端口（如 <code>80</code>, <code>443</code>）需要 <code>root</code> 权限。<code>Master</code> 进程负责绑定这些端口。</li>
-<li><strong>创建和管理 Worker 进程：</strong> 根据配置 (<code>worker_processes</code>) 创建指定数量的 <code>Worker</code> 进程。这些 <code>Worker </code>进程会<strong>继承</strong>已经打开的监听端口。</li>
-<li><strong>以低权限运行 Worker：</strong> 出于安全考虑，<code>Master</code> 进程会以一个普通用户（如<code>http</code>或 <code>www-data</code>）的身份来启动 <code>Worker</code> 进程。这样，即使 <code>Worker</code> 进程被嘿壳利用，其破坏能力也被限制在该用户的权限范围内。🤔</li>
-<li><strong>处理控制信号：</strong> <code>Master</code> 进程负责响应来自管理员的指令，例如：
-<ul>
-<li><code>nginx -s reload</code>: 平滑重载配置。</li>
-<li><code>nginx -s quit</code>: 优雅地关闭。</li>
-<li><code>nginx -s stop</code>: 快速关闭。</li>
-</ul>
-</li>
-<li><strong>监控 Worker 状态：</strong> 持续监控 <code>Worker</code> 进程的健康状况，如果某个 <code>Worker</code> 异常退出，<code>Master </code>会立即重新启动一个新的 <code>Worker</code> 来替代它。</li>
-<li><strong>日志文件管理：</strong> 负责打开日志文件。</li>
-</ul>
-<p><strong>关键点：</strong> <code>Master</code> 进程不处理任何客户端的请求。它只做管理工作。</p>
-<h4 id="2-worker-processes"><a class="markdownIt-Anchor" href="#2-worker-processes"></a> 2. Worker Processes</h4>
-<p>Worker 进程是真正处理业务的“劳动力”。它们由 Master 进程创建，并以低权限用户运行。</p>
-<p><strong>核心工作机制：事件驱动 + 异步非阻塞 I/O</strong></p>
-<ol>
-<li><strong>共享监听套接字 (<code>Shared Listening Sockets</code>):</strong><br>
-所有 <code>Worker</code> 进程都从 <code>Master</code> 进程继承了同一个监听套接字（<code>listening socket</code>）。当一个新的客户端连接请求到达时，操作系统会唤醒这些正在等待的 <code>Worker</code> 进程。</li>
-<li><strong>争抢连接 (<code>accept_mutex</code>):</strong><br>
-为了避免多个 <code>Worker</code> 同时去处理同一个新连接（即“惊群效应” <code>Thundering Herd</code>），<code>Nginx </code>内部有一个 <code>accept_mutex</code> 锁。只有一个 <code>Worker </code>能成功获取到这个锁，然后调用 <code>accept() </code>来建立连接。这保证了连接处理的负载在多个 <code>Worker</code> 之间是相对均衡的。</li>
-<li><strong>事件循环和 <code>epoll</code>:</strong><br>
-每个 <code>Worker</code> 进程内部都有一个高效的<strong>事件循环</strong>。它利用操作系统的 <code>epoll</code> (在<code> Linux</code> 上) 或 <code>kqueue</code> (在 <code>BSD/macOS</code> 上) 这样的 <code>I/O</code> 多路复用技术。
-<ul>
-<li><strong>注册事件：</strong> 当一个 <code>Worker</code> 接受一个新连接后，它不会傻等客户端发数据。它只是把这个连接（<code>socket</code>）注册到<code>epoll</code>实例上，并告诉 <code>epoll</code>：“当这个连接上有数据可读时，请通知我。”</li>
-<li><strong>等待事件：</strong> 然后，<code>Worker</code> 进程就调用 <code>epoll_wait()</code>，把自己“挂起”，等待 <code>epoll</code> 的通知。它不消耗 <code>CPU</code>。</li>
-<li><strong>处理就绪事件：</strong> 当一个或多个连接上的事件就绪时（比如，客户端发来了数据，或者发送缓冲区变空可以继续写入了），<code>epoll_wait()</code> 会被唤醒，并返回一个“就绪事件”的列表。</li>
-<li><strong>处理与再注册：</strong> <code>Worker</code> 进程遍历这个列表，对每个就绪的连接执行相应的<strong>非阻塞操作</strong>（如 <code>read()</code> 读取数据，<code>write()</code> 或 <code>sendfile()</code> 发送数据）。处理完一个连接后，它会再次向 <code>epol</code>l 更新这个连接需要监听的下一个事件。</li>
-</ul>
-</li>
-</ol>
-<p><strong>流程的关键优势：</strong></p>
-<ul>
-<li><strong>单线程高效处理：</strong> 每个 Worker 进程是单线程的，避免了线程切换的开销和锁的复杂性。</li>
-<li><strong>永不阻塞</strong></li>
-<li><strong>连接数与内存消耗解耦：</strong> 一个 Worker 可以轻松维护数万个连接</li>
-</ul>
-<hr>
-<ul>
-<li>[ ] to be continued</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
         <tag>linux</tag>
-        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -756,55 +547,55 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
     <content><![CDATA[<details>
   <summary>索引</summary>
 <ul>
-<li><a href="#network-layer">Network Layer</a>
+<li><a href="#1-network-layer">1. Network Layer</a>
 <ul>
-<li><a href="#ip">IP</a>
+<li><a href="#11-ip">1.1. IP</a>
 <ul>
-<li><a href="#ipv4-%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F">IPv4 数据报格式</a></li>
-<li><a href="#ip-%E5%88%86%E7%89%87-fragmentation">IP 分片 (Fragmentation)</a></li>
+<li><a href="#111-ipv4-%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F">1.1.1. IPv4 数据报格式</a></li>
+<li><a href="#112-ip-%E5%88%86%E7%89%87-fragmentation">1.1.2. IP 分片 (Fragmentation)</a></li>
 </ul>
 </li>
-<li><a href="#icmp">ICMP</a>
+<li><a href="#12-icmp">1.2. ICMP</a>
 <ul>
-<li><a href="#%E5%87%A0%E7%A7%8D%E5%B8%B8%E7%94%A8icmp%E6%8A%A5%E6%96%87%E7%B1%BB%E5%9E%8B">几种常用ICMP报文类型</a>
+<li><a href="#121-%E5%87%A0%E7%A7%8D%E5%B8%B8%E7%94%A8icmp%E6%8A%A5%E6%96%87%E7%B1%BB%E5%9E%8B">1.2.1. 几种常用ICMP报文类型</a>
 <ul>
-<li><a href="#%E7%9B%AE%E7%9A%84%E4%B8%8D%E5%8F%AF%E8%BE%BE%E6%8A%A5%E6%96%873">目的不可达报文（3）</a></li>
-<li><a href="#%E8%B6%85%E6%97%B6%E6%8A%A5%E6%96%8711">超时报文（11）</a></li>
-<li><a href="#%E5%9B%9E%E5%BA%94%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94%E6%8A%A5%E6%96%87-%E7%B1%BB%E5%9E%8B-8-%E5%92%8C-0"><strong>回应请求与应答报文 (类型 8 和 0)</strong></a></li>
+<li><a href="#1211-%E7%9B%AE%E7%9A%84%E4%B8%8D%E5%8F%AF%E8%BE%BE%E6%8A%A5%E6%96%873">1.2.1.1. 目的不可达报文（3）</a></li>
+<li><a href="#1212-%E8%B6%85%E6%97%B6%E6%8A%A5%E6%96%8711">1.2.1.2. 超时报文（11）</a></li>
+<li><a href="#1213-%E5%9B%9E%E5%BA%94%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94%E6%8A%A5%E6%96%87-%E7%B1%BB%E5%9E%8B-8-%E5%92%8C-0">1.2.1.3. <strong>回应请求与应答报文 (类型 8 和 0)</strong></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#arp-address-resolution-protocol">ARP (Address Resolution Protocol)</a></li>
-<li><a href="#dhcp-dynamic-host-configuration-protocol">DHCP (Dynamic Host Configuration Protocol)</a></li>
-<li><a href="#%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE-routing-protocols">路由协议 (Routing Protocols)</a>
+<li><a href="#13-arp-address-resolution-protocol">1.3. ARP (Address Resolution Protocol)</a></li>
+<li><a href="#14-dhcp-dynamic-host-configuration-protocol">1.4. DHCP (Dynamic Host Configuration Protocol)</a></li>
+<li><a href="#15-%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE-routing-protocols">1.5. 路由协议 (Routing Protocols)</a>
 <ul>
-<li><a href="#%E5%86%85%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-igp---interior-gateway-protocol">内部网关协议 (IGP - Interior Gateway Protocol)</a></li>
-<li><a href="#%E5%A4%96%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-egp---exterior-gateway-protocol">外部网关协议 (EGP - Exterior Gateway Protocol)</a></li>
+<li><a href="#151-%E5%86%85%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-igp---interior-gateway-protocol">1.5.1. 内部网关协议 (IGP - Interior Gateway Protocol)</a></li>
+<li><a href="#152-%E5%A4%96%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-egp---exterior-gateway-protocol">1.5.2. 外部网关协议 (EGP - Exterior Gateway Protocol)</a></li>
 </ul>
 </li>
-<li><a href="#ipv6">IPv6</a></li>
-<li><a href="#igmp-internet-group-management-protocol">IGMP (Internet Group Management Protocol)</a></li>
-<li><a href="#nat-network-address-translation">NAT (Network Address Translation)</a></li>
-<li><a href="#ipsec-internet-protocol-security">IPsec (Internet Protocol Security)</a></li>
-<li><a href="#vrrp-virtual-router-redundancy-protocol">VRRP (Virtual Router Redundancy Protocol)</a></li>
-<li><a href="#mpls-multiprotocol-label-switching">MPLS (Multiprotocol Label Switching)</a></li>
+<li><a href="#16-ipv6">1.6. IPv6</a></li>
+<li><a href="#17-igmp-internet-group-management-protocol">1.7. IGMP (Internet Group Management Protocol)</a></li>
+<li><a href="#18-nat-network-address-translation">1.8. NAT (Network Address Translation)</a></li>
+<li><a href="#19-ipsec-internet-protocol-security">1.9. IPsec (Internet Protocol Security)</a></li>
+<li><a href="#110-vrrp-virtual-router-redundancy-protocol">1.10. VRRP (Virtual Router Redundancy Protocol)</a></li>
+<li><a href="#111-mpls-multiprotocol-label-switching">1.11. MPLS (Multiprotocol Label Switching)</a></li>
 </ul>
 </li>
 </ul>
 </details>
-<h1 id="network-layer"><a class="markdownIt-Anchor" href="#network-layer"></a> Network Layer</h1>
+<h1 id="1-network-layer"><a class="markdownIt-Anchor" href="#1-network-layer"></a> 1. Network Layer</h1>
 <blockquote>
 <p>网络层是<code>OSI</code>模型中的第三层，它负责在不同网络之间（端到端）提供数据包的路由和转发。网络互联的本质是通过<code>IP</code>协议实现的，而数据传输的基本单元是<code>IP</code>数据报。本章将详细介绍网络层的核心协议与技术。</p>
 </blockquote>
 <p>网络互连<code>本质</code>是通过<code>ip</code>实现的，<code>传输</code>是以<code>ip数据报</code>为介质。</p>
-<h2 id="ip"><a class="markdownIt-Anchor" href="#ip"></a> IP</h2>
+<h2 id="11-ip"><a class="markdownIt-Anchor" href="#11-ip"></a> 1.1. IP</h2>
 <p><code>IP</code>协议是无连接、不可靠的数据报服务。</p>
 <ul>
 <li><strong>无连接 (<code>Connectionless</code>)</strong>：发送方在发送数据前，不需要与接收方建立连接。每个数据报都是独立传输的，因此到达顺序、完整性都不能保证。</li>
 <li><strong>不可靠 (<code>Unreliable</code>)</strong>：<code>IP</code>协议不提供错误恢复或重传机制。如果数据报在传输中丢失或损坏，<code>IP</code>层本身不会处理，而是交由上层协议（如<code>TCP</code>）来确保可靠性。</li>
 </ul>
-<h3 id="ipv4-数据报格式"><a class="markdownIt-Anchor" href="#ipv4-数据报格式"></a> IPv4 数据报格式</h3>
+<h3 id="111-ipv4-数据报格式"><a class="markdownIt-Anchor" href="#111-ipv4-数据报格式"></a> 1.1.1. IPv4 数据报格式</h3>
 <p>一个<code>IP</code>数据报由<code>首部 (Header)</code>和<code>数据 (Data)</code>两部分组成。首部通常为20字节，包含了路由和转发所需的所有关键信息。</p>
 <ul>
 <li><strong>版本 (<code>Version</code>)</strong> (4位): 指示<code>IP</code>协议的版本，对于<code>IPv4</code>，该值为 4。</li>
@@ -827,7 +618,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <li><strong>目的IP地址 (<code>Destination IP Address</code>)</strong> (32位): 接收方设备的<code>IP</code>地址。</li>
 <li><strong>选项 (<code>Options</code>)</strong> (可变长): 用于一些特殊处理，如记录路由、时间戳等。由于选项会增加首部长度并降低处理效率，因此不常用。如果存在，首部长度字段会大于5。</li>
 </ul>
-<h3 id="ip-分片-fragmentation"><a class="markdownIt-Anchor" href="#ip-分片-fragmentation"></a> IP 分片 (Fragmentation)</h3>
+<h3 id="112-ip-分片-fragmentation"><a class="markdownIt-Anchor" href="#112-ip-分片-fragmentation"></a> 1.1.2. IP 分片 (Fragmentation)</h3>
 <p>当一个<code>IP</code>数据报的长度超过了链路的<strong>最大传输单元 (<code>MTU</code>)</strong> 时，路由器就需要将其分割成多个更小的数据报，这个过程称为分片。</p>
 <ul>
 <li>标识、标志和片偏移这三个字段共同协作，以确保分片能够在目的主机被正确地重组。</li>
@@ -836,7 +627,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <li>片偏移字段记录了每个分片数据在原始数据中的相对位置。</li>
 </ul>
 <hr>
-<h2 id="icmp"><a class="markdownIt-Anchor" href="#icmp"></a> ICMP</h2>
+<h2 id="12-icmp"><a class="markdownIt-Anchor" href="#12-icmp"></a> 1.2. ICMP</h2>
 <p><strong>ICMP</strong>：<code>Internet Control Message Protocol</code> ，因特网控制报文协议</p>
 <p>方向：主机/路由器 -&gt; 源站(发送方)</p>
 <p><img src="/Network-Layer/54070be665d2466175453f2c7153900f-1740404253149-1.jpeg" alt></p>
@@ -972,8 +763,8 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <p>其中<code>3</code>、<code>11</code>、<code>0</code>、<code>8</code>常用</p>
 <p><code>3</code>、<code>11</code>是<code>差错报告报文</code></p>
 <p><code>0</code>、<code>8</code>是<code>提供信息的报文</code></p>
-<h3 id="几种常用icmp报文类型"><a class="markdownIt-Anchor" href="#几种常用icmp报文类型"></a> 几种常用ICMP报文类型</h3>
-<h4 id="目的不可达报文3"><a class="markdownIt-Anchor" href="#目的不可达报文3"></a> 目的不可达报文（3）</h4>
+<h3 id="121-几种常用icmp报文类型"><a class="markdownIt-Anchor" href="#121-几种常用icmp报文类型"></a> 1.2.1. 几种常用ICMP报文类型</h3>
+<h4 id="1211-目的不可达报文3"><a class="markdownIt-Anchor" href="#1211-目的不可达报文3"></a> 1.2.1.1. 目的不可达报文（3）</h4>
 <p>顾名思义，<code>目的不可达报文</code>就是目的不可达，<code>代码</code>部分进一步阐述</p>
 <p><img src="/Network-Layer/eaba7cf385281339afc9f7083d44ea17-1740404253149-2.jpeg" alt></p>
 <p>相当于<code>代码</code>那块就是<code>00</code>,<code>01</code>…这样的十六进制</p>
@@ -982,7 +773,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <p><code>路径最小MTU</code>影响数据在网络中的传输，尤其在路径中包含不同的网络设备时，如果路径中的任何设备不能处理过大的数据包，它就会丢弃该数据包或将其分片。</p>
 <p>所以<code>“路径最小MTU发现”应用</code>可以实现 <code> MTU</code>探测 和 避免分片</p>
 </blockquote>
-<h4 id="超时报文11"><a class="markdownIt-Anchor" href="#超时报文11"></a> 超时报文（11）</h4>
+<h4 id="1212-超时报文11"><a class="markdownIt-Anchor" href="#1212-超时报文11"></a> 1.2.1.2. 超时报文（11）</h4>
 <p><code>代码</code>说明超时的性质：</p>
 <p><code>00</code>  传输过程中IP <code>TTL（time to live）</code>超时</p>
 <p><code>01</code>   分片重装超时</p>
@@ -996,7 +787,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 </ul>
 </blockquote>
 <p><img src="/Network-Layer/4c779b318b1952f5114d3ac31802c576_720-1740404253150-3.jpg" alt></p>
-<h4 id="回应请求与应答报文-类型-8-和-0"><a class="markdownIt-Anchor" href="#回应请求与应答报文-类型-8-和-0"></a> <strong>回应请求与应答报文 (类型 8 和 0)</strong></h4>
+<h4 id="1213-回应请求与应答报文-类型-8-和-0"><a class="markdownIt-Anchor" href="#1213-回应请求与应答报文-类型-8-和-0"></a> 1.2.1.3. <strong>回应请求与应答报文 (类型 8 和 0)</strong></h4>
 <p>这是我们最熟悉的<code>ping</code>命令所使用的报文。</p>
 <ul>
 <li><strong>PING (<code>Packet InterNet Groper</code>)</strong>：用于测试两台主机之间的连通性。</li>
@@ -1005,7 +796,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <li><code>ping</code>是一个应用层程序直接使用网络层<code>ICMP</code>的典型例子，它绕过了传输层的<code>TCP</code>或<code>UDP</code>。</li>
 </ul>
 <hr>
-<h2 id="arp-address-resolution-protocol"><a class="markdownIt-Anchor" href="#arp-address-resolution-protocol"></a> ARP (Address Resolution Protocol)</h2>
+<h2 id="13-arp-address-resolution-protocol"><a class="markdownIt-Anchor" href="#13-arp-address-resolution-protocol"></a> 1.3. ARP (Address Resolution Protocol)</h2>
 <p>在任何局域网（如以太网）中，数据帧的传输最终依赖的是<strong>MAC地址（物理地址）</strong>，而不是<code>IP</code>地址。那么，当一台主机（例如 <code>192.168.1.100</code>）想要与同一网络中的另一台主机（例如 <code>192.168.1.50</code>）通信时，它如何知道对方的<code>MAC</code>地址呢？这就是<code>ARP</code>协议的作用。</p>
 <p><strong>定义</strong>：<code>ARP (Address Resolution Protocol)</code>，地址解析协议。它负责将一个已知的<code>IP</code>地址（网络层地址）解析（映射）为对应的MAC地址（数据链路层地址）。</p>
 <p><strong>工作流程</strong>：</p>
@@ -1017,7 +808,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 </ol>
 <p><strong><code>ARP</code>缓存</strong>：每个主机都维护一个ARP缓存，用于存储近期解析过的<code>IP</code>地址与<code>MAC</code>地址的对应关系。缓存条目有生命周期（通常是几分钟），过期后会被删除，以确保信息的时效性。</p>
 <hr>
-<h2 id="dhcp-dynamic-host-configuration-protocol"><a class="markdownIt-Anchor" href="#dhcp-dynamic-host-configuration-protocol"></a> DHCP (Dynamic Host Configuration Protocol)</h2>
+<h2 id="14-dhcp-dynamic-host-configuration-protocol"><a class="markdownIt-Anchor" href="#14-dhcp-dynamic-host-configuration-protocol"></a> 1.4. DHCP (Dynamic Host Configuration Protocol)</h2>
 <p>当一台新设备（如笔记本电脑或手机）接入网络时，它需要一个<code>IP</code>地址才能通信。手动为每台设备配置IP地址、子网掩码、默认网关和<code>DNS</code>服务器是非常繁琐且容易出错的。<code>DHCP</code>协议就是为了自动化这个过程而设计的。</p>
 <p><strong>定义</strong>：<strong>动态主机配置协议 (<code>DHCP, Dynamic Host Configuration Protocol</code>)</strong> 是一个应用层协议（基于<code>UDP</code>），允许网络中的<code>DHCP</code>服务器自动地为客户端分配IP地址及其他网络配置参数。</p>
 <p><strong>工作流程 (<code>DORA</code>)</strong>：这个过程通常被称为**<code>DORA</code>**，代表四个核心步骤。</p>
@@ -1028,9 +819,9 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <li><strong><code>Acknowledge (确认)</code></strong>：被选中的<code>DHCP</code>服务器会发送一个 <strong><code>DHCP ACK</code></strong> 报文，确认将该<code>IP</code>地址租借给客户端，并规定了租期。此时，客户端就可以使用这个IP地址进行网络通信了。</li>
 </ol>
 <hr>
-<h2 id="路由协议-routing-protocols"><a class="markdownIt-Anchor" href="#路由协议-routing-protocols"></a> 路由协议 (Routing Protocols)</h2>
+<h2 id="15-路由协议-routing-protocols"><a class="markdownIt-Anchor" href="#15-路由协议-routing-protocols"></a> 1.5. 路由协议 (Routing Protocols)</h2>
 <p>IP协议本身只负责数据报的转发，但它并不知道如何选择最佳路径。<strong>路由器</strong>通过运行<strong>路由协议</strong>来学习网络的拓扑结构，并创建<strong>路由表</strong>，从而做出智能的路径选择决策。路由协议主要分为两大类：</p>
-<h3 id="内部网关协议-igp-interior-gateway-protocol"><a class="markdownIt-Anchor" href="#内部网关协议-igp-interior-gateway-protocol"></a> 内部网关协议 (IGP - Interior Gateway Protocol)</h3>
+<h3 id="151-内部网关协议-igp-interior-gateway-protocol"><a class="markdownIt-Anchor" href="#151-内部网关协议-igp-interior-gateway-protocol"></a> 1.5.1. 内部网关协议 (IGP - Interior Gateway Protocol)</h3>
 <p>IGP在一个<strong>自治系统 (<code>AS - Autonomous System</code>)</strong> 内部交换路由信息。一个<code>AS</code>可以是一个公司、一所大学或一个互联网服务提供商（<code>ISP</code>）的网络。</p>
 <ul>
 <li><strong>RIP (<code>Routing Information Protocol</code>)</strong>
@@ -1048,7 +839,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 </ul>
 </li>
 </ul>
-<h3 id="外部网关协议-egp-exterior-gateway-protocol"><a class="markdownIt-Anchor" href="#外部网关协议-egp-exterior-gateway-protocol"></a> 外部网关协议 (EGP - Exterior Gateway Protocol)</h3>
+<h3 id="152-外部网关协议-egp-exterior-gateway-protocol"><a class="markdownIt-Anchor" href="#152-外部网关协议-egp-exterior-gateway-protocol"></a> 1.5.2. 外部网关协议 (EGP - Exterior Gateway Protocol)</h3>
 <p><code>EGP</code>用于在不同的自治系统（<code>AS</code>）之间交换路由信息，是构成整个互联网的骨架。</p>
 <ul>
 <li><strong>BGP (<code>Border Gateway Protocol</code>)</strong>
@@ -1059,7 +850,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 </li>
 </ul>
 <hr>
-<h2 id="ipv6"><a class="markdownIt-Anchor" href="#ipv6"></a> IPv6</h2>
+<h2 id="16-ipv6"><a class="markdownIt-Anchor" href="#16-ipv6"></a> 1.6. IPv6</h2>
 <p>随着物联网的兴起和互联网的蓬勃发展，<code>IPv4</code>的地址空间（约43亿个）已完全耗尽。<code>IPv6</code>作为其继任者，提供了海量的地址空间和诸多改进。</p>
 <p><strong>主要优势</strong>：</p>
 <ol>
@@ -1071,7 +862,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <li><strong>改进的邻居发现协议 (<code>NDP</code>)</strong>：<code>IPv6</code>使用<strong>邻居发现协议 (<code>NDP</code>)</strong>，它基于<code>ICMPv6</code>，取代了<code>IPv4</code>中的<code>ARP</code>和<code>ICMP</code>路由器发现等功能，实现了地址解析、路由器发现、重复地址检测（<code>DAD</code>）等，更加高效和强大。</li>
 </ol>
 <hr>
-<h2 id="igmp-internet-group-management-protocol"><a class="markdownIt-Anchor" href="#igmp-internet-group-management-protocol"></a> IGMP (Internet Group Management Protocol)</h2>
+<h2 id="17-igmp-internet-group-management-protocol"><a class="markdownIt-Anchor" href="#17-igmp-internet-group-management-protocol"></a> 1.7. IGMP (Internet Group Management Protocol)</h2>
 <p>当数据需要发送给一组特定的、感兴趣的主机而不是单个主机（单播）或所有主机（广播）时，就需要<strong>组播 (<code>Multicast</code>)</strong>。<code>IGMP</code>协议就是用于管理这种组播组成员关系的。</p>
 <p><strong>定义</strong>：IGMP (<code>Internet Group Management Protocol</code>)，因特网组管理协议。它允许主机通知其本地路由器，表示自己希望加入或离开某个特定的组播组。</p>
 <p><strong>工作原理</strong>：</p>
@@ -1082,7 +873,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 </ul>
 <p><code>IGMP</code>只负责在主机和本地路由器之间进行通信。路由器之间则需要运行专门的组播路由协议（如<code>PIM</code>）来构建组播数据的分发路径。</p>
 <hr>
-<h2 id="nat-network-address-translation"><a class="markdownIt-Anchor" href="#nat-network-address-translation"></a> NAT (Network Address Translation)</h2>
+<h2 id="18-nat-network-address-translation"><a class="markdownIt-Anchor" href="#18-nat-network-address-translation"></a> 1.8. NAT (Network Address Translation)</h2>
 <p><code>NAT</code>是为了延缓<code>IPv4</code>地址耗尽而设计出的一种关键技术。它允许一个机构内部的众多计算机使用<strong>私有<code>IP</code>地址</strong>上网，但在与外部互联网通信时，共享一个或少数几个<strong>公有<code>IP</code>地址</strong>。</p>
 <p><strong>定义</strong>：<strong>网络地址转换 (<code>NAT</code>)</strong> 工作在路由器或防火墙上，负责在私有网络和公有网络之间转换<code>IP</code>数据报的源/目的地址和端口号。</p>
 <p><strong>私有<code>IP</code>地址段</strong> (不会在公网路由):</p>
@@ -1115,7 +906,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 </li>
 </ol>
 <hr>
-<h2 id="ipsec-internet-protocol-security"><a class="markdownIt-Anchor" href="#ipsec-internet-protocol-security"></a> IPsec (Internet Protocol Security)</h2>
+<h2 id="19-ipsec-internet-protocol-security"><a class="markdownIt-Anchor" href="#19-ipsec-internet-protocol-security"></a> 1.9. IPsec (Internet Protocol Security)</h2>
 <p><strong><code>IPsec</code></strong> 是一套协议簇，用于在网络层为<code>IP</code>通信提供高质量、可互操作的、基于密码学的安全保障。它能提供数据来源认证、数据完整性、数据机密性（加密）和防重放攻击等服务，是构建**<code>VPN</code> (虚拟专用网络)** 的核心技术。</p>
 <p><strong>两种工作模式</strong>：</p>
 <ol>
@@ -1138,7 +929,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <li><strong>ESP (<code>Encapsulating Security Payload</code>)</strong>：提供<strong>数据完整性</strong>、<strong>身份验证</strong>和<strong>数据机密性（加密）</strong>。这是目前应用最广泛的IPsec协议。</li>
 </ul>
 <hr>
-<h2 id="vrrp-virtual-router-redundancy-protocol"><a class="markdownIt-Anchor" href="#vrrp-virtual-router-redundancy-protocol"></a> VRRP (Virtual Router Redundancy Protocol)</h2>
+<h2 id="110-vrrp-virtual-router-redundancy-protocol"><a class="markdownIt-Anchor" href="#110-vrrp-virtual-router-redundancy-protocol"></a> 1.10. VRRP (Virtual Router Redundancy Protocol)</h2>
 <p>在局域网中，如果作为默认网关的路由器发生故障，整个网络的主机将无法访问外部网络，这形成了一个<strong>单点故障</strong>。<code>VRRP</code>就是为了解决这个问题而设计的网关冗余协议。</p>
 <p><strong>定义</strong>：<strong>虚拟路由器冗余协议 (<code>VRRP</code>)</strong> 是一种容错协议，可以将多台物理路由器组织成一个“<strong>虚拟路由器</strong>”，从而对外提供一个高可用的默认网关。</p>
 <p><strong>工作原理</strong>：</p>
@@ -1150,7 +941,7 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
 <li><strong>无缝切换</strong>：这个切换过程对客户端是完全透明的，客户端无需进行任何更改，从而保证了网络连接的连续性。</li>
 </ol>
 <hr>
-<h2 id="mpls-multiprotocol-label-switching"><a class="markdownIt-Anchor" href="#mpls-multiprotocol-label-switching"></a> MPLS (Multiprotocol Label Switching)</h2>
+<h2 id="111-mpls-multiprotocol-label-switching"><a class="markdownIt-Anchor" href="#111-mpls-multiprotocol-label-switching"></a> 1.11. MPLS (Multiprotocol Label Switching)</h2>
 <p><code>MPLS</code>是一种高性能的电信级网络技术，它在传统的IP路由（第三层）和数据链路层交换（第二层）之间工作，常被称为“<strong>2.5层</strong>”技术。</p>
 <p><strong>定义</strong>：<strong>多协议标签交换 (<code>MPLS</code>)</strong> 通过给数据包预先分配简短、固定长度的“<strong>标签（<code>Label</code>）</strong>”，并根据标签进行转发，而不是像传统路由那样在每一跳都查找复杂的IP路由表。</p>
 <p><strong>工作原理</strong>：</p>
@@ -1176,232 +967,379 @@ grubx64.efi 没有微软的签名，而这个使用了shim来签名，很多时
       </tags>
   </entry>
   <entry>
-    <title>Python-algorithm</title>
-    <url>/Python-algorithm/</url>
+    <title>Nginx-enginex</title>
+    <url>/Nginx-enginex/</url>
     <content><![CDATA[<details>
   <summary>索引</summary>
 <ul>
-<li><a href="#%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">核心数据类型</a>
+<li><a href="#1-installation">1. installation</a></li>
+<li><a href="#2-feature">2. feature</a>
 <ul>
-<li><a href="#%E6%95%B4%E6%95%B0-int">整数 (int)</a></li>
-<li><a href="#%E6%B5%AE%E7%82%B9%E6%95%B0-float">浮点数 (float)</a></li>
-<li><a href="#%E5%B8%83%E5%B0%94%E5%80%BC-bool">布尔值 (bool)</a></li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2-str">字符串 (str)</a></li>
+<li><a href="#21-nginx-%E7%9A%84%E7%81%B5%E9%AD%82%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%BC%82%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9E%E6%9E%B6%E6%9E%84">2.1. <strong>Nginx 的灵魂</strong>:<strong>事件驱动的异步非阻塞架构</strong></a>
+<ul>
+<li><a href="#211-%E4%BC%A0%E7%BB%9F-read--write-%E6%96%B9%E5%BC%8F">2.1.1. 传统 read() + write() 方式</a></li>
+<li><a href="#212-sendfile-%E6%96%B9%E5%BC%8F">2.1.2. sendfile() 方式</a></li>
 </ul>
 </li>
-<li><a href="#%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">核心数据结构</a>
+<li><a href="#22-master-worker">2.2. Master-Worker</a>
 <ul>
-<li><a href="#%E5%88%97%E8%A1%A8-list">列表 (List)</a>
-<ul>
-<li><a href="#%E5%88%9B%E5%BB%BA">创建</a></li>
-<li><a href="#%E8%AE%BF%E9%97%AE">访问</a></li>
-<li><a href="#%E5%88%87%E7%89%87">切片</a></li>
-<li><a href="#%E5%88%97%E8%A1%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%92%8C%E6%93%8D%E4%BD%9C">列表的常用函数和操作</a></li>
-<li><a href="#%E5%88%97%E8%A1%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95">列表的常用方法</a></li>
-</ul>
-</li>
-<li><a href="#%E5%AD%97%E5%85%B8-dictionary--hash-map">字典 (Dictionary / Hash Map)</a>
-<ul>
-<li><a href="#%E5%88%9B%E5%BB%BA-1">创建</a></li>
-<li><a href="#%E6%93%8D%E4%BD%9C">操作</a></li>
-</ul>
-</li>
-<li><a href="#%E9%9B%86%E5%90%88-set">集合 (Set)</a>
-<ul>
-<li><a href="#%E5%88%9B%E5%BB%BA-2">创建</a></li>
-<li><a href="#%E6%93%8D%E4%BD%9C-1">操作</a></li>
-</ul>
-</li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2-string">字符串 (String)</a>
-<ul>
-<li><a href="#%E6%93%8D%E4%BD%9C-2">操作</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%E6%8E%A7%E5%88%B6%E6%B5%81%E4%B8%8E%E9%80%BB%E8%BE%91">控制流与逻辑</a>
-<ul>
-<li><a href="#%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%ADifelifelse">条件判断 (if/elif/else)</a></li>
-<li><a href="#%E5%BE%AA%E7%8E%AF">循环</a>
-<ul>
-<li><a href="#for%E5%BE%AA%E7%8E%AF">for循环</a></li>
-<li><a href="#while%E5%BE%AA%E7%8E%AF">while 循环</a></li>
-</ul>
-</li>
-<li><a href="#%E5%87%BD%E6%95%B0">函数</a></li>
-</ul>
-</li>
-<li><a href="#%E9%80%9A%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0">通用内置函数</a>
-<ul>
-<li><a href="#lenobj">len(obj)</a></li>
-<li><a href="#sumiterable">sum(iterable)</a></li>
-<li><a href="#miniterablemaxiterable">min(iterable) / max(iterable)</a></li>
-<li><a href="#sortediterable">sorted(iterable)</a></li>
-<li><a href="#absx">abs(x)</a></li>
-<li><a href="#rangestart-stop-step">range(start, stop, step)</a></li>
-<li><a href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%87%BD%E6%95%B0">类型转换函数</a>
-<ul>
-<li><a href="#intx">int(x)</a></li>
-<li><a href="#strobj">str(obj)</a></li>
-<li><a href="#listiterable">list(iterable)</a></li>
-<li><a href="#setiterable">set(iterable)</a></li>
-</ul>
-</li>
-<li><a href="#enumerateiterable">enumerate(iterable)</a></li>
-<li><a href="#zip">zip()</a></li>
-<li><a href="#mapfunction-iterable">map(function, iterable)</a></li>
-</ul>
-</li>
-<li><a href="#%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%96%B9%E6%B3%95">核心数据类型方法</a>
-<ul>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2-str-1">字符串 (str)</a>
-<ul>
-<li><a href="#strsplitsep">str.split(sep)</a></li>
-<li><a href="#sepjoinlist">sep.join(list)</a></li>
-<li><a href="#strfindsub">str.find(sub)</a></li>
-<li><a href="#strcountsub">str.count(sub)</a></li>
-<li><a href="#strstrip">str.strip()</a></li>
-<li><a href="#strisdigit">str.isdigit()</a></li>
-</ul>
-</li>
-<li><a href="#%E5%88%97%E8%A1%A8-list-1">列表 (list)</a>
-<ul>
-<li><a href="#listindexx-start-end">list.index(x[, start[, end]])</a></li>
-<li><a href="#listappendx">list.append(x)</a></li>
-<li><a href="#listpopi">list.pop(i)</a></li>
-<li><a href="#listsortcmpnone-keynone-reversefalse">list.sort(cmp=None, key=None, reverse=False)</a></li>
-<li><a href="#listreverse">list.reverse()</a></li>
-<li><a href="#listremoveobj">list.remove(obj)</a></li>
-</ul>
-</li>
-<li><a href="#%E5%AD%97%E5%85%B8-dict">字典 (dict)</a>
-<ul>
-<li><a href="#dictgetkey-default">dict.get(key, default)</a></li>
-<li><a href="#dictkeys">dict.keys()</a></li>
-<li><a href="#dictvalues">dict.values()</a></li>
-<li><a href="#dictitems">dict.items()</a></li>
+<li><a href="#221-master-process">2.2.1. Master Process</a></li>
+<li><a href="#222-worker-processes">2.2.2. Worker Processes</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </details>
-<h2 id="核心数据类型"><a class="markdownIt-Anchor" href="#核心数据类型"></a> 核心数据类型</h2>
-<h4 id="整数-int"><a class="markdownIt-Anchor" href="#整数-int"></a> 整数 (int)</h4>
+<h2 id="1-installation"><a class="markdownIt-Anchor" href="#1-installation"></a> 1. installation</h2>
+<p><strong>on arch linux</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> pacman -Syu</span><br><span class="line">$ <span class="built_in">sudo</span> pacman -S nginx</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> systemctl start nginx.service</span><br><span class="line">$ <span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> nginx.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># $ sudo systemctl status nginx.service</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">s3loy@archlinux ~]$ ip a</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host noprefixroute </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:0c:29:4f:fa:7f brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    altname enp2s1</span><br><span class="line">    altname enx000c294ffa7f</span><br><span class="line">    inet 192.168.209.128/24 brd 192.168.209.255 scope global dynamic noprefixroute ens33</span><br><span class="line">       valid_lft 1592sec preferred_lft 1367sec</span><br><span class="line">    inet6 fe80::98ef:2b0d:cbd3:648c/64 scope <span class="built_in">link</span> </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">       </span><br><span class="line"> <span class="comment">#  inet 192.168.209.128</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>主机直接访问<a href="http://192.168.209.128/">http://192.168.209.128/</a>    就可以看到<code>Welcome to nginx!</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> /etc/nginx/nginx.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#user http;</span></span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line"><span class="comment">#error_log  logs/error.log;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Load all installed modules</span></span><br><span class="line">include modules.d/*.conf;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  logs/access.log  main;</span></span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    <span class="comment">#tcp_nopush     on;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#keepalive_timeout  0;</span></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#gzip  on;</span></span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  localhost;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#charset koi8-r;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   /usr/share/nginx/html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#error_page  404              /404.html;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   /usr/share/nginx/html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">        <span class="comment">#    proxy_pass   http://127.0.0.1;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">        <span class="comment">#    root           html;</span></span><br><span class="line">        <span class="comment">#    fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line">        <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">        <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span></span><br><span class="line">        <span class="comment">#    include        fastcgi_params;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># deny access to .htaccess files, if Apache&#x27;s document root</span></span><br><span class="line">        <span class="comment"># concurs with nginx&#x27;s one</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ /\.ht &#123;</span></span><br><span class="line">        <span class="comment">#    deny  all;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server &#123;</span></span><br><span class="line">    <span class="comment">#    listen       8000;</span></span><br><span class="line">    <span class="comment">#    listen       somename:8080;</span></span><br><span class="line">    <span class="comment">#    server_name  somename  alias  another.alias;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / &#123;</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># HTTPS server</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server &#123;</span></span><br><span class="line">    <span class="comment">#    listen       443 ssl;</span></span><br><span class="line">    <span class="comment">#    server_name  localhost;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_certificate      cert.pem;</span></span><br><span class="line">    <span class="comment">#    ssl_certificate_key  cert.key;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_session_cache    shared:SSL:1m;</span></span><br><span class="line">    <span class="comment">#    ssl_session_timeout  5m;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span></span><br><span class="line">    <span class="comment">#    ssl_prefer_server_ciphers  on;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / &#123;</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>block</code>
+<ul>
+<li><code>http { ... }</code>: 配置 <code>HTTP </code>相关功能的顶级块。几乎所有的 Web 服务配置都在这里面。</li>
+<li><code>server { ... }</code>: 定义一个“虚拟主机”,可以在一个 <code>Nginx</code> 里配置多个 <code>server</code> 块，来托管不同的网站</li>
+<li><code>location / { ... }</code>: 定义当请求的 URL 匹配某个路径时，应该如何处理。<code>location / </code>表示匹配所有请求。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> -p ~/my-website/images</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;&lt;h1&gt;hello,this is our first website&lt;/h1&gt;&quot;</span> &gt; ~/my-website/index.html</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;&lt;p&gt;this is about&lt;/p&gt;&quot;</span> &gt; ~/my-website/about.html</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> <span class="built_in">cp</span> /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak</span><br><span class="line"><span class="comment"># backup</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> vim /etc/nginx/nginx.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"><span class="comment"># ... http 块内部 ...</span></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  localhost; </span><br><span class="line">    <span class="comment"># ... 其他配置 ...</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /home/s3loy/my-website;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># ... 其他配置 ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> nginx -t</span><br><span class="line"><span class="comment">#配置成功即可</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">sudo</span> systemctl reload nginx</span><br></pre></td></tr></table></figure>
+<p>访问<a href="http://192.168.209.128/about.html">http://192.168.209.128/about.html</a>   发现<code>403 Forbidden</code></p>
+<p>此时考虑到文件夹为新建且处于<code>whoami</code>用户下，所以</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ps aux | grep <span class="string">&quot;nginx: worker process&quot;</span></span><br><span class="line">http        2179  0.0  0.1  15388  5140 ?        S    16:13   0:00 nginx: worker process</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">chmod</span> o+x /home/s3loy</span><br><span class="line">$ <span class="built_in">ls</span> -ld ~/my-website</span><br><span class="line">drwxr-xr-x 3 s3loy s3loy 4096 Jul 23 16:10 /home/s3loy/my-website</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>直接重返链接就发现页面可以刷新出来了</p>
+<p><strong>当然这也很明显，请不要把网站放在自己的目录当中</strong>。出于隐私和安全考虑，默认权限非常严格</p>
+<p>在<code>arch linux</code>当中，<code>http</code>推荐放在<code>/srv/http</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> -ld /srv/http</span><br><span class="line">drwxr-xr-x 2 root root 4096 May  3 19:26 /srv/http</span><br></pre></td></tr></table></figure>
+<p>在其他很多 <code>Linux</code> 系统上，常用目录是 <code>/var/www/html</code></p>
+<h2 id="2-feature"><a class="markdownIt-Anchor" href="#2-feature"></a> 2. feature</h2>
+<h3 id="21-nginx-的灵魂事件驱动的异步非阻塞架构"><a class="markdownIt-Anchor" href="#21-nginx-的灵魂事件驱动的异步非阻塞架构"></a> 2.1. <strong>Nginx 的灵魂</strong>:<strong>事件驱动的异步非阻塞架构</strong></h3>
+<p>我们以这个简单的静态网页为例，当你请求静态文件时，<code>Nginx</code> 的 <code>Worker</code> 进程接收到请求，告诉操作系统内核：“把 <code>~/my-website/index.html</code> 这个文件的数据发给这个用户”。然后 <code>Worker</code> 进程就去处理其他请求了。当内核把文件数据准备好后，会通知 <code>Worker</code> 进程，<code>Worker</code> 进程再把数据发回给浏览器。这个过程极其高效，因为它利用了操作系统的 <code>sendfile</code> 机制，避免了数据在内核和用户空间之间的多次复制，<code>CPU</code> 占用极低。</p>
+<hr>
+<blockquote>
+<p><code>sendfile</code>机制</p>
+</blockquote>
+<p><strong>用户空间 (<code>User Space</code>)</strong> 和 <strong>内核空间 (<code>Kernel Space</code>)</strong>。</p>
+<ul>
+<li><strong>用户空间：</strong> 你的应用程序（如 <code>Nginx</code> 进程）运行的地方。</li>
+<li><strong>内核空间：</strong> 操作系统内核运行的地方，它能直接操作硬件（如磁盘、网卡）。</li>
+</ul>
+<h4 id="211-传统-read-write-方式"><a class="markdownIt-Anchor" href="#211-传统-read-write-方式"></a> 2.1.1. 传统 read() + write() 方式</h4>
+<p>当 <code>Nginx</code> 需要发送一个静态文件给客户端时，传统的 I/O 流程如下：</p>
+<ol>
+<li><strong><code>read()</code> 系统调用：</strong> <code>Nginx</code> 进程发起 <code>read() </code>系统调用，请求读取文件。这会导致一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
+<li><strong>第一次数据复制 (<code>DMA</code>)：</strong> <code>CPU</code> 指示 <code>DMA </code>控制器将文件内容从磁盘读取到<strong>内核空间的缓冲区</strong>。</li>
+<li><strong>第二次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据从<strong>内核空间缓冲区</strong>复制到<strong>用户空间的 <code>Nginx </code>缓冲区</strong>。<code>read()</code> 调用返回，发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
+<li><strong><code>write()</code> 系统调用：</strong> <code>Nginx</code> 进程拿到数据后，发起 <code>write() </code>系统调用，请求发送数据。再次发生一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
+<li><strong>第三次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据从<strong>用户空间的<code>Nginx</code>缓冲区</strong>复制到<strong>内核空间的 <code>Socket </code>缓冲区</strong>（与网卡关联）。</li>
+<li><strong>第四次数据复制 (<code>DMA</code>)：</strong> <code>DMA</code> 控制器将数据从<strong>内核空间的 <code>Socket</code> 缓冲区</strong>复制到网卡硬件中，然后发送出去。<code>write() </code>调用返回，再次发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
+</ol>
+<h4 id="212-sendfile-方式"><a class="markdownIt-Anchor" href="#212-sendfile-方式"></a> 2.1.2. sendfile() 方式</h4>
+<p><code>sendfile()</code> 是一个系统调用，它把上述过程大大简化了。</p>
+<ol>
+<li><strong><code>sendfile() </code>系统调用：</strong> <code>Nginx</code> 进程发起<code>sendfile()</code>系统调用，它包含了输入（文件描述符）和输出（<code>Socket </code>描述符）的信息。发生一次从<strong>用户空间到内核空间</strong>的上下文切换。</li>
+<li><strong>第一次数据复制 (<code>DMA</code>)：</strong> <code>DMA</code> 控制器将文件内容从磁盘读取到<strong>内核空间的缓冲区</strong>。</li>
+<li><strong>第二次数据复制 (<code>CPU</code>)：</strong> <code>CPU</code> 将数据<strong>直接从内核空间的读缓冲区复制到内核空间的<code>Socket</code>缓冲区</strong>。数据完全没有进入过用户空间！</li>
+<li><strong>第三次数据复制 (<code>DMA</code>)：</strong> <code>DMA </code>控制器将数据从<strong>内核空间的 <code>Socket </code>缓冲区</strong>复制到网卡硬件中。<code>sendfile() </code>调用返回，发生一次从<strong>内核空间到用户空间</strong>的上下文切换。</li>
+</ol>
+<p>总结一下高效之处：</p>
+<ul>
+<li><strong>2 次上下文切换</strong>：减少了一半。</li>
+<li><strong>3 次数据复制</strong>：更重要的是，<strong>CPU 驱动的数据复制只有 1 次，且完全在内核空间内完成</strong>，避免了数据在内核和用户空间之间的拷贝。</li>
+</ul>
+<p><strong>真正的“零拷贝” (<code>Zero-Copy</code>)：</strong><br>
+在更现代的硬件上，<code>sendfile()</code> 还能做到更极致的优化。如果网卡支持 “<code>Scatter-gather DMA</code>” 功能，那么第 3 步的 <code>CPU </code>复制也可以省掉。内核只需要把数据在缓冲区的位置和长度等描述信息传递给网卡，网卡就可以自己去内核缓冲区里拉取数据。此时，数据复制就只剩两次<code> DMA</code> 操作，<code>CPU </code>完全不参与数据拷贝，这就是真正的“零拷贝”。</p>
+<blockquote>
+<p><code>sendfile</code> 在<code>http</code>块中，可自行寻找。<code>/etc/nginx/nginx.conf</code></p>
+</blockquote>
+<h3 id="22-master-worker"><a class="markdownIt-Anchor" href="#22-master-worker"></a> 2.2. Master-Worker</h3>
+<p>虽然我们用 <code>sudo</code> 来启动和管理 <code>Nginx</code>，但为了安全，<code>Nginx</code> 的 <code>Master </code>进程在启动后，会创建一些低权限的 <strong><code>Worker</code> 进程</strong>。真正去处理用户请求、读取网站文件的，正是这些 <code>Worker</code> 进程。</p>
+<p>在 <code>Arch Linux</code> 上，这个低权限用户通常是<code> http</code>。在其他系统（如 <code>Debian/Ubuntu</code>）上可能是 <code>www-data</code>,可以把<code> Nginx</code> 的 <code>Worker</code> 进程想象成一个名叫 <code>http</code> 的普通访客。</p>
+<p><code>403 Forbidden</code> 就是因为这个访客在某个环节被拦住了</p>
+<h4 id="221-master-process"><a class="markdownIt-Anchor" href="#221-master-process"></a> 2.2.1. Master Process</h4>
+<p><code>Master</code> 进程是 <code>Nginx </code>的入口和管理者，它以<code> root</code> 用户权限启动，因为它需要执行一些特权操作。它的核心职责包括：</p>
+<ul>
+<li><strong>读取和验证配置：</strong> 启动时，它会读取 <code>nginx.conf </code>并检查语法是否正确。</li>
+<li><strong>绑定特权端口：</strong> 监听低于 <code>1024</code> 的端口（如 <code>80</code>, <code>443</code>）需要 <code>root</code> 权限。<code>Master</code> 进程负责绑定这些端口。</li>
+<li><strong>创建和管理 Worker 进程：</strong> 根据配置 (<code>worker_processes</code>) 创建指定数量的 <code>Worker</code> 进程。这些 <code>Worker </code>进程会<strong>继承</strong>已经打开的监听端口。</li>
+<li><strong>以低权限运行 Worker：</strong> 出于安全考虑，<code>Master</code> 进程会以一个普通用户（如<code>http</code>或 <code>www-data</code>）的身份来启动 <code>Worker</code> 进程。这样，即使 <code>Worker</code> 进程被嘿壳利用，其破坏能力也被限制在该用户的权限范围内。🤔</li>
+<li><strong>处理控制信号：</strong> <code>Master</code> 进程负责响应来自管理员的指令，例如：
+<ul>
+<li><code>nginx -s reload</code>: 平滑重载配置。</li>
+<li><code>nginx -s quit</code>: 优雅地关闭。</li>
+<li><code>nginx -s stop</code>: 快速关闭。</li>
+</ul>
+</li>
+<li><strong>监控 Worker 状态：</strong> 持续监控 <code>Worker</code> 进程的健康状况，如果某个 <code>Worker</code> 异常退出，<code>Master </code>会立即重新启动一个新的 <code>Worker</code> 来替代它。</li>
+<li><strong>日志文件管理：</strong> 负责打开日志文件。</li>
+</ul>
+<p><strong>关键点：</strong> <code>Master</code> 进程不处理任何客户端的请求。它只做管理工作。</p>
+<h4 id="222-worker-processes"><a class="markdownIt-Anchor" href="#222-worker-processes"></a> 2.2.2. Worker Processes</h4>
+<p>Worker 进程是真正处理业务的“劳动力”。它们由 Master 进程创建，并以低权限用户运行。</p>
+<p><strong>核心工作机制：事件驱动 + 异步非阻塞 I/O</strong></p>
+<ol>
+<li><strong>共享监听套接字 (<code>Shared Listening Sockets</code>):</strong><br>
+所有 <code>Worker</code> 进程都从 <code>Master</code> 进程继承了同一个监听套接字（<code>listening socket</code>）。当一个新的客户端连接请求到达时，操作系统会唤醒这些正在等待的 <code>Worker</code> 进程。</li>
+<li><strong>争抢连接 (<code>accept_mutex</code>):</strong><br>
+为了避免多个 <code>Worker</code> 同时去处理同一个新连接（即“惊群效应” <code>Thundering Herd</code>），<code>Nginx </code>内部有一个 <code>accept_mutex</code> 锁。只有一个 <code>Worker </code>能成功获取到这个锁，然后调用 <code>accept() </code>来建立连接。这保证了连接处理的负载在多个 <code>Worker</code> 之间是相对均衡的。</li>
+<li><strong>事件循环和 <code>epoll</code>:</strong><br>
+每个 <code>Worker</code> 进程内部都有一个高效的<strong>事件循环</strong>。它利用操作系统的 <code>epoll</code> (在<code> Linux</code> 上) 或 <code>kqueue</code> (在 <code>BSD/macOS</code> 上) 这样的 <code>I/O</code> 多路复用技术。
+<ul>
+<li><strong>注册事件：</strong> 当一个 <code>Worker</code> 接受一个新连接后，它不会傻等客户端发数据。它只是把这个连接（<code>socket</code>）注册到<code>epoll</code>实例上，并告诉 <code>epoll</code>：“当这个连接上有数据可读时，请通知我。”</li>
+<li><strong>等待事件：</strong> 然后，<code>Worker</code> 进程就调用 <code>epoll_wait()</code>，把自己“挂起”，等待 <code>epoll</code> 的通知。它不消耗 <code>CPU</code>。</li>
+<li><strong>处理就绪事件：</strong> 当一个或多个连接上的事件就绪时（比如，客户端发来了数据，或者发送缓冲区变空可以继续写入了），<code>epoll_wait()</code> 会被唤醒，并返回一个“就绪事件”的列表。</li>
+<li><strong>处理与再注册：</strong> <code>Worker</code> 进程遍历这个列表，对每个就绪的连接执行相应的<strong>非阻塞操作</strong>（如 <code>read()</code> 读取数据，<code>write()</code> 或 <code>sendfile()</code> 发送数据）。处理完一个连接后，它会再次向 <code>epol</code>l 更新这个连接需要监听的下一个事件。</li>
+</ul>
+</li>
+</ol>
+<p><strong>流程的关键优势：</strong></p>
+<ul>
+<li><strong>单线程高效处理：</strong> 每个 Worker 进程是单线程的，避免了线程切换的开销和锁的复杂性。</li>
+<li><strong>永不阻塞</strong></li>
+<li><strong>连接数与内存消耗解耦：</strong> 一个 Worker 可以轻松维护数万个连接</li>
+</ul>
+<hr>
+<ul>
+<li>[ ] to be continued</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python-algorithm</title>
+    <url>/Python-algorithm/</url>
+    <content><![CDATA[<details>
+  <summary>索引</summary>
+<ul>
+<li><a href="#1-%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">1. 核心数据类型</a>
+<ul>
+<li><a href="#11-%E6%95%B4%E6%95%B0-int">1.1. 整数 (int)</a></li>
+<li><a href="#12-%E6%B5%AE%E7%82%B9%E6%95%B0-float">1.2. 浮点数 (float)</a></li>
+<li><a href="#13-%E5%B8%83%E5%B0%94%E5%80%BC-bool">1.3. 布尔值 (bool)</a></li>
+<li><a href="#14-%E5%AD%97%E7%AC%A6%E4%B8%B2-str">1.4. 字符串 (str)</a></li>
+</ul>
+</li>
+<li><a href="#2-%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">2. 核心数据结构</a>
+<ul>
+<li><a href="#21-%E5%88%97%E8%A1%A8-list">2.1. 列表 (List)</a>
+<ul>
+<li><a href="#211-%E5%88%9B%E5%BB%BA">2.1.1. 创建</a></li>
+<li><a href="#212-%E8%AE%BF%E9%97%AE">2.1.2. 访问</a></li>
+<li><a href="#213-%E5%88%87%E7%89%87">2.1.3. 切片</a></li>
+<li><a href="#214-%E5%88%97%E8%A1%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%92%8C%E6%93%8D%E4%BD%9C">2.1.4. 列表的常用函数和操作</a></li>
+<li><a href="#215-%E5%88%97%E8%A1%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95">2.1.5. 列表的常用方法</a></li>
+</ul>
+</li>
+<li><a href="#22-%E5%AD%97%E5%85%B8-dictionary--hash-map">2.2. 字典 (Dictionary / Hash Map)</a>
+<ul>
+<li><a href="#221-%E5%88%9B%E5%BB%BA">2.2.1. 创建</a></li>
+<li><a href="#222-%E6%93%8D%E4%BD%9C">2.2.2. 操作</a></li>
+</ul>
+</li>
+<li><a href="#23-%E9%9B%86%E5%90%88-set">2.3. 集合 (Set)</a>
+<ul>
+<li><a href="#231-%E5%88%9B%E5%BB%BA">2.3.1. 创建</a></li>
+<li><a href="#232-%E6%93%8D%E4%BD%9C">2.3.2. 操作</a></li>
+</ul>
+</li>
+<li><a href="#24-%E5%AD%97%E7%AC%A6%E4%B8%B2-string">2.4. 字符串 (String)</a>
+<ul>
+<li><a href="#241-%E6%93%8D%E4%BD%9C">2.4.1. 操作</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#3-%E6%8E%A7%E5%88%B6%E6%B5%81%E4%B8%8E%E9%80%BB%E8%BE%91">3. 控制流与逻辑</a>
+<ul>
+<li><a href="#31-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%ADifelifelse">3.1. 条件判断 (if/elif/else)</a></li>
+<li><a href="#32-%E5%BE%AA%E7%8E%AF">3.2. 循环</a>
+<ul>
+<li><a href="#321-for%E5%BE%AA%E7%8E%AF">3.2.1. for循环</a></li>
+<li><a href="#322-while%E5%BE%AA%E7%8E%AF">3.2.2. while 循环</a></li>
+</ul>
+</li>
+<li><a href="#33-%E5%87%BD%E6%95%B0">3.3. 函数</a></li>
+</ul>
+</li>
+<li><a href="#4-%E9%80%9A%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0">4. 通用内置函数</a>
+<ul>
+<li><a href="#41-lenobj">4.1. len(obj)</a></li>
+<li><a href="#42-sumiterable">4.2. sum(iterable)</a></li>
+<li><a href="#43-miniterablemaxiterable">4.3. min(iterable) / max(iterable)</a></li>
+<li><a href="#44-sortediterable">4.4. sorted(iterable)</a></li>
+<li><a href="#45-absx">4.5. abs(x)</a></li>
+<li><a href="#46-rangestart-stop-step">4.6. range(start, stop, step)</a></li>
+<li><a href="#47-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%87%BD%E6%95%B0">4.7. 类型转换函数</a>
+<ul>
+<li><a href="#471-intx">4.7.1. int(x)</a></li>
+<li><a href="#472-strobj">4.7.2. str(obj)</a></li>
+<li><a href="#473-listiterable">4.7.3. list(iterable)</a></li>
+<li><a href="#474-setiterable">4.7.4. set(iterable)</a></li>
+</ul>
+</li>
+<li><a href="#48-enumerateiterable">4.8. enumerate(iterable)</a></li>
+<li><a href="#49-zip">4.9. zip()</a></li>
+<li><a href="#410-mapfunction-iterable">4.10. map(function, iterable)</a></li>
+</ul>
+</li>
+<li><a href="#5-%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%96%B9%E6%B3%95">5. 核心数据类型方法</a>
+<ul>
+<li><a href="#51-%E5%AD%97%E7%AC%A6%E4%B8%B2-str">5.1. 字符串 (str)</a>
+<ul>
+<li><a href="#511-strsplitsep">5.1.1. str.split(sep)</a></li>
+<li><a href="#512-sepjoinlist">5.1.2. sep.join(list)</a></li>
+<li><a href="#513-strfindsub">5.1.3. str.find(sub)</a></li>
+<li><a href="#514-strcountsub">5.1.4. str.count(sub)</a></li>
+<li><a href="#515-strstrip">5.1.5. str.strip()</a></li>
+<li><a href="#516-strisdigit">5.1.6. str.isdigit()</a></li>
+</ul>
+</li>
+<li><a href="#52-%E5%88%97%E8%A1%A8-list">5.2. 列表 (list)</a>
+<ul>
+<li><a href="#521-listindexx-start-end">5.2.1. list.index(x[, start[, end]])</a></li>
+<li><a href="#522-listappendx">5.2.2. list.append(x)</a></li>
+<li><a href="#523-listpopi">5.2.3. list.pop(i)</a></li>
+<li><a href="#524-listsortcmpnone-keynone-reversefalse">5.2.4. list.sort(cmp=None, key=None, reverse=False)</a></li>
+<li><a href="#525-listreverse">5.2.5. list.reverse()</a></li>
+<li><a href="#526-listremoveobj">5.2.6. list.remove(obj)</a></li>
+</ul>
+</li>
+<li><a href="#53-%E5%AD%97%E5%85%B8-dict">5.3. 字典 (dict)</a>
+<ul>
+<li><a href="#531-dictgetkey-default">5.3.1. dict.get(key, default)</a></li>
+<li><a href="#532-dictkeys">5.3.2. dict.keys()</a></li>
+<li><a href="#533-dictvalues">5.3.3. dict.values()</a></li>
+<li><a href="#534-dictitems">5.3.4. dict.items()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</details>
+<h2 id="1-核心数据类型"><a class="markdownIt-Anchor" href="#1-核心数据类型"></a> 1. 核心数据类型</h2>
+<h3 id="11-整数-int"><a class="markdownIt-Anchor" href="#11-整数-int"></a> 1.1. 整数 (int)</h3>
 <p>x = 10, y = -5</p>
-<h4 id="浮点数-float"><a class="markdownIt-Anchor" href="#浮点数-float"></a> 浮点数 (float)</h4>
+<h3 id="12-浮点数-float"><a class="markdownIt-Anchor" href="#12-浮点数-float"></a> 1.2. 浮点数 (float)</h3>
 <p>pi = 3.14</p>
-<h4 id="布尔值-bool"><a class="markdownIt-Anchor" href="#布尔值-bool"></a> 布尔值 (bool)</h4>
+<h3 id="13-布尔值-bool"><a class="markdownIt-Anchor" href="#13-布尔值-bool"></a> 1.3. 布尔值 (bool)</h3>
 <p>flag = True, flag = False</p>
-<h4 id="字符串-str"><a class="markdownIt-Anchor" href="#字符串-str"></a> 字符串 (str)</h4>
+<h3 id="14-字符串-str"><a class="markdownIt-Anchor" href="#14-字符串-str"></a> 1.4. 字符串 (str)</h3>
 <p>s = “hello world”</p>
 <p><code>a, b = b, a</code> 交换变量</p>
-<h2 id="核心数据结构"><a class="markdownIt-Anchor" href="#核心数据结构"></a> 核心数据结构</h2>
-<h3 id="列表-list"><a class="markdownIt-Anchor" href="#列表-list"></a> 列表 (List)</h3>
-<h4 id="创建"><a class="markdownIt-Anchor" href="#创建"></a> 创建</h4>
+<h2 id="2-核心数据结构"><a class="markdownIt-Anchor" href="#2-核心数据结构"></a> 2. 核心数据结构</h2>
+<h3 id="21-列表-list"><a class="markdownIt-Anchor" href="#21-列表-list"></a> 2.1. 列表 (List)</h3>
+<h4 id="211-创建"><a class="markdownIt-Anchor" href="#211-创建"></a> 2.1.1. 创建</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>] </span><br><span class="line"></span><br><span class="line">ans = []</span><br></pre></td></tr></table></figure>
-<h4 id="访问"><a class="markdownIt-Anchor" href="#访问"></a> 访问</h4>
+<h4 id="212-访问"><a class="markdownIt-Anchor" href="#212-访问"></a> 2.1.2. 访问</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">first = nums[<span class="number">0</span>] <span class="comment"># 正向索引，从0开始</span></span><br><span class="line"></span><br><span class="line">last = nums[-<span class="number">1</span>] <span class="comment"># 反向索引，从-1开始</span></span><br></pre></td></tr></table></figure>
-<h4 id="切片"><a class="markdownIt-Anchor" href="#切片"></a> 切片</h4>
+<h4 id="213-切片"><a class="markdownIt-Anchor" href="#213-切片"></a> 2.1.3. 切片</h4>
 <p>创建子列表，语法 [start:stop:step]</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">copy = nums[:] <span class="comment"># 创建列表浅拷贝</span></span><br><span class="line"></span><br><span class="line">reverse = nums[::-<span class="number">1</span>] <span class="comment"># 翻转列表</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="列表的常用函数和操作"><a class="markdownIt-Anchor" href="#列表的常用函数和操作"></a> 列表的常用函数和操作</h4>
+<h4 id="214-列表的常用函数和操作"><a class="markdownIt-Anchor" href="#214-列表的常用函数和操作"></a> 2.1.4. 列表的常用函数和操作</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">len</span>(nums)          <span class="comment"># 获取长度</span></span><br><span class="line"><span class="built_in">sum</span>(nums)          <span class="comment"># 对数字列表求和</span></span><br><span class="line"><span class="built_in">min</span>(nums) / <span class="built_in">max</span>(nums) <span class="comment"># 求最值</span></span><br><span class="line"><span class="built_in">sorted</span>(nums)       <span class="comment"># 返回一个排好序的新列表</span></span><br><span class="line">value <span class="keyword">in</span> nums      <span class="comment"># 成员检查 (O(n))</span></span><br></pre></td></tr></table></figure>
-<h4 id="列表的常用方法"><a class="markdownIt-Anchor" href="#列表的常用方法"></a> 列表的常用方法</h4>
+<h4 id="215-列表的常用方法"><a class="markdownIt-Anchor" href="#215-列表的常用方法"></a> 2.1.5. 列表的常用方法</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nums.append(value)   <span class="comment"># 在末尾添加</span></span><br><span class="line">nums.pop(index)      <span class="comment"># 删除并返回元素</span></span><br><span class="line">nums.sort()          <span class="comment"># 原地排序</span></span><br><span class="line">nums.reverse()       <span class="comment"># 原地反转</span></span><br><span class="line">nums.index(value)    <span class="comment"># 查找索引</span></span><br></pre></td></tr></table></figure>
-<h3 id="字典-dictionary-hash-map"><a class="markdownIt-Anchor" href="#字典-dictionary-hash-map"></a> 字典 (Dictionary / Hash Map)</h3>
+<h3 id="22-字典-dictionary-hash-map"><a class="markdownIt-Anchor" href="#22-字典-dictionary-hash-map"></a> 2.2. 字典 (Dictionary / Hash Map)</h3>
 <p>字典是无序的键值对 (key: value) 集合。它通过哈希表实现，查找、插入、删除的平均时间复杂度为 O(1)</p>
-<h4 id="创建-2"><a class="markdownIt-Anchor" href="#创建-2"></a> 创建</h4>
+<h4 id="221-创建"><a class="markdownIt-Anchor" href="#221-创建"></a> 2.2.1. 创建</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">lookup = &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;Alice&#x27;</span>, <span class="string">&#x27;id&#x27;</span>: <span class="number">123</span>&#125;</span><br><span class="line">empty_dict = &#123;&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="操作"><a class="markdownIt-Anchor" href="#操作"></a> 操作</h4>
+<h4 id="222-操作"><a class="markdownIt-Anchor" href="#222-操作"></a> 2.2.2. 操作</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">name = lookup[<span class="string">&#x27;name&#x27;</span>] <span class="comment"># 不存在会报错</span></span><br><span class="line">lookup[<span class="string">&#x27;id&#x27;</span>] = <span class="number">456</span> <span class="comment"># 添加新的键值对</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;id&#x27;</span> <span class="keyword">in</span> lookup <span class="comment"># 检查键是否存在</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">del</span> lookup[<span class="string">&#x27;id&#x27;</span>] <span class="comment"># 删除键值对</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> lookup.keys() <span class="comment"># 遍历所有键</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> lookup.values() <span class="comment"># 遍历所有值</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> lookup.items() <span class="comment"># 同时遍历键和值</span></span><br></pre></td></tr></table></figure>
-<h3 id="集合-set"><a class="markdownIt-Anchor" href="#集合-set"></a> 集合 (Set)</h3>
+<h3 id="23-集合-set"><a class="markdownIt-Anchor" href="#23-集合-set"></a> 2.3. 集合 (Set)</h3>
 <p>集合是无序、不重复的元素集合。其底层也是哈希表，因此<strong>检查一个元素是否存在</strong>的速度极快 (O(1))</p>
-<h4 id="创建-3"><a class="markdownIt-Anchor" href="#创建-3"></a> 创建</h4>
+<h4 id="231-创建"><a class="markdownIt-Anchor" href="#231-创建"></a> 2.3.1. 创建</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">unique_nums = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">empty_set = <span class="built_in">set</span>() <span class="comment"># 不可以使用&#123;&#125;</span></span><br><span class="line"></span><br><span class="line">from_list = <span class="built_in">set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>]) <span class="comment"># -&gt; &#123;1, 2, 3&#125; (天然去重)</span></span><br></pre></td></tr></table></figure>
-<h4 id="操作-2"><a class="markdownIt-Anchor" href="#操作-2"></a> 操作</h4>
+<h4 id="232-操作"><a class="markdownIt-Anchor" href="#232-操作"></a> 2.3.2. 操作</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">unique_nums.add(<span class="number">4</span>) <span class="comment"># 添加元素</span></span><br><span class="line">unique_nums.remove(<span class="number">3</span>) <span class="comment"># 删除元素</span></span><br><span class="line"></span><br><span class="line"><span class="number">3</span> <span class="keyword">in</span> unique_nums <span class="comment"># 检查成员是否存在</span></span><br><span class="line"></span><br><span class="line">set1 = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">set2 = &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 交集 (intersection) - 两个集合中都有的元素</span></span><br><span class="line">intersection = set1 &amp; set2  <span class="comment"># -&gt; &#123;3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 并集 (union) - 两个集合中所有的元素</span></span><br><span class="line">union = set1 | set2         <span class="comment"># -&gt; &#123;1, 2, 3, 4, 5&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 差集 (difference) - 在 set1 中但不在 set2 中的元素</span></span><br><span class="line">difference = set1 - set2    <span class="comment"># -&gt; &#123;1, 2&#125;</span></span><br></pre></td></tr></table></figure>
-<h3 id="字符串-string"><a class="markdownIt-Anchor" href="#字符串-string"></a> 字符串 (String)</h3>
+<h3 id="24-字符串-string"><a class="markdownIt-Anchor" href="#24-字符串-string"></a> 2.4. 字符串 (String)</h3>
 <p>不可变的文本序列</p>
-<h4 id="操作-3"><a class="markdownIt-Anchor" href="#操作-3"></a> 操作</h4>
+<h4 id="241-操作"><a class="markdownIt-Anchor" href="#241-操作"></a> 2.4.1. 操作</h4>
 <p><strong>切片和索引</strong>与<strong>列表</strong>完全相同</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">new_str = str1 + str2</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27; &#x27;</span>.join([<span class="string">&#x27;111&#x27;</span>, <span class="string">&#x27;222&#x27;</span>, <span class="string">&#x27;333&#x27;</span>]) <span class="comment"># -&gt; &quot;111 222 333&quot; (将列表连接成字符串)</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;a,b,c&quot;</span>.split(<span class="string">&#x27;,&#x27;</span>) <span class="comment"># -&gt; [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;] (将字符串分割成列表)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="控制流与逻辑"><a class="markdownIt-Anchor" href="#控制流与逻辑"></a> 控制流与逻辑</h2>
-<h3 id="条件判断-ifelifelse"><a class="markdownIt-Anchor" href="#条件判断-ifelifelse"></a> 条件判断 (if/elif/else)</h3>
+<h2 id="3-控制流与逻辑"><a class="markdownIt-Anchor" href="#3-控制流与逻辑"></a> 3. 控制流与逻辑</h2>
+<h3 id="31-条件判断-ifelifelse"><a class="markdownIt-Anchor" href="#31-条件判断-ifelifelse"></a> 3.1. 条件判断 (if/elif/else)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> score &gt; <span class="number">90</span>:</span><br><span class="line">    grade = <span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="keyword">elif</span> score &gt; <span class="number">80</span>:</span><br><span class="line">    grade = <span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    grade = <span class="string">&#x27;C&#x27;</span></span><br></pre></td></tr></table></figure>
 <p><strong>三元运算符 (Ternary Operator)</strong>: result = “Even” if num % 2 == 0 else “Odd”</p>
-<h3 id="循环"><a class="markdownIt-Anchor" href="#循环"></a> 循环</h3>
-<h4 id="for循环"><a class="markdownIt-Anchor" href="#for循环"></a> for循环</h4>
+<h3 id="32-循环"><a class="markdownIt-Anchor" href="#32-循环"></a> 3.2. 循环</h3>
+<h4 id="321-for循环"><a class="markdownIt-Anchor" href="#321-for循环"></a> 3.2.1. for循环</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> numbers:</span><br><span class="line">    <span class="built_in">print</span>(num)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 range() 进行固定次数的循环</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>): <span class="comment"># 循环 0, 1, 2, 3, 4</span></span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 enumerate</span></span><br><span class="line"><span class="keyword">for</span> index, value <span class="keyword">in</span> <span class="built_in">enumerate</span>(numbers):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Index: <span class="subst">&#123;index&#125;</span>, Value: <span class="subst">&#123;value&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-<h4 id="while-循环"><a class="markdownIt-Anchor" href="#while-循环"></a> while 循环</h4>
+<h4 id="322-while-循环"><a class="markdownIt-Anchor" href="#322-while-循环"></a> 3.2.2. while 循环</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">count = <span class="number">5</span></span><br><span class="line"><span class="keyword">while</span> count &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="built_in">print</span>(count)</span><br><span class="line">    count -= <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h3 id="函数"><a class="markdownIt-Anchor" href="#函数"></a> 函数</h3>
+<h3 id="33-函数"><a class="markdownIt-Anchor" href="#33-函数"></a> 3.3. 函数</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">solve</span>(<span class="params">parameter1, parameter2</span>):</span><br><span class="line">    <span class="comment"># 1. 初始化变量</span></span><br><span class="line">    result = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 核心逻辑</span></span><br><span class="line">    <span class="comment"># ... (使用循环、判断等)</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 3. 返回结果</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
-<h2 id="通用内置函数"><a class="markdownIt-Anchor" href="#通用内置函数"></a> 通用内置函数</h2>
-<h3 id="lenobj"><a class="markdownIt-Anchor" href="#lenobj"></a> len(obj)</h3>
+<h2 id="4-通用内置函数"><a class="markdownIt-Anchor" href="#4-通用内置函数"></a> 4. 通用内置函数</h2>
+<h3 id="41-lenobj"><a class="markdownIt-Anchor" href="#41-lenobj"></a> 4.1. len(obj)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">length = <span class="built_in">len</span>([<span class="number">1</span>, <span class="number">5</span>, <span class="number">9</span>])      <span class="comment"># -&gt; 3</span></span><br><span class="line">str_len = <span class="built_in">len</span>(<span class="string">&quot;hello&quot;</span>)       <span class="comment"># -&gt; 5</span></span><br><span class="line">dict_len = <span class="built_in">len</span>(&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>&#125;) <span class="comment"># -&gt; 2</span></span><br></pre></td></tr></table></figure>
-<h3 id="sumiterable"><a class="markdownIt-Anchor" href="#sumiterable"></a> sum(iterable)</h3>
+<h3 id="42-sumiterable"><a class="markdownIt-Anchor" href="#42-sumiterable"></a> 4.2. sum(iterable)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 适用于数字组成的列表、元组等</span></span><br><span class="line">total = <span class="built_in">sum</span>([<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>])    <span class="comment"># -&gt; 60</span></span><br></pre></td></tr></table></figure>
-<h3 id="miniterable-maxiterable"><a class="markdownIt-Anchor" href="#miniterable-maxiterable"></a> min(iterable) / max(iterable)</h3>
+<h3 id="43-miniterable-maxiterable"><a class="markdownIt-Anchor" href="#43-miniterable-maxiterable"></a> 4.3. min(iterable) / max(iterable)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 适用于可比较元素组成的序列</span></span><br><span class="line">min_val = <span class="built_in">min</span>([<span class="number">3</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>])  <span class="comment"># -&gt; 1</span></span><br><span class="line">max_val = <span class="built_in">max</span>([<span class="number">3</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>])  <span class="comment"># -&gt; 9</span></span><br><span class="line">min_char = <span class="built_in">min</span>(<span class="string">&quot;database&quot;</span>)   <span class="comment"># -&gt; &#x27;a&#x27; (按字母序)</span></span><br></pre></td></tr></table></figure>
-<h3 id="sortediterable"><a class="markdownIt-Anchor" href="#sortediterable"></a> sorted(iterable)</h3>
+<h3 id="44-sortediterable"><a class="markdownIt-Anchor" href="#44-sortediterable"></a> 4.4. sorted(iterable)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 返回一个全新的排好序的列表，不改变原对象</span></span><br><span class="line">nums = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>]</span><br><span class="line">new_sorted_list = <span class="built_in">sorted</span>(nums) <span class="comment"># -&gt; [1, 2, 3, 4]</span></span><br><span class="line"><span class="comment"># print(nums) 仍然是 [3, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对字符串排序会得到字符列表</span></span><br><span class="line">sorted_chars = <span class="built_in">sorted</span>(<span class="string">&quot;bca&quot;</span>) <span class="comment"># -&gt; [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span></span><br></pre></td></tr></table></figure>
-<h3 id="absx"><a class="markdownIt-Anchor" href="#absx"></a> abs(x)</h3>
+<h3 id="45-absx"><a class="markdownIt-Anchor" href="#45-absx"></a> 4.5. abs(x)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">num = <span class="built_in">abs</span>(-<span class="number">5</span>) <span class="comment"># 5</span></span><br></pre></td></tr></table></figure>
-<h3 id="rangestart-stop-step"><a class="markdownIt-Anchor" href="#rangestart-stop-step"></a> range(start, stop, step)</h3>
+<h3 id="46-rangestart-stop-step"><a class="markdownIt-Anchor" href="#46-rangestart-stop-step"></a> 4.6. range(start, stop, step)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># range(stop)</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    <span class="built_in">print</span>(i) <span class="comment"># -&gt; 依次输出 0, 1, 2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># range(start, stop)</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">4</span>):</span><br><span class="line">    <span class="built_in">print</span>(i) <span class="comment"># -&gt; 依次输出 1, 2, 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># range(start, stop, step)</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">5</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="built_in">print</span>(i) <span class="comment"># -&gt; 依次输出 0, 2, 4</span></span><br></pre></td></tr></table></figure>
-<h3 id="类型转换函数"><a class="markdownIt-Anchor" href="#类型转换函数"></a> 类型转换函数</h3>
-<h4 id="intx"><a class="markdownIt-Anchor" href="#intx"></a> int(x)</h4>
+<h3 id="47-类型转换函数"><a class="markdownIt-Anchor" href="#47-类型转换函数"></a> 4.7. 类型转换函数</h3>
+<h4 id="471-intx"><a class="markdownIt-Anchor" href="#471-intx"></a> 4.7.1. int(x)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=<span class="built_in">int</span>(<span class="string">&quot;123&quot;</span>) <span class="comment"># -&gt; 123 </span></span><br></pre></td></tr></table></figure>
-<h4 id="strobj"><a class="markdownIt-Anchor" href="#strobj"></a> str(obj)</h4>
+<h4 id="472-strobj"><a class="markdownIt-Anchor" href="#472-strobj"></a> 4.7.2. str(obj)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=<span class="built_in">str</span>(<span class="number">123</span>) <span class="comment"># -&gt; &quot;123&quot;</span></span><br></pre></td></tr></table></figure>
-<h4 id="listiterable"><a class="markdownIt-Anchor" href="#listiterable"></a> list(iterable)</h4>
+<h4 id="473-listiterable"><a class="markdownIt-Anchor" href="#473-listiterable"></a> 4.7.3. list(iterable)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ans=<span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">3</span>)) <span class="comment"># -&gt; [0, 1, 2]</span></span><br></pre></td></tr></table></figure>
-<h4 id="setiterable"><a class="markdownIt-Anchor" href="#setiterable"></a> set(iterable)</h4>
+<h4 id="474-setiterable"><a class="markdownIt-Anchor" href="#474-setiterable"></a> 4.7.4. set(iterable)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">new_set=<span class="built_in">set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>]) <span class="comment"># -&gt; &#123;1, 2, 3&#125;</span></span><br></pre></td></tr></table></figure>
-<h3 id="enumerateiterable"><a class="markdownIt-Anchor" href="#enumerateiterable"></a> enumerate(iterable)</h3>
+<h3 id="48-enumerateiterable"><a class="markdownIt-Anchor" href="#48-enumerateiterable"></a> 4.8. enumerate(iterable)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在循环中同时需要下标和元素的最佳方式</span></span><br><span class="line">letters = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> index, value <span class="keyword">in</span> <span class="built_in">enumerate</span>(letters):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Index: <span class="subst">&#123;index&#125;</span>, Value: <span class="subst">&#123;value&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># -&gt; Index: 0, Value: a</span></span><br><span class="line"><span class="comment"># -&gt; Index: 1, Value: b</span></span><br><span class="line"><span class="comment"># -&gt; Index: 2, Value: c</span></span><br></pre></td></tr></table></figure>
-<h3 id="zip"><a class="markdownIt-Anchor" href="#zip"></a> zip()</h3>
+<h3 id="49-zip"><a class="markdownIt-Anchor" href="#49-zip"></a> 4.9. zip()</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将多个列表/元组等并行打包遍历</span></span><br><span class="line">names = [<span class="string">&#x27;Alice&#x27;</span>, <span class="string">&#x27;Bob&#x27;</span>]</span><br><span class="line">scores = [<span class="number">95</span>, <span class="number">88</span>]</span><br><span class="line"><span class="keyword">for</span> name, score <span class="keyword">in</span> <span class="built_in">zip</span>(names, scores):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;name&#125;</span>: <span class="subst">&#123;score&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># -&gt; Alice: 95</span></span><br><span class="line"><span class="comment"># -&gt; Bob: 88 </span></span><br></pre></td></tr></table></figure>
-<h3 id="mapfunction-iterable"><a class="markdownIt-Anchor" href="#mapfunction-iterable"></a> map(function, iterable)</h3>
+<h3 id="410-mapfunction-iterable"><a class="markdownIt-Anchor" href="#410-mapfunction-iterable"></a> 4.10. map(function, iterable)</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将函数应用于序列的每个元素，返回一个迭代器</span></span><br><span class="line">str_nums = [<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>]</span><br><span class="line"><span class="comment"># 需要用 list() 来获取所有结果</span></span><br><span class="line">int_nums = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, str_nums)) <span class="comment"># -&gt; [1, 2, 3]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">line = <span class="string">&quot;10 20 30&quot;</span></span><br><span class="line">nums = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, line.split())) <span class="comment"># -&gt; [10, 20, 30]</span></span><br></pre></td></tr></table></figure>
-<h2 id="核心数据类型方法"><a class="markdownIt-Anchor" href="#核心数据类型方法"></a> 核心数据类型方法</h2>
-<h3 id="字符串-str-2"><a class="markdownIt-Anchor" href="#字符串-str-2"></a> 字符串 (str)</h3>
-<h4 id="strsplitsep"><a class="markdownIt-Anchor" href="#strsplitsep"></a> str.split(sep)</h4>
+<h2 id="5-核心数据类型方法"><a class="markdownIt-Anchor" href="#5-核心数据类型方法"></a> 5. 核心数据类型方法</h2>
+<h3 id="51-字符串-str"><a class="markdownIt-Anchor" href="#51-字符串-str"></a> 5.1. 字符串 (str)</h3>
+<h4 id="511-strsplitsep"><a class="markdownIt-Anchor" href="#511-strsplitsep"></a> 5.1.1. str.split(sep)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = <span class="string">&quot;hello world&quot;</span></span><br><span class="line">words = s.split(<span class="string">&#x27; &#x27;</span>)     <span class="comment"># -&gt; [&#x27;hello&#x27;, &#x27;world&#x27;]</span></span><br><span class="line"></span><br><span class="line">csv = <span class="string">&quot;a,b,c&quot;</span></span><br><span class="line">items = csv.split(<span class="string">&#x27;,&#x27;</span>)   <span class="comment"># -&gt; [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span></span><br></pre></td></tr></table></figure>
-<h4 id="sepjoinlist"><a class="markdownIt-Anchor" href="#sepjoinlist"></a> sep.join(list)</h4>
+<h4 id="512-sepjoinlist"><a class="markdownIt-Anchor" href="#512-sepjoinlist"></a> 5.1.2. sep.join(list)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">words = [<span class="string">&#x27;hello&#x27;</span>, <span class="string">&#x27;world&#x27;</span>]</span><br><span class="line">s = <span class="string">&quot; &quot;</span>.join(words)      <span class="comment"># -&gt; &quot;hello world&quot;</span></span><br><span class="line"></span><br><span class="line">chars = [<span class="string">&#x27;p&#x27;</span>, <span class="string">&#x27;y&#x27;</span>]</span><br><span class="line">result = <span class="string">&quot;-&quot;</span>.join(chars) <span class="comment"># -&gt; &quot;p-y&quot;</span></span><br></pre></td></tr></table></figure>
-<h4 id="strfindsub"><a class="markdownIt-Anchor" href="#strfindsub"></a> str.find(sub)</h4>
+<h4 id="513-strfindsub"><a class="markdownIt-Anchor" href="#513-strfindsub"></a> 5.1.3. str.find(sub)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = <span class="string">&quot;banana&quot;</span></span><br><span class="line"><span class="comment"># 找不到时返回 -1</span></span><br><span class="line">index1 = s.find(<span class="string">&#x27;na&#x27;</span>)    <span class="comment"># -&gt; 2 (首次出现的位置)</span></span><br><span class="line">index2 = s.find(<span class="string">&#x27;z&#x27;</span>)     <span class="comment"># -&gt; -1</span></span><br></pre></td></tr></table></figure>
-<h4 id="strcountsub"><a class="markdownIt-Anchor" href="#strcountsub"></a> str.count(sub)</h4>
+<h4 id="514-strcountsub"><a class="markdownIt-Anchor" href="#514-strcountsub"></a> 5.1.4. str.count(sub)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = <span class="string">&quot;banana&quot;</span></span><br><span class="line">count = s.count(<span class="string">&#x27;a&#x27;</span>)     <span class="comment"># -&gt; 3</span></span><br></pre></td></tr></table></figure>
-<h4 id="strstrip"><a class="markdownIt-Anchor" href="#strstrip"></a> str.strip()</h4>
+<h4 id="515-strstrip"><a class="markdownIt-Anchor" href="#515-strstrip"></a> 5.1.5. str.strip()</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = <span class="string">&quot;  hello  &quot;</span></span><br><span class="line">clean_s = s.strip()      <span class="comment"># -&gt; &quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
-<h4 id="strisdigit"><a class="markdownIt-Anchor" href="#strisdigit"></a> str.isdigit()</h4>
+<h4 id="516-strisdigit"><a class="markdownIt-Anchor" href="#516-strisdigit"></a> 5.1.6. str.isdigit()</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s1 = <span class="string">&quot;123&quot;</span></span><br><span class="line">s2 = <span class="string">&quot;a123&quot;</span></span><br><span class="line"><span class="built_in">print</span>(s1.isdigit())      <span class="comment"># -&gt; True</span></span><br><span class="line"><span class="built_in">print</span>(s2.isdigit())      <span class="comment"># -&gt; False</span></span><br></pre></td></tr></table></figure>
-<h3 id="列表-list-2"><a class="markdownIt-Anchor" href="#列表-list-2"></a> 列表 (list)</h3>
-<h4 id="listindexx-start-end"><a class="markdownIt-Anchor" href="#listindexx-start-end"></a> list.index(x[, start[, end]])</h4>
+<h3 id="52-列表-list"><a class="markdownIt-Anchor" href="#52-列表-list"></a> 5.2. 列表 (list)</h3>
+<h4 id="521-listindexx-start-end"><a class="markdownIt-Anchor" href="#521-listindexx-start-end"></a> 5.2.1. list.index(x[, start[, end]])</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">aList = [<span class="number">123</span>, <span class="string">&#x27;xyz&#x27;</span>, <span class="string">&#x27;runoob&#x27;</span>, <span class="string">&#x27;abc&#x27;</span>]  </span><br><span class="line">  </span><br><span class="line">index1 = aList.index( <span class="string">&#x27;xyz&#x27;</span> )   <span class="comment"># 1</span></span><br><span class="line">index2 = aList.index( <span class="string">&#x27;runoob&#x27;</span>, <span class="number">1</span>, <span class="number">3</span> ) <span class="comment"># 2</span></span><br></pre></td></tr></table></figure>
-<h4 id="listappendx"><a class="markdownIt-Anchor" href="#listappendx"></a> list.append(x)</h4>
+<h4 id="522-listappendx"><a class="markdownIt-Anchor" href="#522-listappendx"></a> 5.2.2. list.append(x)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nums = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">nums.append(<span class="number">3</span>)           <span class="comment"># nums 变为 [1, 2, 3]</span></span><br></pre></td></tr></table></figure>
-<h4 id="listpopi"><a class="markdownIt-Anchor" href="#listpopi"></a> list.pop(i)</h4>
+<h4 id="523-listpopi"><a class="markdownIt-Anchor" href="#523-listpopi"></a> 5.2.3. list.pop(i)</h4>
 <p>时间复杂度为O(n),list模拟队列效率很低</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nums = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]</span><br><span class="line">last = nums.pop()        <span class="comment"># -&gt; 30, nums 变为 [10, 20]</span></span><br><span class="line"><span class="comment"># 删除并返回指定索引的元素</span></span><br><span class="line">first = nums.pop(<span class="number">0</span>)      <span class="comment"># -&gt; 10, nums 变为 [20]</span></span><br></pre></td></tr></table></figure>
-<h4 id="listsortcmpnone-keynone-reversefalse"><a class="markdownIt-Anchor" href="#listsortcmpnone-keynone-reversefalse"></a> list.sort(cmp=None, key=None, reverse=False)</h4>
+<h4 id="524-listsortcmpnone-keynone-reversefalse"><a class="markdownIt-Anchor" href="#524-listsortcmpnone-keynone-reversefalse"></a> 5.2.4. list.sort(cmp=None, key=None, reverse=False)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nums = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>]</span><br><span class="line">nums.sort()              <span class="comment"># nums 本身变为 [1, 2, 3, 4]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 降序排序</span></span><br><span class="line">nums.sort(reverse=<span class="literal">True</span>)  <span class="comment"># nums 变为 [4, 3, 2, 1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取列表的第二个元素</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">takeSecond</span>(<span class="params">elem</span>):</span><br><span class="line">    <span class="keyword">return</span> elem[<span class="number">1</span>]</span><br><span class="line">random = [(<span class="number">2</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">4</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>)]</span><br><span class="line"><span class="comment"># 指定第二个元素排序</span></span><br><span class="line">random.sort(key=takeSecond) <span class="comment"># 排序列表： [(4, 1), (2, 2), (1, 3), (3, 4)]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="listreverse"><a class="markdownIt-Anchor" href="#listreverse"></a> list.reverse()</h4>
+<h4 id="525-listreverse"><a class="markdownIt-Anchor" href="#525-listreverse"></a> 5.2.5. list.reverse()</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">nums.reverse()           <span class="comment"># nums 变为 [3, 2, 1]</span></span><br></pre></td></tr></table></figure>
-<h4 id="listremoveobj"><a class="markdownIt-Anchor" href="#listremoveobj"></a> list.remove(obj)</h4>
+<h4 id="526-listremoveobj"><a class="markdownIt-Anchor" href="#526-listremoveobj"></a> 5.2.6. list.remove(obj)</h4>
 <p>删掉第一个匹配的</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">list1 = [<span class="string">&#x27;Google&#x27;</span>, <span class="string">&#x27;Runoob&#x27;</span>, <span class="string">&#x27;Taobao&#x27;</span>, <span class="string">&#x27;Baidu&#x27;</span>]  </span><br><span class="line">list1.remove(<span class="string">&#x27;Taobao&#x27;</span>)  <span class="comment"># [&#x27;Google&#x27;, &#x27;Runoob&#x27;, &#x27;Baidu&#x27;]</span></span><br><span class="line">list1.remove(<span class="string">&#x27;Baidu&#x27;</span>)   <span class="comment"># [&#x27;Google&#x27;, &#x27;Runoob&#x27;]</span></span><br></pre></td></tr></table></figure>
-<h3 id="字典-dict"><a class="markdownIt-Anchor" href="#字典-dict"></a> 字典 (dict)</h3>
-<h4 id="dictgetkey-default"><a class="markdownIt-Anchor" href="#dictgetkey-default"></a> dict.get(key, default)</h4>
+<h3 id="53-字典-dict"><a class="markdownIt-Anchor" href="#53-字典-dict"></a> 5.3. 字典 (dict)</h3>
+<h4 id="531-dictgetkey-default"><a class="markdownIt-Anchor" href="#531-dictgetkey-default"></a> 5.3.1. dict.get(key, default)</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">counts = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="comment"># 获取键 &#x27;b&#x27; 的值</span></span><br><span class="line">val1 = counts.get(<span class="string">&#x27;b&#x27;</span>, <span class="number">0</span>)  <span class="comment"># -&gt; 1</span></span><br><span class="line"><span class="comment"># 获取键 &#x27;c&#x27; 的值，因不存在，返回默认值 0</span></span><br><span class="line">val2 = counts.get(<span class="string">&#x27;c&#x27;</span>, <span class="number">0</span>)  <span class="comment"># -&gt; 0</span></span><br></pre></td></tr></table></figure>
-<h4 id="dictkeys"><a class="markdownIt-Anchor" href="#dictkeys"></a> dict.keys()</h4>
+<h4 id="532-dictkeys"><a class="markdownIt-Anchor" href="#532-dictkeys"></a> 5.3.2. dict.keys()</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">counts = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> counts.keys():</span><br><span class="line">    <span class="built_in">print</span>(key) <span class="comment"># -&gt; 依次输出 &#x27;a&#x27;, &#x27;b&#x27;</span></span><br><span class="line"></span><br><span class="line">sorted_keys = <span class="built_in">sorted</span>(counts.keys()) <span class="comment"># -&gt; [&#x27;a&#x27;, &#x27;b&#x27;]</span></span><br></pre></td></tr></table></figure>
-<h4 id="dictvalues"><a class="markdownIt-Anchor" href="#dictvalues"></a> dict.values()</h4>
+<h4 id="533-dictvalues"><a class="markdownIt-Anchor" href="#533-dictvalues"></a> 5.3.3. dict.values()</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">counts = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> counts.values():</span><br><span class="line">    <span class="built_in">print</span>(value) <span class="comment"># -&gt; 依次输出 2, 1</span></span><br><span class="line"></span><br><span class="line">values_list = <span class="built_in">list</span>(counts.values()) <span class="comment"># -&gt; [2, 1]</span></span><br></pre></td></tr></table></figure>
-<h4 id="dictitems"><a class="markdownIt-Anchor" href="#dictitems"></a> dict.items()</h4>
+<h4 id="534-dictitems"><a class="markdownIt-Anchor" href="#534-dictitems"></a> 5.3.4. dict.items()</h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">counts = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> counts.items():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;key&#125;</span>: <span class="subst">&#123;value&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># -&gt; a: 2</span></span><br><span class="line"><span class="comment"># -&gt; b: 1</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这边还在等待更新中<br>
