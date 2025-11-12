@@ -304,6 +304,431 @@ n = <code>&quot;adcaab&quot;  lcs = </code>“aca”`</p>
       </tags>
   </entry>
   <entry>
+    <title>Network-Layer</title>
+    <url>/Network-Layer/</url>
+    <content><![CDATA[<details>
+  <summary>索引</summary>
+<ul>
+<li><a href="#1-network-layer">1. Network Layer</a>
+<ul>
+<li><a href="#11-ip">1.1. IP</a>
+<ul>
+<li><a href="#111-ipv4-%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F">1.1.1. IPv4 数据报格式</a></li>
+<li><a href="#112-ip-%E5%88%86%E7%89%87-fragmentation">1.1.2. IP 分片 (Fragmentation)</a></li>
+</ul>
+</li>
+<li><a href="#12-icmp">1.2. ICMP</a>
+<ul>
+<li><a href="#121-%E5%87%A0%E7%A7%8D%E5%B8%B8%E7%94%A8icmp%E6%8A%A5%E6%96%87%E7%B1%BB%E5%9E%8B">1.2.1. 几种常用ICMP报文类型</a>
+<ul>
+<li><a href="#1211-%E7%9B%AE%E7%9A%84%E4%B8%8D%E5%8F%AF%E8%BE%BE%E6%8A%A5%E6%96%873">1.2.1.1. 目的不可达报文（3）</a></li>
+<li><a href="#1212-%E8%B6%85%E6%97%B6%E6%8A%A5%E6%96%8711">1.2.1.2. 超时报文（11）</a></li>
+<li><a href="#1213-%E5%9B%9E%E5%BA%94%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94%E6%8A%A5%E6%96%87-%E7%B1%BB%E5%9E%8B-8-%E5%92%8C-0">1.2.1.3. <strong>回应请求与应答报文 (类型 8 和 0)</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#13-arp-address-resolution-protocol">1.3. ARP (Address Resolution Protocol)</a></li>
+<li><a href="#14-dhcp-dynamic-host-configuration-protocol">1.4. DHCP (Dynamic Host Configuration Protocol)</a></li>
+<li><a href="#15-%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE-routing-protocols">1.5. 路由协议 (Routing Protocols)</a>
+<ul>
+<li><a href="#151-%E5%86%85%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-igp---interior-gateway-protocol">1.5.1. 内部网关协议 (IGP - Interior Gateway Protocol)</a></li>
+<li><a href="#152-%E5%A4%96%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-egp---exterior-gateway-protocol">1.5.2. 外部网关协议 (EGP - Exterior Gateway Protocol)</a></li>
+</ul>
+</li>
+<li><a href="#16-ipv6">1.6. IPv6</a></li>
+<li><a href="#17-igmp-internet-group-management-protocol">1.7. IGMP (Internet Group Management Protocol)</a></li>
+<li><a href="#18-nat-network-address-translation">1.8. NAT (Network Address Translation)</a></li>
+<li><a href="#19-ipsec-internet-protocol-security">1.9. IPsec (Internet Protocol Security)</a></li>
+<li><a href="#110-vrrp-virtual-router-redundancy-protocol">1.10. VRRP (Virtual Router Redundancy Protocol)</a></li>
+<li><a href="#111-mpls-multiprotocol-label-switching">1.11. MPLS (Multiprotocol Label Switching)</a></li>
+</ul>
+</li>
+</ul>
+</details>
+<h1 id="1-network-layer"><a class="markdownIt-Anchor" href="#1-network-layer"></a> 1. Network Layer</h1>
+<blockquote>
+<p>网络层是<code>OSI</code>模型中的第三层，它负责在不同网络之间（端到端）提供数据包的路由和转发。网络互联的本质是通过<code>IP</code>协议实现的，而数据传输的基本单元是<code>IP</code>数据报。本章将详细介绍网络层的核心协议与技术。</p>
+</blockquote>
+<p>网络互连<code>本质</code>是通过<code>ip</code>实现的，<code>传输</code>是以<code>ip数据报</code>为介质。</p>
+<h2 id="11-ip"><a class="markdownIt-Anchor" href="#11-ip"></a> 1.1. IP</h2>
+<p><code>IP</code>协议是无连接、不可靠的数据报服务。</p>
+<ul>
+<li><strong>无连接 (<code>Connectionless</code>)</strong>：发送方在发送数据前，不需要与接收方建立连接。每个数据报都是独立传输的，因此到达顺序、完整性都不能保证。</li>
+<li><strong>不可靠 (<code>Unreliable</code>)</strong>：<code>IP</code>协议不提供错误恢复或重传机制。如果数据报在传输中丢失或损坏，<code>IP</code>层本身不会处理，而是交由上层协议（如<code>TCP</code>）来确保可靠性。</li>
+</ul>
+<h3 id="111-ipv4-数据报格式"><a class="markdownIt-Anchor" href="#111-ipv4-数据报格式"></a> 1.1.1. IPv4 数据报格式</h3>
+<p>一个<code>IP</code>数据报由<code>首部 (Header)</code>和<code>数据 (Data)</code>两部分组成。首部通常为20字节，包含了路由和转发所需的所有关键信息。</p>
+<ul>
+<li><strong>版本 (<code>Version</code>)</strong> (4位): 指示<code>IP</code>协议的版本，对于<code>IPv4</code>，该值为 4。</li>
+<li><strong>首部长度 (<code>IHL - Internet Header Length</code>)</strong> (4位): 表示整个<code>IP</code>首部的长度，单位是 <strong>4字节</strong>（32位）。例如，如果该值为5，则首部长度为 5 * 4 = 20 字节。最小值为5（20字节），最大值为15（60字节）。</li>
+<li><strong>服务类型 (<code>ToS - Type of Service</code>)</strong> (8位): 用于指定数据报的优先级和服务质量（<code>QoS</code>）要求，例如最小延迟、最大吞吐量等。</li>
+<li><strong>总长度 (<code>Total Length</code>)</strong> (16位): 指示整个<code>IP</code>数据报（包括首部和数据）的总长度，单位是字节。最大长度为 <code>65535</code> 字节。</li>
+<li><strong>标识 (<code>Identification</code>)</strong> (16位): 该字段唯一标识一个数据报。当数据报因为过大而被分片时，所有分片都将拥有相同的标识号，以便接收方能够将它们重新组装。</li>
+<li><strong>标志 (<code>Flags</code>)</strong> (3位):
+<ul>
+<li>第1位：保留，必须为0。</li>
+<li>第2位：<strong><code>DF (Don't Fragment)</code></strong>。如果设为1，则禁止路由器对该数据报进行分片。如果数据报过大而无法通过，路由器将丢弃它并返回一个<code>ICMP</code>错误消息。</li>
+<li>第3位：<strong><code>MF (More Fragments)</code></strong>。如果设为1，表示后面还有更多的分片；如果为0，表示这是最后一个分片（或未分片）。</li>
+</ul>
+</li>
+<li><strong>片偏移 (<code>Fragment Offset</code>)</strong> (13位): 指示当前分片在原始数据报中的位置。偏移量以 <strong><code>8字节</code></strong> 为单位。</li>
+<li><strong>生存时间 (<code>TTL - Time to Live</code>)</strong> (8位): 设置数据报在网络中可以存活的最大跳数（经过的路由器数）。每经过一个路由器，<code>TTL</code>值减1。当<code>TTL</code>减为0时，路由器将丢弃该数据报，并向源主机发送一个<code>ICMP</code>超时消息。这可以防止数据报在网络中无限循环。</li>
+<li><strong>协议 (<code>Protocol</code>)</strong> (8位): 指示<code>IP</code>数据报的数据部分承载的是哪个上层协议。例如，<code>6 </code>代表<code>TCP</code>，<code>17 </code>代表<code>UDP</code>，1 代表<code>ICMP</code>。</li>
+<li><strong>首部检验和 (<code>Header Checksum</code>)</strong> (16位): 用于校验<code>IP</code>首部在传输过程中是否出错。它只对首部进行计算，不包括数据部分。</li>
+<li><strong>源IP地址 (<code>Source IP Address</code>)</strong> (32位): 发送方设备的<code>IP</code>地址。</li>
+<li><strong>目的IP地址 (<code>Destination IP Address</code>)</strong> (32位): 接收方设备的<code>IP</code>地址。</li>
+<li><strong>选项 (<code>Options</code>)</strong> (可变长): 用于一些特殊处理，如记录路由、时间戳等。由于选项会增加首部长度并降低处理效率，因此不常用。如果存在，首部长度字段会大于5。</li>
+</ul>
+<h3 id="112-ip-分片-fragmentation"><a class="markdownIt-Anchor" href="#112-ip-分片-fragmentation"></a> 1.1.2. IP 分片 (Fragmentation)</h3>
+<p>当一个<code>IP</code>数据报的长度超过了链路的<strong>最大传输单元 (<code>MTU</code>)</strong> 时，路由器就需要将其分割成多个更小的数据报，这个过程称为分片。</p>
+<ul>
+<li>标识、标志和片偏移这三个字段共同协作，以确保分片能够在目的主机被正确地重组。</li>
+<li>所有分片共享相同的标识号。</li>
+<li>除了最后一个分片，其他所有分片的<code>MF</code>标志位都为1。</li>
+<li>片偏移字段记录了每个分片数据在原始数据中的相对位置。</li>
+</ul>
+<hr>
+<h2 id="12-icmp"><a class="markdownIt-Anchor" href="#12-icmp"></a> 1.2. ICMP</h2>
+<p><strong>ICMP</strong>：<code>Internet Control Message Protocol</code> ，因特网控制报文协议</p>
+<p>方向：主机/路由器 -&gt; 源站(发送方)</p>
+<p><img src="/Network-Layer/54070be665d2466175453f2c7153900f-1740404253149-1.jpeg" alt></p>
+<p><code>代码</code> 提供了进一步的描述信息，在此不进一步提供描述信息，<s>即代码的代码（？</s>。</p>
+<hr>
+<p><strong>However</strong>, 首先想区分一下这边的四个字节vs图上的内容vs十六进制和二进制</p>
+<p>图上的<code>0  8  16  31</code>一共有32位，指的是二进制的32位，这个<code>类型</code>是1字节，2个16进制。也就是在读数据报的时候你看到的是两个十六进制的字符。<s>然而图上很喜欢使用二进制长度来表示</s></p>
+<p><code>8位二进制</code>=<code>2位十六进制</code>=<code>1字节</code></p>
+<hr>
+<table>
+<thead>
+<tr>
+<th>类型字段</th>
+<th>ICMP报文类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>回显应答 Echo Reply</td>
+</tr>
+<tr>
+<td>3</td>
+<td>目的不可达 Destination Unreachable</td>
+</tr>
+<tr>
+<td>4</td>
+<td>源抑制 Source Quench</td>
+</tr>
+<tr>
+<td>5</td>
+<td>路由重定向 Redirect (change a route)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>回显请求 Echo Request</td>
+</tr>
+<tr>
+<td>9</td>
+<td>路由器广告 Router Advertisement</td>
+</tr>
+<tr>
+<td>10</td>
+<td>路由器请求 Router Solicitation</td>
+</tr>
+<tr>
+<td>11</td>
+<td>数据报超时 Time Exceeded for a Datagram</td>
+</tr>
+<tr>
+<td>12</td>
+<td>数据报参数问题 Parameter Problem on a Datagram</td>
+</tr>
+<tr>
+<td>13</td>
+<td>时间戳请求 Timestamp Request</td>
+</tr>
+<tr>
+<td>14</td>
+<td>时间戳应答 Timestamp Reply</td>
+</tr>
+<tr>
+<td>15</td>
+<td>信息请求（废弃） Information Request (obsolete)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>信息应答（废弃） Information Reply (obsolete)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>地址掩码请求 Address Mask Request</td>
+</tr>
+<tr>
+<td>18</td>
+<td>地址掩码应答 Address Mask Reply</td>
+</tr>
+</tbody>
+</table>
+<p><code>ICMP</code> 报文分为两大类</p>
+<p><code>差错报告报文</code>和<code>提供信息的报文(询问报文)</code></p>
+<ul>
+<li>
+<p>差错报告报文 (<code>Error Report Messages</code>)</p>
+<ul>
+<li>
+<p><code>3</code> 目的不可达 <code>Destination Unreachable</code></p>
+</li>
+<li>
+<p><code>4</code> 源抑制 <code>Source Quench</code></p>
+</li>
+<li>
+<p><code>5</code> 路由重定向 <code>Redirect (change a route)</code></p>
+</li>
+<li>
+<p><code>11</code> 数据报超时 <code>Time Exceeded for a Datagram</code></p>
+</li>
+<li>
+<p><code>12</code> 数据报参数问题 <code>Parameter Problem on a Datagram</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>提供信息的报文 (询问报文) (<code>Information Request/Inquiry Messages</code>)</p>
+<ul>
+<li>
+<p><code>0</code> 回显应答 <code>Echo Reply</code></p>
+</li>
+<li>
+<p><code>8</code> 回显请求 <code>Echo Request</code></p>
+</li>
+<li>
+<p><code>9</code> 路由器广告 <code>Router Advertisement</code></p>
+</li>
+<li>
+<p><code>10</code> 路由器请求 <code>Router Solicitation</code></p>
+</li>
+<li>
+<p><code>13</code> 时间戳请求 <code>Timestamp Request</code></p>
+</li>
+<li>
+<p><code>14</code> 时间戳应答 <code>Timestamp Reply</code></p>
+</li>
+<li>
+<p><code>17</code> 地址掩码请求 <code>Address Mask Request</code></p>
+</li>
+<li>
+<p><code>18</code> 地址掩码应答 <code>Address Mask Reply</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>其中<code>3</code>、<code>11</code>、<code>0</code>、<code>8</code>常用</p>
+<p><code>3</code>、<code>11</code>是<code>差错报告报文</code></p>
+<p><code>0</code>、<code>8</code>是<code>提供信息的报文</code></p>
+<h3 id="121-几种常用icmp报文类型"><a class="markdownIt-Anchor" href="#121-几种常用icmp报文类型"></a> 1.2.1. 几种常用ICMP报文类型</h3>
+<h4 id="1211-目的不可达报文3"><a class="markdownIt-Anchor" href="#1211-目的不可达报文3"></a> 1.2.1.1. 目的不可达报文（3）</h4>
+<p>顾名思义，<code>目的不可达报文</code>就是目的不可达，<code>代码</code>部分进一步阐述</p>
+<p><img src="/Network-Layer/eaba7cf385281339afc9f7083d44ea17-1740404253149-2.jpeg" alt></p>
+<p>相当于<code>代码</code>那块就是<code>00</code>,<code>01</code>…这样的十六进制</p>
+<blockquote>
+<p><code>MTU</code>是指一个网络接口上能够传输的最大数据包大小。</p>
+<p><code>路径最小MTU</code>影响数据在网络中的传输，尤其在路径中包含不同的网络设备时，如果路径中的任何设备不能处理过大的数据包，它就会丢弃该数据包或将其分片。</p>
+<p>所以<code>“路径最小MTU发现”应用</code>可以实现 <code> MTU</code>探测 和 避免分片</p>
+</blockquote>
+<h4 id="1212-超时报文11"><a class="markdownIt-Anchor" href="#1212-超时报文11"></a> 1.2.1.2. 超时报文（11）</h4>
+<p><code>代码</code>说明超时的性质：</p>
+<p><code>00</code>  传输过程中IP <code>TTL（time to live）</code>超时</p>
+<p><code>01</code>   分片重装超时</p>
+<blockquote>
+<p>TTL超时可用于实现路由跟踪（<code>tracert</code>）</p>
+<p><em>路由跟踪的工作原理总结：</em></p>
+<ul>
+<li>路由跟踪工具利用<code>TTL</code>字段逐步发送数据包，每次增加<code>TTL</code>值以遍历路径。</li>
+<li>每经过一个路由器，<code>TTL</code>值会减1，直到数据包的<code>TTL</code>变为0，路由器丢弃数据包并返回一个<code>ICMP</code>“时间超时”消息。</li>
+<li>通过收集每个中间路由器的回应，路由跟踪工具能够显示整个路径以及每跳的延迟。</li>
+</ul>
+</blockquote>
+<p><img src="/Network-Layer/4c779b318b1952f5114d3ac31802c576_720-1740404253150-3.jpg" alt></p>
+<h4 id="1213-回应请求与应答报文-类型-8-和-0"><a class="markdownIt-Anchor" href="#1213-回应请求与应答报文-类型-8-和-0"></a> 1.2.1.3. <strong>回应请求与应答报文 (类型 8 和 0)</strong></h4>
+<p>这是我们最熟悉的<code>ping</code>命令所使用的报文。</p>
+<ul>
+<li><strong>PING (<code>Packet InterNet Groper</code>)</strong>：用于测试两台主机之间的连通性。</li>
+<li>主机A向主机B发送一个<code>ICMP</code>回显请求报文（类型8）。</li>
+<li>如果主机B接收到该报文，它会回复一个<code>ICMP</code>回显应答报文（类型0）。</li>
+<li><code>ping</code>是一个应用层程序直接使用网络层<code>ICMP</code>的典型例子，它绕过了传输层的<code>TCP</code>或<code>UDP</code>。</li>
+</ul>
+<hr>
+<h2 id="13-arp-address-resolution-protocol"><a class="markdownIt-Anchor" href="#13-arp-address-resolution-protocol"></a> 1.3. ARP (Address Resolution Protocol)</h2>
+<p>在任何局域网（如以太网）中，数据帧的传输最终依赖的是<strong>MAC地址（物理地址）</strong>，而不是<code>IP</code>地址。那么，当一台主机（例如 <code>192.168.1.100</code>）想要与同一网络中的另一台主机（例如 <code>192.168.1.50</code>）通信时，它如何知道对方的<code>MAC</code>地址呢？这就是<code>ARP</code>协议的作用。</p>
+<p><strong>定义</strong>：<code>ARP (Address Resolution Protocol)</code>，地址解析协议。它负责将一个已知的<code>IP</code>地址（网络层地址）解析（映射）为对应的MAC地址（数据链路层地址）。</p>
+<p><strong>工作流程</strong>：</p>
+<ol>
+<li><strong>检查<code>ARP</code>缓存</strong>：主机 A 首先会检查自己的 <strong><code>ARP</code>缓存表</strong>，看是否已经有目标<code>IP</code>地址 <code>192.168.1.50</code> 对应的<code>MAC</code>地址记录。如果存在，则直接使用该<code>MAC</code>地址封装数据帧并发送。</li>
+<li><strong>发送<code>ARP</code>请求</strong>：如果在缓存中找不到记录，主机 A 会在局域网内广播一个 <strong><code>ARP</code>请求</strong> 报文。这个报文的核心内容是：“<strong>谁的<code>IP</code>地址是 192.168.1.50？请把你的<code>MAC</code>地址告诉我。</strong>” 这个请求是广播的，意味着网络内所有设备都会收到它。</li>
+<li><strong>单播<code>ARP</code>响应</strong>：网络中的所有设备都会解析这个<code>ARP</code>请求。但只有<code>IP</code>地址为 <code>192.168.1.50</code> 的主机 B 会响应。主机 B 会直接向主机 A 发送一个 <strong><code>ARP</code>响应</strong> 报文（单播），内容是：“<strong>我的<code>IP</code>地址是 <code>192.168.1.50</code>，我的<code>MAC</code>地址是<code> XX:XX:XX:XX:XX:XX</code>。</strong>”</li>
+<li><strong>更新<code>ARP</code>缓存</strong>：主机 A 收到响应后，就知道了主机 B 的<code>MAC</code>地址，并将这个映射关系（<code>IP -&gt; MAC</code>）存入自己的<code>ARP</code>缓存表中，以备后续使用。然后，它就可以将数据发送给主机 B 了。</li>
+</ol>
+<p><strong><code>ARP</code>缓存</strong>：每个主机都维护一个ARP缓存，用于存储近期解析过的<code>IP</code>地址与<code>MAC</code>地址的对应关系。缓存条目有生命周期（通常是几分钟），过期后会被删除，以确保信息的时效性。</p>
+<hr>
+<h2 id="14-dhcp-dynamic-host-configuration-protocol"><a class="markdownIt-Anchor" href="#14-dhcp-dynamic-host-configuration-protocol"></a> 1.4. DHCP (Dynamic Host Configuration Protocol)</h2>
+<p>当一台新设备（如笔记本电脑或手机）接入网络时，它需要一个<code>IP</code>地址才能通信。手动为每台设备配置IP地址、子网掩码、默认网关和<code>DNS</code>服务器是非常繁琐且容易出错的。<code>DHCP</code>协议就是为了自动化这个过程而设计的。</p>
+<p><strong>定义</strong>：<strong>动态主机配置协议 (<code>DHCP, Dynamic Host Configuration Protocol</code>)</strong> 是一个应用层协议（基于<code>UDP</code>），允许网络中的<code>DHCP</code>服务器自动地为客户端分配IP地址及其他网络配置参数。</p>
+<p><strong>工作流程 (<code>DORA</code>)</strong>：这个过程通常被称为**<code>DORA</code>**，代表四个核心步骤。</p>
+<ol>
+<li><strong><code>Discover</code> (发现)</strong>：客户端（新设备）在网络中<strong>广播</strong>一个 <strong><code>DHCP Discover</code></strong> 报文，试图找到可用的<code>DHCP</code>服务器。报文大意是：“<strong>我需要一个<code>IP</code>地址，网络里有<code>DHCP</code>服务器吗？</strong>”</li>
+<li><strong><code>Offer</code> (提供)</strong>：所有收到<code>Discover</code>报文的<code>DHCP</code>服务器都会从自己的地址池中选择一个可用的<code>IP</code>地址，并通过一个 <strong><code>DHCP Offer</code></strong> 报文（单播或广播）提供给客户端。报文大意是：“<strong>你好，我这里有一个<code>IP</code>地址 <code>192.168.1.123</code> 可以给你用，同时还有这些其他的配置信息。</strong>”</li>
+<li><strong><code>Request (请求)</code></strong>：客户端可能会收到多个<code>Offer</code>。它会选择其中一个（通常是第一个收到的），然后<strong>广播</strong>一个 <strong><code>DHCP Request</code></strong> 报文，正式请求使用这个<code>IP</code>地址。广播的目的是通知所有<code>DHCP</code>服务器（包括那些也提供了Offer的服务器），它已经做出了选择。报文大意是：“<strong>各位，我决定使用服务器X提供的<code>IP</code>地址 <code>192.168.1.123</code>。</strong>”</li>
+<li><strong><code>Acknowledge (确认)</code></strong>：被选中的<code>DHCP</code>服务器会发送一个 <strong><code>DHCP ACK</code></strong> 报文，确认将该<code>IP</code>地址租借给客户端，并规定了租期。此时，客户端就可以使用这个IP地址进行网络通信了。</li>
+</ol>
+<hr>
+<h2 id="15-路由协议-routing-protocols"><a class="markdownIt-Anchor" href="#15-路由协议-routing-protocols"></a> 1.5. 路由协议 (Routing Protocols)</h2>
+<p>IP协议本身只负责数据报的转发，但它并不知道如何选择最佳路径。<strong>路由器</strong>通过运行<strong>路由协议</strong>来学习网络的拓扑结构，并创建<strong>路由表</strong>，从而做出智能的路径选择决策。路由协议主要分为两大类：</p>
+<h3 id="151-内部网关协议-igp-interior-gateway-protocol"><a class="markdownIt-Anchor" href="#151-内部网关协议-igp-interior-gateway-protocol"></a> 1.5.1. 内部网关协议 (IGP - Interior Gateway Protocol)</h3>
+<p>IGP在一个<strong>自治系统 (<code>AS - Autonomous System</code>)</strong> 内部交换路由信息。一个<code>AS</code>可以是一个公司、一所大学或一个互联网服务提供商（<code>ISP</code>）的网络。</p>
+<ul>
+<li><strong>RIP (<code>Routing Information Protocol</code>)</strong>
+<ul>
+<li><strong>类型</strong>：距离矢量协议 (<code>Distance-Vector</code>)。</li>
+<li><strong>工作原理</strong>：RIP路由器周期性地与邻居交换整个路由表。它使用“<strong>跳数 (<code>Hop Count</code>)</strong>”作为度量值来衡量路径的好坏，即经过的路由器数量越少，路径越优。</li>
+<li><strong>特点</strong>：实现简单，但有明显缺点，如最大跳数限制（15跳）、收敛速度慢、容易产生路由环路等。现在已基本被<code>OSPF</code>取代。</li>
+</ul>
+</li>
+<li><strong>OSPF (<code>Open Shortest Path First</code>)</strong>
+<ul>
+<li><strong>类型</strong>：链路状态协议 (<code>Link-State</code>)。</li>
+<li><strong>工作原理</strong>：<code>OSPF</code>路由器不交换路由表，而是交换<strong>链路状态通告 (<code>LSA</code>)</strong>。每个路由器都收集网络中所有的<code>LSA</code>，从而在本地构建一个完整的网络拓扑图。然后，它使用**<code>Dijkstra</code>算法**计算出到达每个目的地的最短路径。</li>
+<li><strong>特点</strong>：收敛速度快，无路由环路，支持可变长子网掩码（<code>VLSM</code>），支持区域划分以实现更好的扩展性。是当今企业网络中最主流的<code>IGP</code>协议。</li>
+</ul>
+</li>
+</ul>
+<h3 id="152-外部网关协议-egp-exterior-gateway-protocol"><a class="markdownIt-Anchor" href="#152-外部网关协议-egp-exterior-gateway-protocol"></a> 1.5.2. 外部网关协议 (EGP - Exterior Gateway Protocol)</h3>
+<p><code>EGP</code>用于在不同的自治系统（<code>AS</code>）之间交换路由信息，是构成整个互联网的骨架。</p>
+<ul>
+<li><strong>BGP (<code>Border Gateway Protocol</code>)</strong>
+<ul>
+<li><strong>定义</strong>：边界网关协议是目前唯一在使用的<code>EGP</code>。它不仅仅是寻找最短路径，更重要的是，它是一个“<strong>路径矢量协议</strong>”，能够根据管理员设定的策略（如费用、安全、政治因素等）来选择最佳路由。</li>
+<li><strong>特点</strong>：极其稳定和可扩展，是互联网的核心路由协议，负责连接全球成千上万个自治系统。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="16-ipv6"><a class="markdownIt-Anchor" href="#16-ipv6"></a> 1.6. IPv6</h2>
+<p>随着物联网的兴起和互联网的蓬勃发展，<code>IPv4</code>的地址空间（约43亿个）已完全耗尽。<code>IPv6</code>作为其继任者，提供了海量的地址空间和诸多改进。</p>
+<p><strong>主要优势</strong>：</p>
+<ol>
+<li><strong>巨大的地址空间</strong>：<code>IPv6</code>使用128位地址，理论上可提供<code> 2^128</code> 个地址，这个数字足以满足未来数百年内任何可以想象到的需求。</li>
+<li><strong>简化的首部格式</strong>：<code>IPv6</code>的首部是固定的40字节，移除了<code>IPv4</code>中不常用或冗余的字段（如<code>IHL</code>、标识、标志、片偏移、首部检验和），使得路由器处理数据包的效率更高。</li>
+<li><strong>不再由路由器分片</strong>：<code>IPv6</code>要求发送方主机在发送前完成“路径<code>MTU</code>发现”（<code>PMTUD</code>），确保数据包大小不超过路径中的最小<code>MTU</code>。路由器不再进行分片，大大减轻了路由器的负担。</li>
+<li><strong>增强的安全性</strong>：<code>IPsec</code>（IP安全协议）被设计为<code>IPv6</code>的强制组成部分（尽管后来变为可选），为网络层提供了端到端的加密和认证，安全性远超<code>IPv4</code>。</li>
+<li><strong>支持无状态地址自动配置 (<code>SLAAC</code>)</strong>：<code>IPv6</code>主机可以根据路由器通告的前缀和自身的<code>MAC</code>地址等信息，自动生成全局唯一的<code>IP</code>地址，无需<code>DHCP</code>服务器介入即可上网。</li>
+<li><strong>改进的邻居发现协议 (<code>NDP</code>)</strong>：<code>IPv6</code>使用<strong>邻居发现协议 (<code>NDP</code>)</strong>，它基于<code>ICMPv6</code>，取代了<code>IPv4</code>中的<code>ARP</code>和<code>ICMP</code>路由器发现等功能，实现了地址解析、路由器发现、重复地址检测（<code>DAD</code>）等，更加高效和强大。</li>
+</ol>
+<hr>
+<h2 id="17-igmp-internet-group-management-protocol"><a class="markdownIt-Anchor" href="#17-igmp-internet-group-management-protocol"></a> 1.7. IGMP (Internet Group Management Protocol)</h2>
+<p>当数据需要发送给一组特定的、感兴趣的主机而不是单个主机（单播）或所有主机（广播）时，就需要<strong>组播 (<code>Multicast</code>)</strong>。<code>IGMP</code>协议就是用于管理这种组播组成员关系的。</p>
+<p><strong>定义</strong>：IGMP (<code>Internet Group Management Protocol</code>)，因特网组管理协议。它允许主机通知其本地路由器，表示自己希望加入或离开某个特定的组播组。</p>
+<p><strong>工作原理</strong>：</p>
+<ul>
+<li><strong>加入组</strong>：当一个主机上的某个应用希望接收特定组播组（例如一个视频流）的数据时，主机会向其本地路由器发送一个<code>IGMP</code><strong>成员关系报告</strong>报文。</li>
+<li><strong>维护关系</strong>：路由器会周期性地发送<code>IGMP</code><strong>查询</strong>报文，询问本地网络上是否还有成员对某个组播组感兴趣。仍在组内的成员会回复报告报文。</li>
+<li><strong>离开组</strong>：当主机不再希望接收数据时，它会发送一个<code>IGMP</code><strong>离开组</strong>报文。</li>
+</ul>
+<p><code>IGMP</code>只负责在主机和本地路由器之间进行通信。路由器之间则需要运行专门的组播路由协议（如<code>PIM</code>）来构建组播数据的分发路径。</p>
+<hr>
+<h2 id="18-nat-network-address-translation"><a class="markdownIt-Anchor" href="#18-nat-network-address-translation"></a> 1.8. NAT (Network Address Translation)</h2>
+<p><code>NAT</code>是为了延缓<code>IPv4</code>地址耗尽而设计出的一种关键技术。它允许一个机构内部的众多计算机使用<strong>私有<code>IP</code>地址</strong>上网，但在与外部互联网通信时，共享一个或少数几个<strong>公有<code>IP</code>地址</strong>。</p>
+<p><strong>定义</strong>：<strong>网络地址转换 (<code>NAT</code>)</strong> 工作在路由器或防火墙上，负责在私有网络和公有网络之间转换<code>IP</code>数据报的源/目的地址和端口号。</p>
+<p><strong>私有<code>IP</code>地址段</strong> (不会在公网路由):</p>
+<ul>
+<li><code>10.0.0.0</code> 到 <code>10.255.255.255</code> (A类)</li>
+<li><code>172.16.0.0</code> 到 <code>172.31.255.255</code> (B类)</li>
+<li><code>192.168.0.0</code> 到 <code>192.168.255.255</code> (C类)</li>
+</ul>
+<p><strong>工作原理与类型</strong>：</p>
+<ol>
+<li><strong>静态NAT (<code>Static NAT</code>)</strong>：
+<ul>
+<li>将一个私有<code>IP</code>地址<strong>一对一</strong>地映射到一个公有IP地址。</li>
+<li>主要用于内部服务器（如Web服务器）需要被外部网络稳定访问的场景。</li>
+</ul>
+</li>
+<li><strong>动态NAT (<code>Dynamic NAT</code>)</strong>：
+<ul>
+<li>维护一个公有<code>IP</code>地址池。当内部主机需要访问互联网时，从地址池中<strong>临时分配</strong>一个未使用的公有<code>IP</code>地址给它。</li>
+<li>当通信结束时，该公有<code>IP</code>地址被回收，可供其他主机使用。</li>
+</ul>
+</li>
+<li><strong>PAT (<code>Port Address Translation</code>) / NAPT</strong>：
+<ul>
+<li>这是目前<strong>最常用</strong>的<code>NAT</code>形式，也称为<code>NAPT</code>（网络地址端口转换）。它将多个私有<code>IP</code>地址映射到<strong>同一个公有IP地址</strong>的不同<strong>端口</strong>上。</li>
+<li><strong>流程</strong>：当内部主机 <code>192.168.1.100 </code>使用端口 <code>50000 </code>访问外部服务器时，<code>NAT</code>路由器会将源地址和端口转换为 (公有IP, 新端口号)，例如 (<code>202.100.1.1</code>, <code>60001</code>)，并记录这个映射关系。当外部服务器响应数据到 (<code>202.100.1.1</code>, <code>60001</code>) 时，路由器根据记录将数据包的目的地址和端口改回 (<code>192.168.1.100</code>, <code>50000</code>)，并发送给内部主机。</li>
+<li><strong>优点</strong>：极大地节约了公有<code>IP</code>地址，仅用一个公有<code>IP</code>就能让成百上千台设备同时上网。</li>
+<li><strong>缺点</strong>：破坏了端到端的连接模型，可能导致某些<code>P2P</code>应用或<code>VoIP</code>协议出现问题。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="19-ipsec-internet-protocol-security"><a class="markdownIt-Anchor" href="#19-ipsec-internet-protocol-security"></a> 1.9. IPsec (Internet Protocol Security)</h2>
+<p><strong><code>IPsec</code></strong> 是一套协议簇，用于在网络层为<code>IP</code>通信提供高质量、可互操作的、基于密码学的安全保障。它能提供数据来源认证、数据完整性、数据机密性（加密）和防重放攻击等服务，是构建**<code>VPN</code> (虚拟专用网络)** 的核心技术。</p>
+<p><strong>两种工作模式</strong>：</p>
+<ol>
+<li><strong>传输模式 (<code>Transport Mode</code>)</strong>：
+<ul>
+<li><strong>工作方式</strong>：只对IP数据报的<strong>数据部分（<code>Payload</code>）</strong> 进行加密或认证。原始的IP头部保持不变，只插入了<code>IPsec</code>头部。</li>
+<li><strong>用途</strong>：主要用于两台主机之间的<strong>端到端</strong>安全通信。</li>
+</ul>
+</li>
+<li><strong>隧道模式 (<code>Tunnel Mode</code>)</strong>：
+<ul>
+<li><strong>工作方式</strong>：将<strong>整个原始<code>IP</code>数据报（包括头部和数据）</strong> 都进行加密和认证，然后将其封装在一个新的IP数据报中。</li>
+<li><strong>用途</strong>：主要用于两个网络（如公司总部和分部）之间的<strong>网关到网关</strong>安全通信，由网络边缘的<code>VPN</code>网关来处理。这是构建<code>VPN</code>最常见的方式。</li>
+</ul>
+</li>
+</ol>
+<p><strong>核心协议</strong>：</p>
+<ul>
+<li><strong>AH (<code>Authentication Header</code>)</strong>：只提供<strong>数据完整性</strong>和<strong>身份验证</strong>，但不提供加密。它确保数据在传输中未被篡改，但传输内容是明文的。</li>
+<li><strong>ESP (<code>Encapsulating Security Payload</code>)</strong>：提供<strong>数据完整性</strong>、<strong>身份验证</strong>和<strong>数据机密性（加密）</strong>。这是目前应用最广泛的IPsec协议。</li>
+</ul>
+<hr>
+<h2 id="110-vrrp-virtual-router-redundancy-protocol"><a class="markdownIt-Anchor" href="#110-vrrp-virtual-router-redundancy-protocol"></a> 1.10. VRRP (Virtual Router Redundancy Protocol)</h2>
+<p>在局域网中，如果作为默认网关的路由器发生故障，整个网络的主机将无法访问外部网络，这形成了一个<strong>单点故障</strong>。<code>VRRP</code>就是为了解决这个问题而设计的网关冗余协议。</p>
+<p><strong>定义</strong>：<strong>虚拟路由器冗余协议 (<code>VRRP</code>)</strong> 是一种容错协议，可以将多台物理路由器组织成一个“<strong>虚拟路由器</strong>”，从而对外提供一个高可用的默认网关。</p>
+<p><strong>工作原理</strong>：</p>
+<ol>
+<li><strong>虚拟路由器</strong>：在一个<code>VRRP</code>组中，多台物理路由器共享一个<strong>虚拟<code>IP</code>地址</strong>和<strong>虚拟<code>MAC</code>地址</strong>。网络中的所有客户端都将这个虚拟<code>IP</code>地址配置为它们的默认网关。</li>
+<li><strong><code>Master</code>和<code>Backup</code></strong>：在任何时刻，<code>VRRP</code>组中只有一台路由器处于 <strong><code>Master </code>(主)</strong> 状态，它实际拥有虚拟IP地址并负责转发数据包。组内其他路由器则处于 <strong><code>Backup</code> (备)</strong> 状态。</li>
+<li><strong>心跳检测</strong>：<code>Master</code>路由器会周期性地发送<code>VRRP</code>通告报文（心跳），向<code>Backup</code>路由器宣告自己处于活动状态。</li>
+<li><strong>故障切换</strong>：如果<code>Backup</code>路由器在一定时间内没有收到<code>Master</code>的心跳报文，它会认为<code>Master</code>已经出现故障。此时，优先级最高的<code>Backup</code>路由器会自动切换为新的<code>Master</code>，接管虚拟<code>IP</code>地址和<code>MAC</code>地址，并开始转发数据。</li>
+<li><strong>无缝切换</strong>：这个切换过程对客户端是完全透明的，客户端无需进行任何更改，从而保证了网络连接的连续性。</li>
+</ol>
+<hr>
+<h2 id="111-mpls-multiprotocol-label-switching"><a class="markdownIt-Anchor" href="#111-mpls-multiprotocol-label-switching"></a> 1.11. MPLS (Multiprotocol Label Switching)</h2>
+<p><code>MPLS</code>是一种高性能的电信级网络技术，它在传统的IP路由（第三层）和数据链路层交换（第二层）之间工作，常被称为“<strong>2.5层</strong>”技术。</p>
+<p><strong>定义</strong>：<strong>多协议标签交换 (<code>MPLS</code>)</strong> 通过给数据包预先分配简短、固定长度的“<strong>标签（<code>Label</code>）</strong>”，并根据标签进行转发，而不是像传统路由那样在每一跳都查找复杂的IP路由表。</p>
+<p><strong>工作原理</strong>：</p>
+<ol>
+<li><strong>标签分发</strong>：<code>MPLS</code>网络中的路由器（称为<code>LSR</code> - 标签交换路由器）会通过<code>LDP</code>（标签分发协议）等协议，预先为网络中的IP前缀（路由）建立标签映射关系，形成<strong>标签转发信息库 (<code>LFIB</code>)</strong>。</li>
+<li><strong>入口打标 (<code>Push</code>)</strong>：当一个IP数据包进入<code>MPLS</code>网络时，入口路由器（<code>Ingress LER</code>）会进行一次常规的<code>IP</code>路由查找，然后给这个数据包压入一个或多个<code>MPLS</code>标签，形成一个带标签的数据包。</li>
+<li><strong>标签交换 (<code>Swap</code>)</strong>：在<code>MPLS</code>网络内部，核心的<code>LSR</code>路由器不再查看<code>IP</code>头部。它们只需读取最外层的标签，在<code>LFIB</code>中进行极速查找，然后“交换”（替换）标签，并将数据包转发到下一个<code>LSR</code>。</li>
+<li><strong>出口弹标 (<code>Pop</code>)</strong>：当数据包到达<code>MPLS</code>网络的出口路由器（<code>Egress LER</code>）时，标签被移除（弹出），恢复成原始的<code>IP</code>数据包，然后继续进行标准的<code>IP</code>转发。</li>
+</ol>
+<p><strong>主要优势</strong>：</p>
+<ul>
+<li><strong>高速转发</strong>：基于标签的精确匹配交换比基于<code>IP</code>地址的最长前缀匹配查找要快得多。</li>
+<li><strong>流量工程 (<code>Traffic Engineering</code>)</strong>：<code>MPLS</code>可以预先设定数据流的路径（建立<code>LSP</code> - 标签交换路径），而不必完全遵循<code>IGP</code>计算出的最短路径。这使得网络管理员可以精细地控制流量，以优化带宽利用率或绕过拥塞点。</li>
+<li><strong>VPN支持</strong>：<code>MPLS</code>是构建大规模、高性能<code>VPN</code>（特别是<code>MPLS</code> <code>L3VPN</code>）的基础技术，被全球各大<code>ISP</code>广泛采用。</li>
+</ul>
+<p>仍在咕咕咕中</p>
+]]></content>
+      <categories>
+        <category>Computer Networks</category>
+      </categories>
+      <tags>
+        <tag>network</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>My-Fedora-Journey</title>
     <url>/My-Fedora-Journey/</url>
     <content><![CDATA[<blockquote>
@@ -961,431 +1386,6 @@ qaq</p>
       <tags>
         <tag>linux</tag>
         <tag>nginx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Network-Layer</title>
-    <url>/Network-Layer/</url>
-    <content><![CDATA[<details>
-  <summary>索引</summary>
-<ul>
-<li><a href="#1-network-layer">1. Network Layer</a>
-<ul>
-<li><a href="#11-ip">1.1. IP</a>
-<ul>
-<li><a href="#111-ipv4-%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F">1.1.1. IPv4 数据报格式</a></li>
-<li><a href="#112-ip-%E5%88%86%E7%89%87-fragmentation">1.1.2. IP 分片 (Fragmentation)</a></li>
-</ul>
-</li>
-<li><a href="#12-icmp">1.2. ICMP</a>
-<ul>
-<li><a href="#121-%E5%87%A0%E7%A7%8D%E5%B8%B8%E7%94%A8icmp%E6%8A%A5%E6%96%87%E7%B1%BB%E5%9E%8B">1.2.1. 几种常用ICMP报文类型</a>
-<ul>
-<li><a href="#1211-%E7%9B%AE%E7%9A%84%E4%B8%8D%E5%8F%AF%E8%BE%BE%E6%8A%A5%E6%96%873">1.2.1.1. 目的不可达报文（3）</a></li>
-<li><a href="#1212-%E8%B6%85%E6%97%B6%E6%8A%A5%E6%96%8711">1.2.1.2. 超时报文（11）</a></li>
-<li><a href="#1213-%E5%9B%9E%E5%BA%94%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94%E6%8A%A5%E6%96%87-%E7%B1%BB%E5%9E%8B-8-%E5%92%8C-0">1.2.1.3. <strong>回应请求与应答报文 (类型 8 和 0)</strong></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#13-arp-address-resolution-protocol">1.3. ARP (Address Resolution Protocol)</a></li>
-<li><a href="#14-dhcp-dynamic-host-configuration-protocol">1.4. DHCP (Dynamic Host Configuration Protocol)</a></li>
-<li><a href="#15-%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE-routing-protocols">1.5. 路由协议 (Routing Protocols)</a>
-<ul>
-<li><a href="#151-%E5%86%85%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-igp---interior-gateway-protocol">1.5.1. 内部网关协议 (IGP - Interior Gateway Protocol)</a></li>
-<li><a href="#152-%E5%A4%96%E9%83%A8%E7%BD%91%E5%85%B3%E5%8D%8F%E8%AE%AE-egp---exterior-gateway-protocol">1.5.2. 外部网关协议 (EGP - Exterior Gateway Protocol)</a></li>
-</ul>
-</li>
-<li><a href="#16-ipv6">1.6. IPv6</a></li>
-<li><a href="#17-igmp-internet-group-management-protocol">1.7. IGMP (Internet Group Management Protocol)</a></li>
-<li><a href="#18-nat-network-address-translation">1.8. NAT (Network Address Translation)</a></li>
-<li><a href="#19-ipsec-internet-protocol-security">1.9. IPsec (Internet Protocol Security)</a></li>
-<li><a href="#110-vrrp-virtual-router-redundancy-protocol">1.10. VRRP (Virtual Router Redundancy Protocol)</a></li>
-<li><a href="#111-mpls-multiprotocol-label-switching">1.11. MPLS (Multiprotocol Label Switching)</a></li>
-</ul>
-</li>
-</ul>
-</details>
-<h1 id="1-network-layer"><a class="markdownIt-Anchor" href="#1-network-layer"></a> 1. Network Layer</h1>
-<blockquote>
-<p>网络层是<code>OSI</code>模型中的第三层，它负责在不同网络之间（端到端）提供数据包的路由和转发。网络互联的本质是通过<code>IP</code>协议实现的，而数据传输的基本单元是<code>IP</code>数据报。本章将详细介绍网络层的核心协议与技术。</p>
-</blockquote>
-<p>网络互连<code>本质</code>是通过<code>ip</code>实现的，<code>传输</code>是以<code>ip数据报</code>为介质。</p>
-<h2 id="11-ip"><a class="markdownIt-Anchor" href="#11-ip"></a> 1.1. IP</h2>
-<p><code>IP</code>协议是无连接、不可靠的数据报服务。</p>
-<ul>
-<li><strong>无连接 (<code>Connectionless</code>)</strong>：发送方在发送数据前，不需要与接收方建立连接。每个数据报都是独立传输的，因此到达顺序、完整性都不能保证。</li>
-<li><strong>不可靠 (<code>Unreliable</code>)</strong>：<code>IP</code>协议不提供错误恢复或重传机制。如果数据报在传输中丢失或损坏，<code>IP</code>层本身不会处理，而是交由上层协议（如<code>TCP</code>）来确保可靠性。</li>
-</ul>
-<h3 id="111-ipv4-数据报格式"><a class="markdownIt-Anchor" href="#111-ipv4-数据报格式"></a> 1.1.1. IPv4 数据报格式</h3>
-<p>一个<code>IP</code>数据报由<code>首部 (Header)</code>和<code>数据 (Data)</code>两部分组成。首部通常为20字节，包含了路由和转发所需的所有关键信息。</p>
-<ul>
-<li><strong>版本 (<code>Version</code>)</strong> (4位): 指示<code>IP</code>协议的版本，对于<code>IPv4</code>，该值为 4。</li>
-<li><strong>首部长度 (<code>IHL - Internet Header Length</code>)</strong> (4位): 表示整个<code>IP</code>首部的长度，单位是 <strong>4字节</strong>（32位）。例如，如果该值为5，则首部长度为 5 * 4 = 20 字节。最小值为5（20字节），最大值为15（60字节）。</li>
-<li><strong>服务类型 (<code>ToS - Type of Service</code>)</strong> (8位): 用于指定数据报的优先级和服务质量（<code>QoS</code>）要求，例如最小延迟、最大吞吐量等。</li>
-<li><strong>总长度 (<code>Total Length</code>)</strong> (16位): 指示整个<code>IP</code>数据报（包括首部和数据）的总长度，单位是字节。最大长度为 <code>65535</code> 字节。</li>
-<li><strong>标识 (<code>Identification</code>)</strong> (16位): 该字段唯一标识一个数据报。当数据报因为过大而被分片时，所有分片都将拥有相同的标识号，以便接收方能够将它们重新组装。</li>
-<li><strong>标志 (<code>Flags</code>)</strong> (3位):
-<ul>
-<li>第1位：保留，必须为0。</li>
-<li>第2位：<strong><code>DF (Don't Fragment)</code></strong>。如果设为1，则禁止路由器对该数据报进行分片。如果数据报过大而无法通过，路由器将丢弃它并返回一个<code>ICMP</code>错误消息。</li>
-<li>第3位：<strong><code>MF (More Fragments)</code></strong>。如果设为1，表示后面还有更多的分片；如果为0，表示这是最后一个分片（或未分片）。</li>
-</ul>
-</li>
-<li><strong>片偏移 (<code>Fragment Offset</code>)</strong> (13位): 指示当前分片在原始数据报中的位置。偏移量以 <strong><code>8字节</code></strong> 为单位。</li>
-<li><strong>生存时间 (<code>TTL - Time to Live</code>)</strong> (8位): 设置数据报在网络中可以存活的最大跳数（经过的路由器数）。每经过一个路由器，<code>TTL</code>值减1。当<code>TTL</code>减为0时，路由器将丢弃该数据报，并向源主机发送一个<code>ICMP</code>超时消息。这可以防止数据报在网络中无限循环。</li>
-<li><strong>协议 (<code>Protocol</code>)</strong> (8位): 指示<code>IP</code>数据报的数据部分承载的是哪个上层协议。例如，<code>6 </code>代表<code>TCP</code>，<code>17 </code>代表<code>UDP</code>，1 代表<code>ICMP</code>。</li>
-<li><strong>首部检验和 (<code>Header Checksum</code>)</strong> (16位): 用于校验<code>IP</code>首部在传输过程中是否出错。它只对首部进行计算，不包括数据部分。</li>
-<li><strong>源IP地址 (<code>Source IP Address</code>)</strong> (32位): 发送方设备的<code>IP</code>地址。</li>
-<li><strong>目的IP地址 (<code>Destination IP Address</code>)</strong> (32位): 接收方设备的<code>IP</code>地址。</li>
-<li><strong>选项 (<code>Options</code>)</strong> (可变长): 用于一些特殊处理，如记录路由、时间戳等。由于选项会增加首部长度并降低处理效率，因此不常用。如果存在，首部长度字段会大于5。</li>
-</ul>
-<h3 id="112-ip-分片-fragmentation"><a class="markdownIt-Anchor" href="#112-ip-分片-fragmentation"></a> 1.1.2. IP 分片 (Fragmentation)</h3>
-<p>当一个<code>IP</code>数据报的长度超过了链路的<strong>最大传输单元 (<code>MTU</code>)</strong> 时，路由器就需要将其分割成多个更小的数据报，这个过程称为分片。</p>
-<ul>
-<li>标识、标志和片偏移这三个字段共同协作，以确保分片能够在目的主机被正确地重组。</li>
-<li>所有分片共享相同的标识号。</li>
-<li>除了最后一个分片，其他所有分片的<code>MF</code>标志位都为1。</li>
-<li>片偏移字段记录了每个分片数据在原始数据中的相对位置。</li>
-</ul>
-<hr>
-<h2 id="12-icmp"><a class="markdownIt-Anchor" href="#12-icmp"></a> 1.2. ICMP</h2>
-<p><strong>ICMP</strong>：<code>Internet Control Message Protocol</code> ，因特网控制报文协议</p>
-<p>方向：主机/路由器 -&gt; 源站(发送方)</p>
-<p><img src="/Network-Layer/54070be665d2466175453f2c7153900f-1740404253149-1.jpeg" alt></p>
-<p><code>代码</code> 提供了进一步的描述信息，在此不进一步提供描述信息，<s>即代码的代码（？</s>。</p>
-<hr>
-<p><strong>However</strong>, 首先想区分一下这边的四个字节vs图上的内容vs十六进制和二进制</p>
-<p>图上的<code>0  8  16  31</code>一共有32位，指的是二进制的32位，这个<code>类型</code>是1字节，2个16进制。也就是在读数据报的时候你看到的是两个十六进制的字符。<s>然而图上很喜欢使用二进制长度来表示</s></p>
-<p><code>8位二进制</code>=<code>2位十六进制</code>=<code>1字节</code></p>
-<hr>
-<table>
-<thead>
-<tr>
-<th>类型字段</th>
-<th>ICMP报文类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>回显应答 Echo Reply</td>
-</tr>
-<tr>
-<td>3</td>
-<td>目的不可达 Destination Unreachable</td>
-</tr>
-<tr>
-<td>4</td>
-<td>源抑制 Source Quench</td>
-</tr>
-<tr>
-<td>5</td>
-<td>路由重定向 Redirect (change a route)</td>
-</tr>
-<tr>
-<td>8</td>
-<td>回显请求 Echo Request</td>
-</tr>
-<tr>
-<td>9</td>
-<td>路由器广告 Router Advertisement</td>
-</tr>
-<tr>
-<td>10</td>
-<td>路由器请求 Router Solicitation</td>
-</tr>
-<tr>
-<td>11</td>
-<td>数据报超时 Time Exceeded for a Datagram</td>
-</tr>
-<tr>
-<td>12</td>
-<td>数据报参数问题 Parameter Problem on a Datagram</td>
-</tr>
-<tr>
-<td>13</td>
-<td>时间戳请求 Timestamp Request</td>
-</tr>
-<tr>
-<td>14</td>
-<td>时间戳应答 Timestamp Reply</td>
-</tr>
-<tr>
-<td>15</td>
-<td>信息请求（废弃） Information Request (obsolete)</td>
-</tr>
-<tr>
-<td>16</td>
-<td>信息应答（废弃） Information Reply (obsolete)</td>
-</tr>
-<tr>
-<td>17</td>
-<td>地址掩码请求 Address Mask Request</td>
-</tr>
-<tr>
-<td>18</td>
-<td>地址掩码应答 Address Mask Reply</td>
-</tr>
-</tbody>
-</table>
-<p><code>ICMP</code> 报文分为两大类</p>
-<p><code>差错报告报文</code>和<code>提供信息的报文(询问报文)</code></p>
-<ul>
-<li>
-<p>差错报告报文 (<code>Error Report Messages</code>)</p>
-<ul>
-<li>
-<p><code>3</code> 目的不可达 <code>Destination Unreachable</code></p>
-</li>
-<li>
-<p><code>4</code> 源抑制 <code>Source Quench</code></p>
-</li>
-<li>
-<p><code>5</code> 路由重定向 <code>Redirect (change a route)</code></p>
-</li>
-<li>
-<p><code>11</code> 数据报超时 <code>Time Exceeded for a Datagram</code></p>
-</li>
-<li>
-<p><code>12</code> 数据报参数问题 <code>Parameter Problem on a Datagram</code></p>
-</li>
-</ul>
-</li>
-<li>
-<p>提供信息的报文 (询问报文) (<code>Information Request/Inquiry Messages</code>)</p>
-<ul>
-<li>
-<p><code>0</code> 回显应答 <code>Echo Reply</code></p>
-</li>
-<li>
-<p><code>8</code> 回显请求 <code>Echo Request</code></p>
-</li>
-<li>
-<p><code>9</code> 路由器广告 <code>Router Advertisement</code></p>
-</li>
-<li>
-<p><code>10</code> 路由器请求 <code>Router Solicitation</code></p>
-</li>
-<li>
-<p><code>13</code> 时间戳请求 <code>Timestamp Request</code></p>
-</li>
-<li>
-<p><code>14</code> 时间戳应答 <code>Timestamp Reply</code></p>
-</li>
-<li>
-<p><code>17</code> 地址掩码请求 <code>Address Mask Request</code></p>
-</li>
-<li>
-<p><code>18</code> 地址掩码应答 <code>Address Mask Reply</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<p>其中<code>3</code>、<code>11</code>、<code>0</code>、<code>8</code>常用</p>
-<p><code>3</code>、<code>11</code>是<code>差错报告报文</code></p>
-<p><code>0</code>、<code>8</code>是<code>提供信息的报文</code></p>
-<h3 id="121-几种常用icmp报文类型"><a class="markdownIt-Anchor" href="#121-几种常用icmp报文类型"></a> 1.2.1. 几种常用ICMP报文类型</h3>
-<h4 id="1211-目的不可达报文3"><a class="markdownIt-Anchor" href="#1211-目的不可达报文3"></a> 1.2.1.1. 目的不可达报文（3）</h4>
-<p>顾名思义，<code>目的不可达报文</code>就是目的不可达，<code>代码</code>部分进一步阐述</p>
-<p><img src="/Network-Layer/eaba7cf385281339afc9f7083d44ea17-1740404253149-2.jpeg" alt></p>
-<p>相当于<code>代码</code>那块就是<code>00</code>,<code>01</code>…这样的十六进制</p>
-<blockquote>
-<p><code>MTU</code>是指一个网络接口上能够传输的最大数据包大小。</p>
-<p><code>路径最小MTU</code>影响数据在网络中的传输，尤其在路径中包含不同的网络设备时，如果路径中的任何设备不能处理过大的数据包，它就会丢弃该数据包或将其分片。</p>
-<p>所以<code>“路径最小MTU发现”应用</code>可以实现 <code> MTU</code>探测 和 避免分片</p>
-</blockquote>
-<h4 id="1212-超时报文11"><a class="markdownIt-Anchor" href="#1212-超时报文11"></a> 1.2.1.2. 超时报文（11）</h4>
-<p><code>代码</code>说明超时的性质：</p>
-<p><code>00</code>  传输过程中IP <code>TTL（time to live）</code>超时</p>
-<p><code>01</code>   分片重装超时</p>
-<blockquote>
-<p>TTL超时可用于实现路由跟踪（<code>tracert</code>）</p>
-<p><em>路由跟踪的工作原理总结：</em></p>
-<ul>
-<li>路由跟踪工具利用<code>TTL</code>字段逐步发送数据包，每次增加<code>TTL</code>值以遍历路径。</li>
-<li>每经过一个路由器，<code>TTL</code>值会减1，直到数据包的<code>TTL</code>变为0，路由器丢弃数据包并返回一个<code>ICMP</code>“时间超时”消息。</li>
-<li>通过收集每个中间路由器的回应，路由跟踪工具能够显示整个路径以及每跳的延迟。</li>
-</ul>
-</blockquote>
-<p><img src="/Network-Layer/4c779b318b1952f5114d3ac31802c576_720-1740404253150-3.jpg" alt></p>
-<h4 id="1213-回应请求与应答报文-类型-8-和-0"><a class="markdownIt-Anchor" href="#1213-回应请求与应答报文-类型-8-和-0"></a> 1.2.1.3. <strong>回应请求与应答报文 (类型 8 和 0)</strong></h4>
-<p>这是我们最熟悉的<code>ping</code>命令所使用的报文。</p>
-<ul>
-<li><strong>PING (<code>Packet InterNet Groper</code>)</strong>：用于测试两台主机之间的连通性。</li>
-<li>主机A向主机B发送一个<code>ICMP</code>回显请求报文（类型8）。</li>
-<li>如果主机B接收到该报文，它会回复一个<code>ICMP</code>回显应答报文（类型0）。</li>
-<li><code>ping</code>是一个应用层程序直接使用网络层<code>ICMP</code>的典型例子，它绕过了传输层的<code>TCP</code>或<code>UDP</code>。</li>
-</ul>
-<hr>
-<h2 id="13-arp-address-resolution-protocol"><a class="markdownIt-Anchor" href="#13-arp-address-resolution-protocol"></a> 1.3. ARP (Address Resolution Protocol)</h2>
-<p>在任何局域网（如以太网）中，数据帧的传输最终依赖的是<strong>MAC地址（物理地址）</strong>，而不是<code>IP</code>地址。那么，当一台主机（例如 <code>192.168.1.100</code>）想要与同一网络中的另一台主机（例如 <code>192.168.1.50</code>）通信时，它如何知道对方的<code>MAC</code>地址呢？这就是<code>ARP</code>协议的作用。</p>
-<p><strong>定义</strong>：<code>ARP (Address Resolution Protocol)</code>，地址解析协议。它负责将一个已知的<code>IP</code>地址（网络层地址）解析（映射）为对应的MAC地址（数据链路层地址）。</p>
-<p><strong>工作流程</strong>：</p>
-<ol>
-<li><strong>检查<code>ARP</code>缓存</strong>：主机 A 首先会检查自己的 <strong><code>ARP</code>缓存表</strong>，看是否已经有目标<code>IP</code>地址 <code>192.168.1.50</code> 对应的<code>MAC</code>地址记录。如果存在，则直接使用该<code>MAC</code>地址封装数据帧并发送。</li>
-<li><strong>发送<code>ARP</code>请求</strong>：如果在缓存中找不到记录，主机 A 会在局域网内广播一个 <strong><code>ARP</code>请求</strong> 报文。这个报文的核心内容是：“<strong>谁的<code>IP</code>地址是 192.168.1.50？请把你的<code>MAC</code>地址告诉我。</strong>” 这个请求是广播的，意味着网络内所有设备都会收到它。</li>
-<li><strong>单播<code>ARP</code>响应</strong>：网络中的所有设备都会解析这个<code>ARP</code>请求。但只有<code>IP</code>地址为 <code>192.168.1.50</code> 的主机 B 会响应。主机 B 会直接向主机 A 发送一个 <strong><code>ARP</code>响应</strong> 报文（单播），内容是：“<strong>我的<code>IP</code>地址是 <code>192.168.1.50</code>，我的<code>MAC</code>地址是<code> XX:XX:XX:XX:XX:XX</code>。</strong>”</li>
-<li><strong>更新<code>ARP</code>缓存</strong>：主机 A 收到响应后，就知道了主机 B 的<code>MAC</code>地址，并将这个映射关系（<code>IP -&gt; MAC</code>）存入自己的<code>ARP</code>缓存表中，以备后续使用。然后，它就可以将数据发送给主机 B 了。</li>
-</ol>
-<p><strong><code>ARP</code>缓存</strong>：每个主机都维护一个ARP缓存，用于存储近期解析过的<code>IP</code>地址与<code>MAC</code>地址的对应关系。缓存条目有生命周期（通常是几分钟），过期后会被删除，以确保信息的时效性。</p>
-<hr>
-<h2 id="14-dhcp-dynamic-host-configuration-protocol"><a class="markdownIt-Anchor" href="#14-dhcp-dynamic-host-configuration-protocol"></a> 1.4. DHCP (Dynamic Host Configuration Protocol)</h2>
-<p>当一台新设备（如笔记本电脑或手机）接入网络时，它需要一个<code>IP</code>地址才能通信。手动为每台设备配置IP地址、子网掩码、默认网关和<code>DNS</code>服务器是非常繁琐且容易出错的。<code>DHCP</code>协议就是为了自动化这个过程而设计的。</p>
-<p><strong>定义</strong>：<strong>动态主机配置协议 (<code>DHCP, Dynamic Host Configuration Protocol</code>)</strong> 是一个应用层协议（基于<code>UDP</code>），允许网络中的<code>DHCP</code>服务器自动地为客户端分配IP地址及其他网络配置参数。</p>
-<p><strong>工作流程 (<code>DORA</code>)</strong>：这个过程通常被称为**<code>DORA</code>**，代表四个核心步骤。</p>
-<ol>
-<li><strong><code>Discover</code> (发现)</strong>：客户端（新设备）在网络中<strong>广播</strong>一个 <strong><code>DHCP Discover</code></strong> 报文，试图找到可用的<code>DHCP</code>服务器。报文大意是：“<strong>我需要一个<code>IP</code>地址，网络里有<code>DHCP</code>服务器吗？</strong>”</li>
-<li><strong><code>Offer</code> (提供)</strong>：所有收到<code>Discover</code>报文的<code>DHCP</code>服务器都会从自己的地址池中选择一个可用的<code>IP</code>地址，并通过一个 <strong><code>DHCP Offer</code></strong> 报文（单播或广播）提供给客户端。报文大意是：“<strong>你好，我这里有一个<code>IP</code>地址 <code>192.168.1.123</code> 可以给你用，同时还有这些其他的配置信息。</strong>”</li>
-<li><strong><code>Request (请求)</code></strong>：客户端可能会收到多个<code>Offer</code>。它会选择其中一个（通常是第一个收到的），然后<strong>广播</strong>一个 <strong><code>DHCP Request</code></strong> 报文，正式请求使用这个<code>IP</code>地址。广播的目的是通知所有<code>DHCP</code>服务器（包括那些也提供了Offer的服务器），它已经做出了选择。报文大意是：“<strong>各位，我决定使用服务器X提供的<code>IP</code>地址 <code>192.168.1.123</code>。</strong>”</li>
-<li><strong><code>Acknowledge (确认)</code></strong>：被选中的<code>DHCP</code>服务器会发送一个 <strong><code>DHCP ACK</code></strong> 报文，确认将该<code>IP</code>地址租借给客户端，并规定了租期。此时，客户端就可以使用这个IP地址进行网络通信了。</li>
-</ol>
-<hr>
-<h2 id="15-路由协议-routing-protocols"><a class="markdownIt-Anchor" href="#15-路由协议-routing-protocols"></a> 1.5. 路由协议 (Routing Protocols)</h2>
-<p>IP协议本身只负责数据报的转发，但它并不知道如何选择最佳路径。<strong>路由器</strong>通过运行<strong>路由协议</strong>来学习网络的拓扑结构，并创建<strong>路由表</strong>，从而做出智能的路径选择决策。路由协议主要分为两大类：</p>
-<h3 id="151-内部网关协议-igp-interior-gateway-protocol"><a class="markdownIt-Anchor" href="#151-内部网关协议-igp-interior-gateway-protocol"></a> 1.5.1. 内部网关协议 (IGP - Interior Gateway Protocol)</h3>
-<p>IGP在一个<strong>自治系统 (<code>AS - Autonomous System</code>)</strong> 内部交换路由信息。一个<code>AS</code>可以是一个公司、一所大学或一个互联网服务提供商（<code>ISP</code>）的网络。</p>
-<ul>
-<li><strong>RIP (<code>Routing Information Protocol</code>)</strong>
-<ul>
-<li><strong>类型</strong>：距离矢量协议 (<code>Distance-Vector</code>)。</li>
-<li><strong>工作原理</strong>：RIP路由器周期性地与邻居交换整个路由表。它使用“<strong>跳数 (<code>Hop Count</code>)</strong>”作为度量值来衡量路径的好坏，即经过的路由器数量越少，路径越优。</li>
-<li><strong>特点</strong>：实现简单，但有明显缺点，如最大跳数限制（15跳）、收敛速度慢、容易产生路由环路等。现在已基本被<code>OSPF</code>取代。</li>
-</ul>
-</li>
-<li><strong>OSPF (<code>Open Shortest Path First</code>)</strong>
-<ul>
-<li><strong>类型</strong>：链路状态协议 (<code>Link-State</code>)。</li>
-<li><strong>工作原理</strong>：<code>OSPF</code>路由器不交换路由表，而是交换<strong>链路状态通告 (<code>LSA</code>)</strong>。每个路由器都收集网络中所有的<code>LSA</code>，从而在本地构建一个完整的网络拓扑图。然后，它使用**<code>Dijkstra</code>算法**计算出到达每个目的地的最短路径。</li>
-<li><strong>特点</strong>：收敛速度快，无路由环路，支持可变长子网掩码（<code>VLSM</code>），支持区域划分以实现更好的扩展性。是当今企业网络中最主流的<code>IGP</code>协议。</li>
-</ul>
-</li>
-</ul>
-<h3 id="152-外部网关协议-egp-exterior-gateway-protocol"><a class="markdownIt-Anchor" href="#152-外部网关协议-egp-exterior-gateway-protocol"></a> 1.5.2. 外部网关协议 (EGP - Exterior Gateway Protocol)</h3>
-<p><code>EGP</code>用于在不同的自治系统（<code>AS</code>）之间交换路由信息，是构成整个互联网的骨架。</p>
-<ul>
-<li><strong>BGP (<code>Border Gateway Protocol</code>)</strong>
-<ul>
-<li><strong>定义</strong>：边界网关协议是目前唯一在使用的<code>EGP</code>。它不仅仅是寻找最短路径，更重要的是，它是一个“<strong>路径矢量协议</strong>”，能够根据管理员设定的策略（如费用、安全、政治因素等）来选择最佳路由。</li>
-<li><strong>特点</strong>：极其稳定和可扩展，是互联网的核心路由协议，负责连接全球成千上万个自治系统。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="16-ipv6"><a class="markdownIt-Anchor" href="#16-ipv6"></a> 1.6. IPv6</h2>
-<p>随着物联网的兴起和互联网的蓬勃发展，<code>IPv4</code>的地址空间（约43亿个）已完全耗尽。<code>IPv6</code>作为其继任者，提供了海量的地址空间和诸多改进。</p>
-<p><strong>主要优势</strong>：</p>
-<ol>
-<li><strong>巨大的地址空间</strong>：<code>IPv6</code>使用128位地址，理论上可提供<code> 2^128</code> 个地址，这个数字足以满足未来数百年内任何可以想象到的需求。</li>
-<li><strong>简化的首部格式</strong>：<code>IPv6</code>的首部是固定的40字节，移除了<code>IPv4</code>中不常用或冗余的字段（如<code>IHL</code>、标识、标志、片偏移、首部检验和），使得路由器处理数据包的效率更高。</li>
-<li><strong>不再由路由器分片</strong>：<code>IPv6</code>要求发送方主机在发送前完成“路径<code>MTU</code>发现”（<code>PMTUD</code>），确保数据包大小不超过路径中的最小<code>MTU</code>。路由器不再进行分片，大大减轻了路由器的负担。</li>
-<li><strong>增强的安全性</strong>：<code>IPsec</code>（IP安全协议）被设计为<code>IPv6</code>的强制组成部分（尽管后来变为可选），为网络层提供了端到端的加密和认证，安全性远超<code>IPv4</code>。</li>
-<li><strong>支持无状态地址自动配置 (<code>SLAAC</code>)</strong>：<code>IPv6</code>主机可以根据路由器通告的前缀和自身的<code>MAC</code>地址等信息，自动生成全局唯一的<code>IP</code>地址，无需<code>DHCP</code>服务器介入即可上网。</li>
-<li><strong>改进的邻居发现协议 (<code>NDP</code>)</strong>：<code>IPv6</code>使用<strong>邻居发现协议 (<code>NDP</code>)</strong>，它基于<code>ICMPv6</code>，取代了<code>IPv4</code>中的<code>ARP</code>和<code>ICMP</code>路由器发现等功能，实现了地址解析、路由器发现、重复地址检测（<code>DAD</code>）等，更加高效和强大。</li>
-</ol>
-<hr>
-<h2 id="17-igmp-internet-group-management-protocol"><a class="markdownIt-Anchor" href="#17-igmp-internet-group-management-protocol"></a> 1.7. IGMP (Internet Group Management Protocol)</h2>
-<p>当数据需要发送给一组特定的、感兴趣的主机而不是单个主机（单播）或所有主机（广播）时，就需要<strong>组播 (<code>Multicast</code>)</strong>。<code>IGMP</code>协议就是用于管理这种组播组成员关系的。</p>
-<p><strong>定义</strong>：IGMP (<code>Internet Group Management Protocol</code>)，因特网组管理协议。它允许主机通知其本地路由器，表示自己希望加入或离开某个特定的组播组。</p>
-<p><strong>工作原理</strong>：</p>
-<ul>
-<li><strong>加入组</strong>：当一个主机上的某个应用希望接收特定组播组（例如一个视频流）的数据时，主机会向其本地路由器发送一个<code>IGMP</code><strong>成员关系报告</strong>报文。</li>
-<li><strong>维护关系</strong>：路由器会周期性地发送<code>IGMP</code><strong>查询</strong>报文，询问本地网络上是否还有成员对某个组播组感兴趣。仍在组内的成员会回复报告报文。</li>
-<li><strong>离开组</strong>：当主机不再希望接收数据时，它会发送一个<code>IGMP</code><strong>离开组</strong>报文。</li>
-</ul>
-<p><code>IGMP</code>只负责在主机和本地路由器之间进行通信。路由器之间则需要运行专门的组播路由协议（如<code>PIM</code>）来构建组播数据的分发路径。</p>
-<hr>
-<h2 id="18-nat-network-address-translation"><a class="markdownIt-Anchor" href="#18-nat-network-address-translation"></a> 1.8. NAT (Network Address Translation)</h2>
-<p><code>NAT</code>是为了延缓<code>IPv4</code>地址耗尽而设计出的一种关键技术。它允许一个机构内部的众多计算机使用<strong>私有<code>IP</code>地址</strong>上网，但在与外部互联网通信时，共享一个或少数几个<strong>公有<code>IP</code>地址</strong>。</p>
-<p><strong>定义</strong>：<strong>网络地址转换 (<code>NAT</code>)</strong> 工作在路由器或防火墙上，负责在私有网络和公有网络之间转换<code>IP</code>数据报的源/目的地址和端口号。</p>
-<p><strong>私有<code>IP</code>地址段</strong> (不会在公网路由):</p>
-<ul>
-<li><code>10.0.0.0</code> 到 <code>10.255.255.255</code> (A类)</li>
-<li><code>172.16.0.0</code> 到 <code>172.31.255.255</code> (B类)</li>
-<li><code>192.168.0.0</code> 到 <code>192.168.255.255</code> (C类)</li>
-</ul>
-<p><strong>工作原理与类型</strong>：</p>
-<ol>
-<li><strong>静态NAT (<code>Static NAT</code>)</strong>：
-<ul>
-<li>将一个私有<code>IP</code>地址<strong>一对一</strong>地映射到一个公有IP地址。</li>
-<li>主要用于内部服务器（如Web服务器）需要被外部网络稳定访问的场景。</li>
-</ul>
-</li>
-<li><strong>动态NAT (<code>Dynamic NAT</code>)</strong>：
-<ul>
-<li>维护一个公有<code>IP</code>地址池。当内部主机需要访问互联网时，从地址池中<strong>临时分配</strong>一个未使用的公有<code>IP</code>地址给它。</li>
-<li>当通信结束时，该公有<code>IP</code>地址被回收，可供其他主机使用。</li>
-</ul>
-</li>
-<li><strong>PAT (<code>Port Address Translation</code>) / NAPT</strong>：
-<ul>
-<li>这是目前<strong>最常用</strong>的<code>NAT</code>形式，也称为<code>NAPT</code>（网络地址端口转换）。它将多个私有<code>IP</code>地址映射到<strong>同一个公有IP地址</strong>的不同<strong>端口</strong>上。</li>
-<li><strong>流程</strong>：当内部主机 <code>192.168.1.100 </code>使用端口 <code>50000 </code>访问外部服务器时，<code>NAT</code>路由器会将源地址和端口转换为 (公有IP, 新端口号)，例如 (<code>202.100.1.1</code>, <code>60001</code>)，并记录这个映射关系。当外部服务器响应数据到 (<code>202.100.1.1</code>, <code>60001</code>) 时，路由器根据记录将数据包的目的地址和端口改回 (<code>192.168.1.100</code>, <code>50000</code>)，并发送给内部主机。</li>
-<li><strong>优点</strong>：极大地节约了公有<code>IP</code>地址，仅用一个公有<code>IP</code>就能让成百上千台设备同时上网。</li>
-<li><strong>缺点</strong>：破坏了端到端的连接模型，可能导致某些<code>P2P</code>应用或<code>VoIP</code>协议出现问题。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="19-ipsec-internet-protocol-security"><a class="markdownIt-Anchor" href="#19-ipsec-internet-protocol-security"></a> 1.9. IPsec (Internet Protocol Security)</h2>
-<p><strong><code>IPsec</code></strong> 是一套协议簇，用于在网络层为<code>IP</code>通信提供高质量、可互操作的、基于密码学的安全保障。它能提供数据来源认证、数据完整性、数据机密性（加密）和防重放攻击等服务，是构建**<code>VPN</code> (虚拟专用网络)** 的核心技术。</p>
-<p><strong>两种工作模式</strong>：</p>
-<ol>
-<li><strong>传输模式 (<code>Transport Mode</code>)</strong>：
-<ul>
-<li><strong>工作方式</strong>：只对IP数据报的<strong>数据部分（<code>Payload</code>）</strong> 进行加密或认证。原始的IP头部保持不变，只插入了<code>IPsec</code>头部。</li>
-<li><strong>用途</strong>：主要用于两台主机之间的<strong>端到端</strong>安全通信。</li>
-</ul>
-</li>
-<li><strong>隧道模式 (<code>Tunnel Mode</code>)</strong>：
-<ul>
-<li><strong>工作方式</strong>：将<strong>整个原始<code>IP</code>数据报（包括头部和数据）</strong> 都进行加密和认证，然后将其封装在一个新的IP数据报中。</li>
-<li><strong>用途</strong>：主要用于两个网络（如公司总部和分部）之间的<strong>网关到网关</strong>安全通信，由网络边缘的<code>VPN</code>网关来处理。这是构建<code>VPN</code>最常见的方式。</li>
-</ul>
-</li>
-</ol>
-<p><strong>核心协议</strong>：</p>
-<ul>
-<li><strong>AH (<code>Authentication Header</code>)</strong>：只提供<strong>数据完整性</strong>和<strong>身份验证</strong>，但不提供加密。它确保数据在传输中未被篡改，但传输内容是明文的。</li>
-<li><strong>ESP (<code>Encapsulating Security Payload</code>)</strong>：提供<strong>数据完整性</strong>、<strong>身份验证</strong>和<strong>数据机密性（加密）</strong>。这是目前应用最广泛的IPsec协议。</li>
-</ul>
-<hr>
-<h2 id="110-vrrp-virtual-router-redundancy-protocol"><a class="markdownIt-Anchor" href="#110-vrrp-virtual-router-redundancy-protocol"></a> 1.10. VRRP (Virtual Router Redundancy Protocol)</h2>
-<p>在局域网中，如果作为默认网关的路由器发生故障，整个网络的主机将无法访问外部网络，这形成了一个<strong>单点故障</strong>。<code>VRRP</code>就是为了解决这个问题而设计的网关冗余协议。</p>
-<p><strong>定义</strong>：<strong>虚拟路由器冗余协议 (<code>VRRP</code>)</strong> 是一种容错协议，可以将多台物理路由器组织成一个“<strong>虚拟路由器</strong>”，从而对外提供一个高可用的默认网关。</p>
-<p><strong>工作原理</strong>：</p>
-<ol>
-<li><strong>虚拟路由器</strong>：在一个<code>VRRP</code>组中，多台物理路由器共享一个<strong>虚拟<code>IP</code>地址</strong>和<strong>虚拟<code>MAC</code>地址</strong>。网络中的所有客户端都将这个虚拟<code>IP</code>地址配置为它们的默认网关。</li>
-<li><strong><code>Master</code>和<code>Backup</code></strong>：在任何时刻，<code>VRRP</code>组中只有一台路由器处于 <strong><code>Master </code>(主)</strong> 状态，它实际拥有虚拟IP地址并负责转发数据包。组内其他路由器则处于 <strong><code>Backup</code> (备)</strong> 状态。</li>
-<li><strong>心跳检测</strong>：<code>Master</code>路由器会周期性地发送<code>VRRP</code>通告报文（心跳），向<code>Backup</code>路由器宣告自己处于活动状态。</li>
-<li><strong>故障切换</strong>：如果<code>Backup</code>路由器在一定时间内没有收到<code>Master</code>的心跳报文，它会认为<code>Master</code>已经出现故障。此时，优先级最高的<code>Backup</code>路由器会自动切换为新的<code>Master</code>，接管虚拟<code>IP</code>地址和<code>MAC</code>地址，并开始转发数据。</li>
-<li><strong>无缝切换</strong>：这个切换过程对客户端是完全透明的，客户端无需进行任何更改，从而保证了网络连接的连续性。</li>
-</ol>
-<hr>
-<h2 id="111-mpls-multiprotocol-label-switching"><a class="markdownIt-Anchor" href="#111-mpls-multiprotocol-label-switching"></a> 1.11. MPLS (Multiprotocol Label Switching)</h2>
-<p><code>MPLS</code>是一种高性能的电信级网络技术，它在传统的IP路由（第三层）和数据链路层交换（第二层）之间工作，常被称为“<strong>2.5层</strong>”技术。</p>
-<p><strong>定义</strong>：<strong>多协议标签交换 (<code>MPLS</code>)</strong> 通过给数据包预先分配简短、固定长度的“<strong>标签（<code>Label</code>）</strong>”，并根据标签进行转发，而不是像传统路由那样在每一跳都查找复杂的IP路由表。</p>
-<p><strong>工作原理</strong>：</p>
-<ol>
-<li><strong>标签分发</strong>：<code>MPLS</code>网络中的路由器（称为<code>LSR</code> - 标签交换路由器）会通过<code>LDP</code>（标签分发协议）等协议，预先为网络中的IP前缀（路由）建立标签映射关系，形成<strong>标签转发信息库 (<code>LFIB</code>)</strong>。</li>
-<li><strong>入口打标 (<code>Push</code>)</strong>：当一个IP数据包进入<code>MPLS</code>网络时，入口路由器（<code>Ingress LER</code>）会进行一次常规的<code>IP</code>路由查找，然后给这个数据包压入一个或多个<code>MPLS</code>标签，形成一个带标签的数据包。</li>
-<li><strong>标签交换 (<code>Swap</code>)</strong>：在<code>MPLS</code>网络内部，核心的<code>LSR</code>路由器不再查看<code>IP</code>头部。它们只需读取最外层的标签，在<code>LFIB</code>中进行极速查找，然后“交换”（替换）标签，并将数据包转发到下一个<code>LSR</code>。</li>
-<li><strong>出口弹标 (<code>Pop</code>)</strong>：当数据包到达<code>MPLS</code>网络的出口路由器（<code>Egress LER</code>）时，标签被移除（弹出），恢复成原始的<code>IP</code>数据包，然后继续进行标准的<code>IP</code>转发。</li>
-</ol>
-<p><strong>主要优势</strong>：</p>
-<ul>
-<li><strong>高速转发</strong>：基于标签的精确匹配交换比基于<code>IP</code>地址的最长前缀匹配查找要快得多。</li>
-<li><strong>流量工程 (<code>Traffic Engineering</code>)</strong>：<code>MPLS</code>可以预先设定数据流的路径（建立<code>LSP</code> - 标签交换路径），而不必完全遵循<code>IGP</code>计算出的最短路径。这使得网络管理员可以精细地控制流量，以优化带宽利用率或绕过拥塞点。</li>
-<li><strong>VPN支持</strong>：<code>MPLS</code>是构建大规模、高性能<code>VPN</code>（特别是<code>MPLS</code> <code>L3VPN</code>）的基础技术，被全球各大<code>ISP</code>广泛采用。</li>
-</ul>
-<p>仍在咕咕咕中</p>
-]]></content>
-      <categories>
-        <category>Computer Networks</category>
-      </categories>
-      <tags>
-        <tag>network</tag>
       </tags>
   </entry>
   <entry>
