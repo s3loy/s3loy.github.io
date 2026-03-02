@@ -1,0 +1,92 @@
+---
+import siteConfig from '~/site.config'
+import Layout from '../layouts/Layout.astro'
+
+const friends = [
+  {
+    name: "futurefe's blog",
+    url: 'https://futurefe414.github.io/',
+    description: '有努力学习的大手子',
+    avatar: 'https://futurefe414.github.io/images/facial.jpg',
+  },
+  {
+    name: '今を生きる',
+    url: 'https://soapsama.cn/',
+    description: '一点记录和胡言乱语',
+    avatar: 'https://soapsama.cn/images/avatar.jpg',
+  },
+  {
+    name: "William Wei's Blog",
+    url: 'https://williamwei.top/',
+    description: 'Everything will be well. Hopefully.',
+    avatar: 'https://williamwei.top/links/avatar.webp',
+  },
+  {
+    name: "SeanDictionary's Blog",
+    url: 'https://seandictionary.top/',
+    description: 'SeanDictionary | 折腾日记',
+    avatar:
+      'https://seandictionary.top/wp-content/uploads/2024/09/%E5%93%AD%E5%93%AD_%E9%80%8F%E6%98%8E.png',
+  },
+  {
+    name: "🦊's Blog",
+    url: 'https://blog.jagdender.ink/',
+    description: '最喜欢吃小孩的🦊',
+    avatar: 'https://blog.jagdender.ink/image/avatar.jpg',
+  },
+  {
+    name: "zer00ne's Blog",
+    url: 'https://khighl.github.io/',
+    description: '恭迎龙王归位✋😭🤚',
+    avatar: 'https://khighl.github.io/avatar/avatar.webp',
+  },
+  {
+    name: 'T.本秋的自留地',
+    url: 'https://blog.texsd.eu.org',
+    description: 'With great power comes great responsibility.',
+    avatar: 'https://blog.texsd.eu.org/images/avatar.webp',
+  },
+  {
+    name: '诺天的小世界',
+    url: 'https://nosora.dev/',
+    description: '野生学长!',
+    avatar:
+      'https://nosora.dev/wp-content/uploads/2025/08/illust_15107364_20181118_235240.webp',
+  },
+  {
+    name: "y11han's icu",
+    url: 'https://blog.y11han.icu',
+    description: '该病房内一切内容不构成投资建议。',
+    avatar: 'https://avatars.githubusercontent.com/u/74756438?v=4',
+  },
+]
+---
+
+<Layout title={`友情链接 - ${siteConfig.title}`} description={siteConfig.description}>
+  <main>
+    <div class="divide-y dark:divide-zinc-800">
+      {
+        friends.map((friend) => (
+          <a
+            href={friend.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex items-center gap-4 py-4 transition-opacity hover:opacity-70"
+          >
+            <img
+              src={friend.avatar}
+              alt={friend.name}
+              class="size-10 rounded-full shrink-0"
+            />
+            <div class="min-w-0">
+              <p class="font-medium text-zinc-900 dark:text-zinc-100">{friend.name}</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 truncate">
+                {friend.description}
+              </p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Layout>
