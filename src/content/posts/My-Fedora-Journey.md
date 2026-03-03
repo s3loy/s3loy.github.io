@@ -6,23 +6,27 @@ tags:
   - linux
 ---
 > 冷知识:
+>
 > - F2是机械革命翼龙15pro开bios的按键
 > - fedora是rpm系，可以直接用dnf install xxx.rpm
 > - fedora不是arch
 > - fedora的重音是这样的 fe'dora
 > 叠甲：仅限个人使用，有错误是正常的
 
-## 1. Desktop(KDE plasma 6)::stop using GNOME!
+## 1. Desktop(KDE plasma 6)::stop using GNOME
 
 前端本来用的是默认的`GNOME`，因为没有桌面很难受所以换成了`KDE plasma`
+
 ```shell
-$ sudo dnf install @kde-desktop-environment
+sudo dnf install @kde-desktop-environment
 ```
 
 后面可以在登录页面切换桌面前端
 
 ### 1.1. 配置
+
 s3是果粉
+
 - `显示和监视器配置-显示器配置-旧式应用程序(X11)` 一定要选 `由应用程序进行缩放`
 - `颜色和主题-全局主题`：WhiteSur-Dark
 - `颜色和主题-全局主题-颜色`有问题，不能自动下下来暗色配色，要去[WhiteSur Color - KDE Store](https://store.kde.org/p/1398831)手动下载，然后 从文件安装 选择`WhiteSurDark.colors`
@@ -43,36 +47,58 @@ s3是果粉
 - 外观增强-窗口透明度-常规透明度设置-仅仅稍微降低了一点`移动中窗口`的透明度
 - 外观增强-高亮显示屏幕和周围四角
 - 窗口管理功能-桌面概览
+
 ### 1.2. 桌面优化
+
 - `下方面板设置：`对齐：居中;宽度：填满宽度;显示/隐藏：总是显示;不透明度：自适应;悬浮：面板和小程序;面板高度：40
+
 > 添加的组件：右侧：虚拟桌面切换器，暂时显示桌面
+
 - 上方面板设置：对齐：靠左;宽度：填满宽度;显示/隐藏：总是显示;不透明度：自适应;悬浮：已禁用;面板高度：32
+
 > 添加的组件：左侧：应用程序启动器
 > 右侧从右到左：数字时钟-搜索-系统托盘
+
 - `桌面添加组件`:媒体相框，二进制时钟，窗口列表，网络速度（修改成了内存使用率）
+
 > Fedora 43默认使用的已经变成了KDE plasma
 > 去掉了X11
 > Do you like Wayland?
+
 ### 1.3. Tricks
+
 在`KDE plasma`上，有一些功能你会很喜欢的
+
 #### 1.3.1. 窗口分屏
+
 快捷键`Meta`+`键盘左键和右键和上下键`
 当然也可以直接拖动窗口到左右边缘也可以分屏
+
 #### 1.3.2. KRunner
+
 快捷键`alt`+`空格`
 全局搜索和应用启动等等等等
 功能可以自行探索
+
 #### 1.3.3. 切换虚拟桌面
+
 快捷键`ctrl`+`Meta`+`键盘左右键`
 如果配置了桌面循环切换食用更佳a
+
 #### 1.3.4. 切换应用
+
 快捷键`Meta`+`tab`或者`alt`+`tab`
+
 #### 1.3.5. 桌面视图
+
 快捷键`Meta`+`G`
 使用起来很方便
+
 ## 2. Boot(rEFInd)::UEFI Boot Manager
+
 因为电脑上是双系统，因此需要一个折中的启动方案
 没有选择使用grub引导启动，而是使用了`rEFInd`
+
 ```shell
 $ sudo dnf install rEFInd
 
@@ -89,6 +115,7 @@ http://www.rodsbooks.com/refind/secureboot.html.
 Do you want to proceed with installation (Y/N)? n
 
 ```
+
 在这看出来问题了，脚本并不能自主识别本地efi在哪个地方
 因此使用了`sudo refind-install --shim /boot/efi/EFI/fedora/shimx64.efi`
 
@@ -112,6 +139,7 @@ The appropriate Secure Boot key is already enrolled.
 Installation has completed successfully.
 
 ```
+
 这边看起来说都弄好了，结果我到MoK那边去找的时候傻眼了，发现这个keys目录是空的啊！
 折腾死了，最后还是选择关掉了`Secure Boot`
 目前配置仍有问题，自动的识别会多出来很多的启动项
@@ -121,6 +149,7 @@ Installation has completed successfully.
 > 使用默认主题选到不需要的启动项可以使用Del按键选择隐藏，因此可以修改好之后再启动
 
 同时如果类似fedora这种可以扫出来很多内容，要注意保留的是什么，我就用我自己扫到的举个例子
+
 - Boot Microsoft EFI boot from EFI System Partition
 - Boot EFI\fedora\grubx64.efi from EFI System Partition
 - Boot EFI\fedora\gcdx64.efi from EFI System Partition
@@ -133,9 +162,11 @@ Installation has completed successfully.
 [GitHub - catppuccin/refind: 🔄 Soothing pastel theme for rEFInd](https://github.com/catppuccin/refind)
 
 > 知识拓展
+
 ### 2.1. UEFI & BIOS
 
 BIOS(**Basic Input/Output System**)
+
 1. **POST (Power-On Self-Test，开机自检)**：
     - 它会先清点一遍家当，快速检查所有核心硬件是否连接正常并能工作。如果发现严重问题（比如没插内存条），它就会通过鸣叫来报警。
 2. **寻找“交接手册”**：
@@ -145,23 +176,26 @@ BIOS(**Basic Input/Output System**)
 4. **交接班**：
     - 从 MBR 开始，后续的引导加载程序会一步步接力，最终将整个操作系统加载到内存中并运行起来。
 
-> 在几十年的时间里，BIOS 工作得非常出色。它简单、可靠、标准化。但随着计算机技术爆炸式发展，这位老管家开始显得力不从心，他的几个“老毛病”越来越严重：
+> 在几十年的时间里，BIOS 工作得非常出色。它简单、可靠、标准化。但随着计算机技术爆炸式发展，他的几个“老毛病”越来越严重：
+
 - **视野太窄（2.2TB 硬盘限制）**：MBR 使用 32 位地址来记录分区，这导致它能管理的最大硬盘容量只有 2.2TB。在今天 4TB、8TB 硬盘普及的时代，这成了一个无法逾越的障碍。
 - **启动太慢**：BIOS 只能以 16 位的“老模式”运行，内存寻址能力只有 1MB，并且它是一个个地初始化硬件，效率低下。
 - **不够安全**：BIOS 没有任何安全校验机制。黑客可以制造一种叫“Bootkit”的病毒，在操作系统启动前就感染 MBR，从而获得最高控制权，极难被发现和清除。
-- **界面古老** 
+- **界面古老**
 
 在老式的 BIOS 启动方式下，电脑启动时会去硬盘的主引导记录 MBR 寻找启动代码，这种方法较为死板，因此聪明的人们就想到了另一种启动方式：UEFI
 UEFI 统一可扩展固件接口启动方式，它不依赖于某个固定位置，而是规定硬盘上必须有一个特殊的小分区，这就是 ESP(**EFI System Partition**)
 
 ESP的特点：
+
 - **格式特殊**：它必须是 FAT32 格式。这是为了确保所有操作系统和 UEFI 固件都能无障碍地读写它
 - **功能专一**：它的唯一作用就是存放**引导加载程序 (Bootloader)**
 
-**ESP 是所有已安装操作系统的启动程序的存放地和调度中心**
-
-
+:::note
+ESP 是所有已安装操作系统的启动程序的存放地和调度中心
+:::
 UEFI 的革命性优势
+
 1. **全新的启动方式：GPT 分区与 ESP 分区**
     - **告别 MBR，拥抱 GPT**：UEFI 不再使用 MBR，而是使用全新的 **GPT (GUID Partition Table)** 分区方案。GPT 使用 64 位地址，理论上可以支持高达 9.4 ZB (94 亿 TB) 的硬盘，彻底解决了容量限制问题。同时，它还支持多达 128 个主分区。
     - **告别固定位置，启用 ESP**：UEFI 不再去硬盘的第一个扇区找启动代码。而是在硬盘上建立一个标准化的 **EFI 系统分区 (ESP)**。所有操作系统的引导加载程序（.efi 文件）都以普通文件的形式存放在这个分区里。UEFI 固件会扫描并读取这些文件，生成一个启动菜单。这就像从“在门缝下塞纸条”升级到了“拥有一个标准的公告板”。
@@ -178,6 +212,7 @@ UEFI 的革命性优势
     - UEFI 可以加载独立的硬件驱动程序。这意味着它在操作系统启动前就能识别并使用更多的硬件，比如网卡（实现网络启动或远程诊断）。
 
 ### 2.2. efi里面的xdx
+
 Boot EFI\fedora\grubx64.efi from EFI System Partition
 我们以这个为例子，这是grub，Fedora 的主要引导加载程序 GRUB2(*GRand Unified Bootloader*)
 
@@ -191,7 +226,9 @@ Boot Fallback boot loader from EFI System Partition
 Boot vmlinuz-6.16.12-200.fc42.x86_64 from 1024 MiB ext4 Volume
 这是直接从 Linux 文件系统启动 Linux 内核。现代 Linux 内核支持一种叫 EFISTUB 的技术，允许 UEFI 固件像运行一个 .efi 程序一样，直接加载并运行内核文件
 我目前开机使用的就是这个，因为它确实快一些
+
 ## 3. System(fedora)::maybe U should know something about this
+
 ```shell
 
 $ sudo dnf update
@@ -230,9 +267,11 @@ $ rm -rf ~/.cache/*
 如果有的指令可以看看[运维组第一次授课 虚拟机和命令行 - 飞书云文档](https://njupt-sast.feishu.cn/wiki/OU2Ow2GxuiG2tVkPfLvcmfWxnEd)
 
 ## 4. Optimization(sudo)::using sudo without password
+
 因为每次用`sudo`都需要密码觉得太麻烦了，所以修改了一下
+
 ```shell
-$ sudo visudo
+sudo visudo
 ```
 
 修改了这一行
@@ -240,6 +279,7 @@ $ sudo visudo
 然后保存就行了，因为本身用户就在wheel用户组内
 
 ## 5. Optimization(auto login)::login without password
+
 系统设置-外观和样式-颜色和主题-全局主题-登录屏幕(SDDM)-右上角的“行为...”-自动登录 选择账户和前端并输入密码
 
 ## 6. Optimization(super .desktop)::快捷方式书写
@@ -259,27 +299,28 @@ Categories=Network;Office;InstantMessaging;
 ```
 
 ## 7. Optimization(tlp)::Battery
-```shell
-$ sudo dnf install tlp tlp-rdw
 
-$ sudo systemctl enable tlp.service
+```shell
+sudo dnf install tlp tlp-rdw
+
+sudo systemctl enable tlp.service
 ```
 
-
 ```shell
-$ sudo dnf copr enable sunwire/envycontrol
+sudo dnf copr enable sunwire/envycontrol
 
-$ sudo dnf install python3-envycontrol
+sudo dnf install python3-envycontrol
 
 $  sudo envycontrol -q
 hybrid
 
-$ sudo envycontrol --switch integrated # 集成显卡模式
-$ sudo envycontrol --switch hybrid # 混合模式
-$ sudo envycontrol --switch discrete # 独显直连模式
+sudo envycontrol --switch integrated # 集成显卡模式
+sudo envycontrol --switch hybrid # 混合模式
+sudo envycontrol --switch discrete # 独显直连模式
 ```
 
 ## 8. Optimization(blueman)::Bluetooth
+
 ```shell
 $ sudo dnf install bluez gnome-bluetooth
 仓库更新和加载中:
@@ -292,12 +333,15 @@ Nothing to do.
 
 但发现仍然识别不到耳机，
 于是使用另外一个包
+
 ```shell
-$ sudo dnf install blueman
+sudo dnf install blueman
 ```
+
 连接成功
 
 ## 9. Tool(neofetch)::Show your OS
+
 `fedora`的官方仓库里面是没有neofetch的，但是可以
 `sudo dnf install fastfetch`
 作为替代
@@ -305,28 +349,30 @@ $ sudo dnf install blueman
 [Installation · dylanaraps/neofetch Wiki · GitHub](https://github.com/dylanaraps/neofetch/wiki/Installation#fedora--rhel--centos--mageia--openmandriva)
 
 ## 10. Tool(bleachbit)::Rubbish Sorting
+
 ```shell
-$ sudo dnf install bleachbit
+sudo dnf install bleachbit
 ```
 
-## 11. Tool(wezTerm+fish)::Come and use wezTerm!
+## 11. Tool(wezTerm+fish)::Come and use wezTerm
 
 默认的终端应用是`konsole`,有一点不满意，于是换成了**wezTerm**+**fish**+**oh my fish**
 
 ```shell
-$ sudo dnf copr enable wezfurlong/wezterm-nightly
+sudo dnf copr enable wezfurlong/wezterm-nightly
 
-$ sudo dnf install wezterm
+sudo dnf install wezterm
 
-$ chsh -s /usr/bin/fish
+chsh -s /usr/bin/fish
 ```
 
 在[nerd fonts](https://www.nerdfonts.com/font-downloads)
 下载了FiraCode Nerd Font,解压到了`~/.fonts`文件夹
-```shell
-$ fc-cache -fv
 
-$ nano ~/.wezterm.lua
+```shell
+fc-cache -fv
+
+nano ~/.wezterm.lua
 ```
 
 ```lua
@@ -397,18 +443,17 @@ return config
 ```
 
 ```shell
-$ curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
 
-$ omf install pure
+omf install pure
 
-$ sudo dnf install fzf
-$ sudo dnf install grc
+sudo dnf install fzf
+sudo dnf install grc
 
-$ omf install fzf
-$ omf install grc
-$ omf install nvm
-$ omf install z
-
+omf install fzf
+omf install grc
+omf install nvm
+omf install z
 ```
 
 使用的是`pure`主题
@@ -417,7 +462,8 @@ $ omf install z
 ![preview](My-Fedora-Journey/pure.png)
 
 ## 12. Tool(Fcitx5)::Input method
-一开始使用了`IBus` 
+
+一开始使用了`IBus`
 其中碰到的问题例如Obsidian不能使用中文输入法
 在启动命令行参数里面添加了
 `--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime`
@@ -425,7 +471,7 @@ $ omf install z
 然后又换回了`Fcitx5`
 
 ```shell
-$ sudo dnf install fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt
+sudo dnf install fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt
 ```
 
 看有推荐使用Fcitx5 rime的，还没进行尝试
@@ -435,6 +481,7 @@ $ sudo dnf install fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fci
 它的mac主题遮罩都有明显问题，观感不好不推荐使用
 
 配置修改：
+
 - 临时在当前和第一个输入法之间切换 绑定 `Shift` 可以方便适应
 - 开启云拼音，把后端改成百度
 - 去拼音里面把前后鼻音啥的纠错打打开
@@ -442,9 +489,9 @@ $ sudo dnf install fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fci
 > 已知问题：
 > 在使用qq的时候智能使用默认的双行输入而不是单行 即使通过`ctrl`+`alt`+`P` 也不可以更改输入模式
 
-
 后续问题：
 漏字
+
 ```shell
 # /etc/environment
 GTK_IM_MODULE=fcitx
@@ -452,11 +499,12 @@ GTK_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 
 SDL_IM_MODULE=fcitx
-
 ```
+
 添加了如下环境变量
 
 ## 13. Tool(snapper)::Backup
+
 ```shell
 $ sudo dnf install snapper python3-dnf-plugin-snapper
 
@@ -479,30 +527,35 @@ $ sudo snapper list
 `sudo snapper create --description "进行重要操作前的备份"`
 
 后编：
-`btrfs`下`snapper`保存快照太狠了，s3一看发现`df -h `和 `du -h`两边差距非常大，电脑出现了几十个G的幽灵文件
+`btrfs`下`snapper`保存快照太狠了，s3一看发现`df -h`和 `du -h`两边差距非常大，电脑出现了几十个G的幽灵文件
 这一看`sudo snapper list` 发现存爆了都
 所以需要删除
-```shell
-$ sudo snapper delete --sync 1-97
-$ sudo snapper create --type single --description "手动备份-准备清理旧快照"
 
-$ sudo snapper set-config "TIMELINE_LIMIT_HOURLY=0"
-$ sudo snapper set-config "TIMELINE_LIMIT_DAILY=7"
-$ sudo snapper set-config "TIMELINE_LIMIT_MONTHLY=3"
+```shell
+sudo snapper delete --sync 1-97
+sudo snapper create --type single --description "手动备份-准备清理旧快照"
+
+sudo snapper set-config "TIMELINE_LIMIT_HOURLY=0"
+sudo snapper set-config "TIMELINE_LIMIT_DAILY=7"
+sudo snapper set-config "TIMELINE_LIMIT_MONTHLY=3"
 ```
+
 一下子干净多了
 qaq
 
 ## 14. Tool(vscode)::米奇妙妙物
+
 ```shell
-$ sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 
-$ sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
-$ sudo dnf check-update
-$ sudo dnf install code
+sudo dnf check-update
+sudo dnf install code
 ```
+
 插件: 还没有分类
+
 - Better Comments Next
 - bis
 - Bookmarks
@@ -543,20 +596,28 @@ $ sudo dnf install code
 - Swift
 - TODO Highlight
 - YAML
+
 ## 15. Tool(virtualization)::Visual Machine
+
 ```shell
-$ sudo dnf install @virtualization
+sudo dnf install @virtualization
 ```
+
 要关防火墙
+
 ```shell
-$ sudo systemctl stop firewalld
+sudo systemctl stop firewalld
 ```
+
 ps：这个防火墙真的很烦人啊
 然后还可以使用VMware Workstation
+
 ## 16. Tool(Termius)::ssh helper
+
 官方只提供了`.deb`包，因此使用snap仓库内的包
+
 ```shell
-$ sudo snap install termius-app
+sudo snap install termius-app
 ```
 
 > 此处不推荐使用flatpak,因为文件不共享会导致SFTP不好用
@@ -567,32 +628,35 @@ $ sudo snap install termius-app
 ssh 连接服务器，然后爽用
 
 ```shell
-$ sudo dnf install openssh-server
+sudo dnf install openssh-server
 
-$ sudo systemctl start sshd
+sudo systemctl start sshd
 
-$ sudo systemctl enable sshd
+sudo systemctl enable sshd
 
-$ systemctl daemon-reload
+systemctl daemon-reload
 ```
 
-
-
 ## 17. Workshop(Obsidian+Gdrive+rclone)::working with different workspaces
+
 方案：
+
 - markdown：**Obsidian+OneDrive**
 - coding：**github&gitlab**
 - [ ] TODO： CI/CD
 
 [OneDrive for linux](https://github.com/abraunegg/onedrive/blob/master/docs/install.md)
+
 ```shell
-$ sudo dnf install onedrive
+sudo dnf install onedrive
 ```
+
 OneDrive失败，**南邮管理员没开启认证**
 
 > 切换方案 Google Drive
 
 [**rclone**](https://rclone.org/)
+
 ```shell
 $ sudo -v ; curl https://rclone.org/install.sh | sudo bash
 ...
@@ -606,11 +670,11 @@ $ rclone config
 
 # 后续可以参考https://www.cnblogs.com/Undefined443/p/18615701
 ```
+
 使用方法:
 > 我的本地config命名就是 **work_space** ()
 > 所以如果config命名不一样救修改 " : "前面的那个work_space即可
 > 位置要根据自己文件存放的位置使用
-
 
 ```shell
 # 从上游拉下来
@@ -625,9 +689,9 @@ $ rclone sync -P /workshop/Blog/source/_posts  work_space:work_space/s3_workshop
 ```
 
 ```shell
-$ rclone sync -P work_space: /workshop/work_space/ --drive-root-folder-id 1gQg-FNNg2kLR8vnQMV9b5-Mqpro2roMN #下载
+rclone sync -P work_space: /workshop/work_space/ --drive-root-folder-id 1gQg-FNNg2kLR8vnQMV9b5-Mqpro2roMN #下载
 
-$ rclone sync -P /workshop/work_space/ work_space: --drive-root-folder-id 1gQg-FNNg2kLR8vnQMV9b5-Mqpro2roMN #上传
+rclone sync -P /workshop/work_space/ work_space: --drive-root-folder-id 1gQg-FNNg2kLR8vnQMV9b5-Mqpro2roMN #上传
 ```
 
 > 新的方法：
@@ -662,7 +726,7 @@ end
 
 ## 18. Environment(rust)::加入rust神教喵喵加入rust神教
 
-`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  `
+`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
 ```shell
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  
@@ -680,6 +744,7 @@ programming language, and its package manager, Cargo.
 ```
 
 直接回车就好了
+
 ```shell
 info: default toolchain set to 'stable-x86_64-unknown-linux-gnu'  
   
@@ -737,6 +802,7 @@ Copyright © 2025 Free Software Foundation, Inc.
 ```
 
 Something U can use.
+
 ```shell
 sudo dnf install cmake
 
@@ -775,6 +841,7 @@ v22.20.0
 ```
 
 ## 21. Environment(docker)::Container
+
 [Install Docker Engine on Fedora](https://docs.docker.com/engine/install/fedora/)
 
 ```shell
@@ -840,6 +907,7 @@ For more examples and ideas, visit:
 ```
 
 ## 22. Environment(k8s)::Container
+
 ```shell
 $ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
 $ sudo rpm -Uvh minikube-latest.x86_64.rpm
@@ -861,6 +929,7 @@ fish: kubectl: 未找到命令...
 $ sudo dnf install kubernetes1.34-client
 $ kubectl completion fish | source
 ```
+
 ### 22.1. k8s简单实验：nginx服务器
 
 ```shell
@@ -915,7 +984,9 @@ Commercial support is available at
 </body>
 </html>
 ```
+
 二则 多容器实验
+
 ```shell
 $ kubectl scale deployment nginx-deployment --replicas=3
 deployment.apps/nginx-deployment scaled
@@ -949,7 +1020,9 @@ $ minikube delete
 🔥  正在移除 /home/s3loy/.minikube/machines/minikube…
 💀  已删除所有关于 "minikube" 集群的痕迹。
 ```
+
 三则 多节点创建
+
 ```shell
 $ minikube start --nodes 3 -p multi-node-cluster
 😄  Fedora 42 上的 [multi-node-cluster] minikube v1.37.0
@@ -1080,40 +1153,54 @@ $ minikube delete -p multi-node-cluster
 🔥  正在移除 /home/s3loy/.minikube/machines/multi-node-cluster-m03…
 💀  已删除所有关于 "multi-node-cluster" 集群的痕迹。
 ```
+
 ### 22.2. k8s概念简单解析和minikube使用方法
+
 #### 22.2.1. k8s内重要概念
+
 - Pod (最小工作单元)
+
 > Pod 是 K8s 中可以创建和管理的最小部署单元。一个 Pod 包含一个或多个紧密相关的容器（比如一个主应用容器和一个日志收集容器）。这些容器共享同一个网络环境和存储卷，可以把它们看作一个整体。
 > 通常使用更高层管理。
+
 - Deployment (部署)
+
 > 确保指定数量的 Pod 正在运行。副本管理，滚动更新，回滚三大功能。
+
 - Service (服务)
+
 > 服务发现，会自动跟踪其后端 Pod 的变化；负载均衡，将请求优先发送到健康 Pod
+
 - Namespace (命名空间)
+
 > 资源进行逻辑上的隔离,创建的 Deployment、Service 等资源都属于某一个 Namespace。默认情况下，它们都在 default 命名空间里.
 
 #### 22.2.2. kubectl
+
 [**kube control**](https://kubernetes.io/zh-cn/docs/reference/kubectl/)用于 K8s 集群交互
 
-使用方法 
+使用方法
+
 ```shell
-$ kubectl [command] [TYPE] [NAME] [flags]
+kubectl [command] [TYPE] [NAME] [flags]
 ```
 
 ## 23. Gaming(gamemode)::Games optimize
 
 ```shell
-$ sudo dnf install gamemode
+sudo dnf install gamemode
 
-$ systemctl --user enable gamemoded.service && systemctl --user start gamemoded.service
+systemctl --user enable gamemoded.service && systemctl --user start gamemoded.service
 ```
 
-
 ## 24. Sideloading(legacy-ios-kit)
+
 [GitHub - LukeZGD/Legacy-iOS-Kit: An all-in-one tool to restore/downgrade, save SHSH blobs, jailbreak legacy iOS devices, and more](https://github.com/LukeZGD/Legacy-iOS-Kit)
 
 目前还没有使用过，但看起来是一个很好的侧载方案
+
 ## 25. Trick(Wayland-Docker-OSX)::Building macOS with docker
+
 ```shell
 $ docker run -it \                                                           
              --device /dev/kvm \
@@ -1129,7 +1216,9 @@ $ docker run -it \
 ```
 
 还没有成功，死在了盘都装好了打不开来，但因为`wayland`的`display`和`x11`有所区别,所以得参考`github`内`issues`
+
 ## 26. Trick(systemd-analyze blame)::Optimization
+
 ```shell
 ❯ systemd-analyze blame
 5.338s NetworkManager-wait-online.service
@@ -1147,6 +1236,7 @@ $ docker run -it \
 ## 27. Trick(MTU test)::Network
 
 因为发现向`google drive`上传的时候很慢，刚刚好看一下是不是这一块的问题
+
 ```shell
 $ ping -c 3 -M do -s 1453 8.8.8.8
 ping: sendmsg: 消息过长
@@ -1156,11 +1246,8 @@ $ ping -c 3 -M do -s 1452 8.8.8.8
 PING 8.8.8.8 (8.8.8.8) 1452(1480) 字节的数据。
 1460 字节，来自 8.8.8.8: icmp_seq=1 ttl=112 时间=45.7 毫秒
 ```
-顺手把`tun`模式换成了`System`,因为`System`快啊
 
-
-> 好像是因为ICMP和TCP的区别
-> 呜呜有没有大神教我计网
+顺手把`tun`模式换成了`System`,因为`System`快
 
 ## 28. Preview(Desktop)
 

@@ -1,5 +1,7 @@
 # How it works
 
-Astro + MultiTerm Astro 
+Astro + MultiTerm Astro
 
-cloudflare pages but not github pages
+cloudflare pages
+
+[Theme usage](https://multiterm.stelclementine.com/posts/showing-off-blog-features/)

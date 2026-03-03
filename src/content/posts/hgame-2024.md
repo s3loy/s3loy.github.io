@@ -5,8 +5,6 @@ tags:
   - CTF
 ---
 
-# hgame week 1 wp
-
 > *s3loy #000132 4700 pts*
 
 ## 签到
@@ -45,7 +43,7 @@ hgame{Y0ur-Can_c0nN3Ct-To_THE-reM0te_ENv1RoNMEnT_To_Get_FLAg0}
 
 > hgame{Y0ur-Can_c0nN3Ct-To_THE-reM0te_ENv1RoNMEnT_To_Get_FLAg0}
 
-### 2.从这里开始的序章。
+### 2.从这里开始的序章
 
 ctrl+C   ctrl+shift+v
 
@@ -105,9 +103,7 @@ reverse_png(input_path, output_path)
 
 > hagme{h4kyu4_w4nt_gir1f3nd_+q_931290928}
 
-
-
-###  2.Level 314 线性走廊中的双生实体
+### 2.Level 314 线性走廊中的双生实体
 
 > **观测记录 Level 314 线性走廊中的双生实体**
 >
@@ -120,7 +116,7 @@ reverse_png(input_path, output_path)
 >
 > 1. 使用标准加载协议激活实体：
 >
->     ```
+>     ```python
 >     entity = torch.jit.load('Model.pt')
 >     ```
 >
@@ -128,7 +124,7 @@ reverse_png(input_path, output_path)
 >
 > 3. 将张量输入实体以尝试激活信息：
 >
->     ```
+>     ```python
 >     output = entity(input_tensor)
 >     ```
 >
@@ -274,8 +270,6 @@ Decoy Flag (直接提取): flag{fake_flag}
 
 > flag{s0_th1s_1s_r3al_s3cr3t}
 
-
-
 ### 3.Computer cleaner
 
 > 小明的虚拟机好像遭受了攻击，你可以帮助他清理一下他的电脑吗
@@ -289,8 +283,6 @@ Decoy Flag (直接提取): flag{fake_flag}
 使用Vmware Workstation 17 打开，
 
 既然是webshell，那么就应该去看看web服务器那边的问题，因此去/var/www/html。
-
-
 
 在log里面看到攻击者目的
 
@@ -312,8 +304,6 @@ Decoy Flag (直接提取): flag{fake_flag}
 `_c0mput3r!}`
 
 > hgame{y0u_hav3_cleaned_th3_c0mput3r!}
-
-
 
 ### 4.Two wires
 
@@ -387,8 +377,8 @@ print(f"hgame{{{x1}_{x2}_{y1}_{y2}}}")
 
 那么现在的问题就是：
 
-* 上位机的`secret`和`counter`
-* 上一任拥有者的`secret`和`counter`
+- 上位机的`secret`和`counter`
+- 上一任拥有者的`secret`和`counter`
 
 那还是一步一步走。
 
@@ -409,7 +399,7 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
 
 使用IDA pro打开，
 
-<img src="hgame-2024/image-20250209203754718.png" alt="image-20250209203754718" style="zoom:50%;" />
+[image-20250209203754718](hgame-2024/image-20250209203754718.png)
 
 不过ida不能反汇编。
 
@@ -510,8 +500,6 @@ undefined2 i2cOnReceive(undefined2 param_1)
 
 此处先停止了思考。
 
-
-
 #### 2 上一任拥有者
 
 分析firmware里面的`EepromData::tryUnserialize`
@@ -522,7 +510,7 @@ undefined2 i2cOnReceive(undefined2 param_1)
 undefined2 EepromData::tryUnserialize(undefined2 param_1)
 
 {
-	...省略...
+    ...省略...
     cVar10 = '\0';
     *unaff_SP = (char)in_R15R14;
     unaff_SP[-1] = (char)((ushort)in_R15R14 >> 8);
@@ -578,7 +566,6 @@ undefined2 EepromData::tryUnserialize(undefined2 param_1)
     sVar3 = CONCAT11((char)((ushort)(puVar16 + 0x20) >> 8),(char)(puVar16 + 0x20));
     return CONCAT11(*(undefined *)(sVar3 + 3),*(undefined *)(sVar3 + 4));
 }
-
 
 ```
 
@@ -671,8 +658,6 @@ undefined2 EepromData::serialize(undefined2 param_1)
 
 `secret2` =`32 1C 31 D4 94 54 85 42 44 DE 86 CC 4A B6 DD F4 35 42 90 52`
 
-
-
 同时在这里对我有所启发。这边排序的时候先排的是`counter2`再排的`secret2`
 
 那回到前面的数据，
@@ -691,17 +676,11 @@ undefined2 EepromData::serialize(undefined2 param_1)
 
 第一个是8字节，第二个20字节，刚刚好。
 
-
-
 `secret1`=`6B 69 4F 7E 03 54 F6 C6 6A B5 1A 04 02 1B 1C 6D 7D 45 58 02`
 
-`counter1`=`01 00 00 00 93 7E CD 0D` 
+`counter1`=`01 00 00 00 93 7E CD 0D`
 
 所有数据都得到了。
-
-
-
-
 
 #### 3 数据处理和脚本编写
 
@@ -714,8 +693,6 @@ undefined2 EepromData::serialize(undefined2 param_1)
 `counter1`=`01 00 00 00 93 7E CD 0D`=`0DCD7E9300000001`=`992224077072691201`
 
 `counter2`=`92 05 00 00 17 CD 92 3A`=`3A92CD1700000592`=`4227023796868324242`
-
-
 
 ```python
 import base64
@@ -766,8 +743,6 @@ hgame{283942_633153_431432_187457}
 ```
 
 > hgame{283942_633153_431432_187457}
-
-
 
 ## Crypto
 
@@ -858,8 +833,6 @@ b'hgame{sieve_is_n0t_that_HArd}'
 '''
 ```
 
-
-
 ## Reverse
 
 ### 1.Compress dot new
@@ -921,8 +894,6 @@ Nulla nec ligula neque. Etiam et viverra nunc, vel bibendum risus. Donec.`
 不知道是什么
 
 ![image-20250210010324581](hgame-2024/image-20250210010324581.png)
-
-
 
 ### 2.Turtle
 
@@ -1120,8 +1091,6 @@ Decrypted flag: hgame{Y0u'r3_re4l1y_g3t_0Ut_of_th3_upX!}
 
 > hgame{Y0u'r3_re4l1y_g3t_0Ut_of_th3_upX!}
 
-
-
 ## Web
 
 ### 1.Level 24 Pacman
@@ -1158,8 +1127,6 @@ Decrypted flag: hgame{Y0u'r3_re4l1y_g3t_0Ut_of_th3_upX!}
 
 > hgame{u_4re_pacman_m4ster}
 
-
-
 ### 2.Level 69 MysteryMessageBoard
 
 > 在一个昏暗的空间里，存在着一块神秘的留言板，挂在虚拟墙壁上，仿佛可以窥见外界的光明。每一条信息都能带来不同的后果，但它们都被一个神秘的管理者所审视，这位管理者决定了谁能够通过这扇门，谁将永远被困在这片虚拟的牢笼中。
@@ -1176,141 +1143,141 @@ Decrypted flag: hgame{Y0u'r3_re4l1y_g3t_0Ut_of_th3_upX!}
 package main
 
 import (
-	"context"
-	"fmt"
-	"github.com/chromedp/chromedp"
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/sessions"
-	"log"
-	"net/http"
-	"sync"
-	"time"
+    "context"
+    "fmt"
+    "github.com/chromedp/chromedp"
+    "github.com/gin-gonic/gin"
+    "github.com/gorilla/sessions"
+    "log"
+    "net/http"
+    "sync"
+    "time"
 )
 
 var (
-	store = sessions.NewCookieStore([]byte("fake_key"))
-	users = map[string]string{
-		"shallot": "fake_password",
-		"admin":   "fake_password"}
-	comments []string
-	flag     = "FLAG{this_is_a_fake_flag}"
-	lock     sync.Mutex
+    store = sessions.NewCookieStore([]byte("fake_key"))
+    users = map[string]string{
+        "shallot": "fake_password",
+        "admin":   "fake_password"}
+    comments []string
+    flag     = "FLAG{this_is_a_fake_flag}"
+    lock     sync.Mutex
 )
 
 func loginHandler(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	if storedPassword, ok := users[username]; ok && storedPassword == password {
-		session, _ := store.Get(c.Request, "session")
-		session.Values["username"] = username
-		session.Options = &sessions.Options{
-			Path:     "/",
-			MaxAge:   3600,
-			HttpOnly: false,
-			Secure:   false,
-		}
-		session.Save(c.Request, c.Writer)
-		c.String(http.StatusOK, "success")
-		return
-	}
-	log.Printf("Login failed for user: %s\n", username)
-	c.String(http.StatusUnauthorized, "error")
+    username := c.PostForm("username")
+    password := c.PostForm("password")
+    if storedPassword, ok := users[username]; ok && storedPassword == password {
+        session, _ := store.Get(c.Request, "session")
+        session.Values["username"] = username
+        session.Options = &sessions.Options{
+            Path:     "/",
+            MaxAge:   3600,
+            HttpOnly: false,
+            Secure:   false,
+        }
+        session.Save(c.Request, c.Writer)
+        c.String(http.StatusOK, "success")
+        return
+    }
+    log.Printf("Login failed for user: %s\n", username)
+    c.String(http.StatusUnauthorized, "error")
 }
 func logoutHandler(c *gin.Context) {
-	session, _ := store.Get(c.Request, "session")
-	delete(session.Values, "username")
-	session.Save(c.Request, c.Writer)
-	c.Redirect(http.StatusFound, "/login")
+    session, _ := store.Get(c.Request, "session")
+    delete(session.Values, "username")
+    session.Save(c.Request, c.Writer)
+    c.Redirect(http.StatusFound, "/login")
 }
 func indexHandler(c *gin.Context) {
-	session, _ := store.Get(c.Request, "session")
-	username, ok := session.Values["username"].(string)
-	if !ok {
-		log.Println("User not logged in, redirecting to login")
-		c.Redirect(http.StatusFound, "/login")
-		return
-	}
-	if c.Request.Method == http.MethodPost {
-		comment := c.PostForm("comment")
-		log.Printf("New comment submitted: %s\n", comment)
-		comments = append(comments, comment)
-	}
-	htmlContent := fmt.Sprintf(`<html>
-		<body>
-			<h1>留言板</h1>
-			<p>欢迎，%s，试着写点有意思的东西吧，admin才不会来看你！自恋的笨蛋！</p>
-			<form method="post">
-				<textarea name="comment" required></textarea><br>
-				<input type="submit" value="提交评论">
-			</form>
-			<h3>留言:</h3>
-			<ul>`, username)
-	for _, comment := range comments {
-		htmlContent += "<li>" + comment + "</li>"
-	}
-	htmlContent += `</ul>
-			<p><a href="/logout">退出</a></p>
-		</body>
-	</html>`
-	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
+    session, _ := store.Get(c.Request, "session")
+    username, ok := session.Values["username"].(string)
+    if !ok {
+        log.Println("User not logged in, redirecting to login")
+        c.Redirect(http.StatusFound, "/login")
+        return
+    }
+    if c.Request.Method == http.MethodPost {
+        comment := c.PostForm("comment")
+        log.Printf("New comment submitted: %s\n", comment)
+        comments = append(comments, comment)
+    }
+    htmlContent := fmt.Sprintf(`<html>
+        <body>
+            <h1>留言板</h1>
+            <p>欢迎，%s，试着写点有意思的东西吧，admin才不会来看你！自恋的笨蛋！</p>
+            <form method="post">
+                <textarea name="comment" required></textarea><br>
+                <input type="submit" value="提交评论">
+            </form>
+            <h3>留言:</h3>
+            <ul>`, username)
+    for _, comment := range comments {
+        htmlContent += "<li>" + comment + "</li>"
+    }
+    htmlContent += `</ul>
+            <p><a href="/logout">退出</a></p>
+        </body>
+    </html>`
+    c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
 }
 func adminHandler(c *gin.Context) {
-	htmlContent := `<html><body>
-		<p>好吧好吧你都这么求我了~admin只好勉为其难的来看看你写了什么~才不是人家想看呢！</p>
-		</body></html>`
-	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
-	//无头浏览器模拟登录admin，并以admin身份访问/路由
-	go func() {
-		lock.Lock()
-		defer lock.Unlock()
-		ctx, cancel := chromedp.NewContext(context.Background())
-		defer cancel()
-		ctx, _ = context.WithTimeout(ctx, 20*time.Second)
-		if err := chromedp.Run(ctx, myTasks()); err != nil {
-			log.Println("Chromedp error:", err)
-			return
-		}
-	}()
+    htmlContent := `<html><body>
+        <p>好吧好吧你都这么求我了~admin只好勉为其难的来看看你写了什么~才不是人家想看呢！</p>
+        </body></html>`
+    c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
+    //无头浏览器模拟登录admin，并以admin身份访问/路由
+    go func() {
+        lock.Lock()
+        defer lock.Unlock()
+        ctx, cancel := chromedp.NewContext(context.Background())
+        defer cancel()
+        ctx, _ = context.WithTimeout(ctx, 20*time.Second)
+        if err := chromedp.Run(ctx, myTasks()); err != nil {
+            log.Println("Chromedp error:", err)
+            return
+        }
+    }()
 }
 
 // 无头浏览器操作
 func myTasks() chromedp.Tasks {
-	return chromedp.Tasks{
-		chromedp.Navigate("/login"),
-		chromedp.WaitVisible(`input[name="username"]`),
-		chromedp.SendKeys(`input[name="username"]`, "admin"),
-		chromedp.SendKeys(`input[name="password"]`, "fake_password"),
-		chromedp.Click(`input[type="submit"]`),
-		chromedp.Navigate("/"),
-		chromedp.Sleep(5 * time.Second),
-	}
+    return chromedp.Tasks{
+        chromedp.Navigate("/login"),
+        chromedp.WaitVisible(`input[name="username"]`),
+        chromedp.SendKeys(`input[name="username"]`, "admin"),
+        chromedp.SendKeys(`input[name="password"]`, "fake_password"),
+        chromedp.Click(`input[type="submit"]`),
+        chromedp.Navigate("/"),
+        chromedp.Sleep(5 * time.Second),
+    }
 }
 
 func flagHandler(c *gin.Context) {
-	log.Println("Handling flag request")
-	session, err := store.Get(c.Request, "session")
-	if err != nil {
-		c.String(http.StatusInternalServerError, "无法获取会话")
-		return
-	}
-	username, ok := session.Values["username"].(string)
-	if !ok || username != "admin" {
-		c.String(http.StatusForbidden, "只有admin才可以访问哦")
-		return
-	}
-	log.Println("Admin accessed the flag")
-	c.String(http.StatusOK, flag)
+    log.Println("Handling flag request")
+    session, err := store.Get(c.Request, "session")
+    if err != nil {
+        c.String(http.StatusInternalServerError, "无法获取会话")
+        return
+    }
+    username, ok := session.Values["username"].(string)
+    if !ok || username != "admin" {
+        c.String(http.StatusForbidden, "只有admin才可以访问哦")
+        return
+    }
+    log.Println("Admin accessed the flag")
+    c.String(http.StatusOK, flag)
 }
 func main() {
-	r := gin.Default()
-	r.GET("/login", loginHandler)
-	r.POST("/login", loginHandler)
-	r.GET("/logout", logoutHandler)
-	r.GET("/", indexHandler)
-	r.GET("/admin", adminHandler)
-	r.GET("/flag", flagHandler)
-	log.Println("Server started at :8888")
-	log.Fatal(r.Run(":8888"))
+    r := gin.Default()
+    r.GET("/login", loginHandler)
+    r.POST("/login", loginHandler)
+    r.GET("/logout", logoutHandler)
+    r.GET("/", indexHandler)
+    r.GET("/admin", adminHandler)
+    r.GET("/flag", flagHandler)
+    log.Println("Server started at :8888")
+    log.Fatal(r.Run(":8888"))
 }
 
 ```
@@ -1357,8 +1324,6 @@ func main() {
 
 > hgame{W0w_y0u_5r4_9o0d_4t_xss}
 
-
-
 ### 3.Level 38475 角落
 
 > 这里被称为“角落（The Corner）”，仿佛是某个庞大迷宫中被遗漏的碎片。
@@ -1377,12 +1342,12 @@ func main() {
 
 然后继续访问了`/app.conf`
 
-```
+```conf
 # Include by httpd.conf
 <Directory "/usr/local/apache2/app">
-	Options Indexes
-	AllowOverride None
-	Require all granted
+    Options Indexes
+    AllowOverride None
+    Require all granted
 </Directory>
 
 <Files "/usr/local/apache2/app/app.py">
@@ -1446,46 +1411,42 @@ pwd = os.path.dirname(__file__)
 show_msg = templates.show_msg
 
 def readmsg():
-	filename = pwd + "/tmp/message.txt"
-	if os.path.exists(filename):
-		f = open(filename, 'r')
-		message = f.read()
-		f.close()
-		return message
-	else:
-		return 'No message now.'
+    filename = pwd + "/tmp/message.txt"
+    if os.path.exists(filename):
+        f = open(filename, 'r')
+        message = f.read()
+        f.close()
+        return message
+    else:
+        return 'No message now.'
 
 @app.route('/index', methods=['GET'])
 def index():
-	status = request.args.get('status')
-	if status is None:
-		status = ''
-	return render_template("index.html", status=status)
+    status = request.args.get('status')
+    if status is None:
+        status = ''
+    return render_template("index.html", status=status)
 
 @app.route('/send', methods=['POST'])
 def write_message():
-	filename = pwd + "/tmp/message.txt"
-	message = request.form['message']
-	f = open(filename, 'w')
-	f.write(message) 
-	f.close()
-	return redirect('index?status=Send successfully!!')
-	
+    filename = pwd + "/tmp/message.txt"
+    message = request.form['message']
+    f = open(filename, 'w')
+    f.write(message) 
+    f.close()
+    return redirect('index?status=Send successfully!!')
+    
 @app.route('/read', methods=['GET'])
 def read_message():
-	if "{" not in readmsg():
-		show = show_msg.replace("{{message}}", readmsg())
-		return render_template_string(show)
-	return 'waf!!'
+    if "{" not in readmsg():
+        show = show_msg.replace("{{message}}", readmsg())
+        return render_template_string(show)
+    return 'waf!!'
 
 if __name__ == '__main__':
-	app.run(host = '0.0.0.0', port = 5000)
+    app.run(host = '0.0.0.0', port = 5000)
 '''
 ```
-
-
-
-
 
 exp
 
@@ -1538,11 +1499,7 @@ if __name__ == '__main__':
 
 > hgame{y0u_fInd_the-K3Y_To-RrR@cE-0UuUUt2ce20df}
 
-# hgame week2 wp
-
-> *s3loy #000132 **No.53**5866 pts*
-
-## Misc
+## Week 2
 
 ### 1.Computer cleaner plus
 
@@ -1562,9 +1519,7 @@ if __name__ == '__main__':
 >
 > - “这里的‘Hint #*x*’是哪个hint？（*x*替换为你喜欢的非负整数）” -- 由你自己来发现。
 > - “不会出现负收益的中间状态吗？” -- 无舍即无得。但我们保证解出赛题的收益是非负的。
-
 > 求解本题无需使用暴力枚举。请选手确保在解题过程中不存在暴力枚举行为。
-
 > 本题不设置血分。自动计算的血分将由工作人员扣除。
 
 每个 Hint 按原串顺序包含以下位（个位代表原串的第一个字符）。
