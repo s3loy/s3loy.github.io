@@ -2,7 +2,7 @@
 title: Go
 published: 2026-03-03T15:00:00
 tags:
-  - go
+  - golang
 series: "Backend"
 ---
 :::warning
@@ -72,5 +72,7 @@ b.data 可能逃逸 → 整个 slice 逃逸 → 堆分配
 > 不允许你覆盖分析结果
 
 它只允许用于汇编实现函数,runtime 内部函数,cgo 桥接函数xwx
+
+### go:uintptrescapes
 
 - [ ] To Be Continued

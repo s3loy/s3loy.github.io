@@ -1342,7 +1342,7 @@ func main() {
 
 然后继续访问了`/app.conf`
 
-```conf
+```txt
 # Include by httpd.conf
 <Directory "/usr/local/apache2/app">
     Options Indexes
