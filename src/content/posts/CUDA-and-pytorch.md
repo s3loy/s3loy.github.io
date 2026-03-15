@@ -7,9 +7,6 @@ tags:
   - python
 ---
 
-
-# 1. 在win系统上安装pytorch
-
 ## 1.1. Step 1 安装Conda
 
 [Download Now | Anaconda](https://www.anaconda.com/download/success)
@@ -26,13 +23,13 @@ tags:
 
 如果不想配置环境变量就选`All Users`吧。
 
-![](CUDA-and-pytorch/image-20250218235016076-1740145143701-1.png)
+![setup1](CUDA-and-pytorch/image-20250218235016076-1740145143701-1.png)
 
 然后推荐找个不是C盘的地方下
 
-![](CUDA-and-pytorch/image-20250218235145695-1740145143701-2.png)
+![setup2](CUDA-and-pytorch/image-20250218235145695-1740145143701-2.png)
 
-![](CUDA-and-pytorch/image-20250218235447531-1740145143701-4.png)
+![setup3](CUDA-and-pytorch/image-20250218235447531-1740145143701-4.png)
 
 安装时间也许会比较长，别急。
 
@@ -42,8 +39,6 @@ tags:
 conda --version
 conda 25.1.1
 ```
-
-
 
 因为我后面要玩`d2l`，所以就用`conda`创建了一个环境
 
@@ -62,8 +57,6 @@ conda 25.1.1
 `conda deactivate`
 
 这样就回去了，不过你直接关掉重开也不是不行（
-
-
 
 ## 1.2. Step 2 CUDA
 
@@ -88,21 +81,21 @@ Wed Feb 19 00:07:11 2025
 
 这边可以看到CUDA的版本
 
-到https://developer.nvidia.com/cuda-downloads里面去
+到[CUDA Toolkit download](https://developer.nvidia.com/cuda-downloads)里面去
 
-![](CUDA-and-pytorch/image-20250219000853416-1740145143701-3.png)
+![choice](CUDA-and-pytorch/image-20250219000853416-1740145143701-3.png)
 
 然后根据版本选一下，本地跑别乱选`network`
 
 然后点`Download`就行了
 
-![](CUDA-and-pytorch/image-20250219001030527-1740145143701-5.png)
+![cuda setup](CUDA-and-pytorch/image-20250219001030527-1740145143701-5.png)
 
 下载好的ok就行了，这步只是解压不是安装。
 
 网上看教程说
 
-![](CUDA-and-pytorch/image-20250219001140813-1740145143701-6.png)
+![大坑](CUDA-and-pytorch/image-20250219001140813-1740145143701-6.png)
 
 我确实没勾这个，但是我下面的几个选项还是都装了。
 
@@ -201,7 +194,7 @@ Result = PASS
 
 试一下`nvcc -V`
 
-![](CUDA-and-pytorch/876ee5e3b3266e2d56bdd5b30a2809cf-1739898997106-5-1740145143702-7.png)
+![test](CUDA-and-pytorch/876ee5e3b3266e2d56bdd5b30a2809cf-1739898997106-5-1740145143702-7.png)
 
 ## 1.3. Step 3 安装Pytorch
 
@@ -211,7 +204,7 @@ Result = PASS
 
 [PyTorch](https://pytorch.org/)打开这个网站，
 
-![](CUDA-and-pytorch/image-20250219004200322-1740145143702-9.png)
+![pytorch download](CUDA-and-pytorch/image-20250219004200322-1740145143702-9.png)
 
 选好要下载的，复制好下面这个`Run this Command`
 
@@ -219,7 +212,7 @@ Result = PASS
 
 ~~需要魔法，否则可能会给你装疯，而且在查阅资料的时候发现用镜像有概率不能识别pytorch，即使你的pytorch是你的pytorch，但是你的pytorch不是你的pytorch~~
 
-![](CUDA-and-pytorch/6dbdeed45283dcad3a1c1f91a769f6b3-1740145143702-8.png)
+![process](CUDA-and-pytorch/6dbdeed45283dcad3a1c1f91a769f6b3-1740145143702-8.png)
 
 报警告不用慌张，不影响使用。如果是这样就安装好了。
 
@@ -245,13 +238,8 @@ Result = PASS
 
 大概就活了。
 
-![](CUDA-and-pytorch/28dcd3a09bb512143de46b300b9d95e7-1740145143702-10.png)
+![彳亍](CUDA-and-pytorch/28dcd3a09bb512143de46b300b9d95e7-1740145143702-10.png)
 
 `exit()`退出去
 
 简单的`pytorch`就装好了
-
-
-
-
-

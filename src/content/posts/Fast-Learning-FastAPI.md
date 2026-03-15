@@ -6,9 +6,6 @@ tags:
   - backend
 ---
 
-
-# 1. FastAPI
-
 `pip install fastapi uvicorn`
 
 ## 1.1. part 1 **简单创建**
@@ -38,9 +35,9 @@ async def read_item(item_id: int):
     return {"item_id": item_id}
 ```
 
-此时访问http://127.0.0.1:8000/items/5    ，会发现返回了`{"item_id":5}`,
+此时访问`http://127.0.0.1:8000/items/5`    ，会发现返回了`{"item_id":5}`,
 
-如果访问的是[127.0.0.1:8000/items/sast ](http://127.0.0.1:8000/items/sast)   ，会发现返回的是`{"detail":[{"type":"int_parsing","loc":["path","item_id"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"sast"}]}`
+如果访问的是[127.0.0.1:8000/items/sast](http://127.0.0.1:8000/items/sast)   ，会发现返回的是`{"detail":[{"type":"int_parsing","loc":["path","item_id"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"sast"}]}`
 
 我们在`item_id`处使用注解要求其为`int`类型，能看到它会自动检验。
 
@@ -53,11 +50,11 @@ def read_fake_item(skip: int = 0, limit: int = 10):
     return fake_items_db[skip : skip + limit]
 ```
 
-此时访问http://127.0.0.1:8000/items/?skip=0&limit=2    ，会发现返回是`[{"item_name":"Foo"},{"item_name":"Bar"}]`
+此时访问`http://127.0.0.1:8000/items/?skip=0&limit=2`，会发现返回是`[{"item_name":"Foo"},{"item_name":"Bar"}]`
 
 ## 1.2. part 2 **响应模型**
 
-**请求体和 Pydantic 模型**
+### 请求体和 Pydantic 模型
 
 为了定义请求体的结构，FastAPI 使用了 Pydantic 库。
 
@@ -172,7 +169,7 @@ async def read_users(commons: CommonsDep):
     return response
 ```
 
-现在，`/items/ `和 ``/users/`` 两个端点都拥有了同样的分页和查询能力，而我们只写了一次核心逻辑。这就是依赖注入最直观的好处。
+现在，`/items/`和 `/users/` 两个端点都拥有了同样的分页和查询能力，而我们只写了一次核心逻辑。这就是依赖注入最直观的好处。
 
 ### 1.3.2. 依赖项作为“守卫”
 
@@ -204,8 +201,6 @@ async def read_protected_route():
 ## 1.4. part 4 组织大型应用
 
 当API越来越多，把所有东西都写在同一个 `main.py` 文件里会变得难以维护。`APIRouter` 允许你将API按功能模块拆分到不同的文件中。
-
-
 
 文件树如下
 
@@ -362,10 +357,8 @@ if __name__ =='__main__':
     uvicorn.run(app)
 ```
 
->   **思考**：目前items和users的数据是完全隔离的，并且每次服务器重启都会丢失。在真实应用中，这些数据应该存放在一个共享的、持久化的数据库中。接下来，我们将学习如何将FastAPI与真实数据库连接起来。
+> **思考**：目前items和users的数据是完全隔离的，并且每次服务器重启都会丢失。在真实应用中，这些数据应该存放在一个共享的、持久化的数据库中。接下来，我们将学习如何将FastAPI与真实数据库连接起来。
 
 ## 1.5. part 5 异步数据库操作
 
-到目前为止，我们都使用`Python`列表或字典作为假数据库。现在，我们将学习如何将`FastAPI`与一个真正的SQL数据库（以`PostgreSQL`为例）进行异步交互。
-
--   [ ] To be continued
+这边咕咕掉了
