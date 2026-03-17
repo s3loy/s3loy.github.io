@@ -1,0 +1,397 @@
+---
+import Layout from '~/layouts/Layout.astro'
+import PageHeader from '~/components/PageHeader.astro'
+import { dateString, getSortedPosts, TagsGroup } from '~/utils'
+import { slug } from 'github-slugger'
+
+const sortedPosts = await getSortedPosts()
+const posts = [...sortedPosts].reverse()
+const totalPosts = posts.length
+
+const tagsGroup = await TagsGroup.build(posts)
+const tagCollations = tagsGroup.sortCollationsLargest()
+
+const postsByYear = posts.reduce(
+  (groups, post) => {
+    const year = post.data.published.getFullYear().toString()
+    if (!groups[year]) {
+      groups[year] = []
+    }
+    groups[year].push(post)
+    return groups
+  },
+  {} as Record<string, typeof posts>,
+)
+
+const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a))
+---
+
+<Layout title="Archives" description="Compact timeline of all posts">
+  <div class="mt-2 sm:mt-0">
+    <PageHeader title="archives" />
+    <p class="archives-total mt-5 mb-3">
+      there are <span id="archives-total-count">{totalPosts}</span> posts in total.
+    </p>
+
+    <section class="archive-filters">
+      <div class="filter-row">
+        <span class="filter-label">tags</span>
+        <div class="filter-chips">
+          <a class="filter-chip" data-kind="tag" data-value="all" href="/archives">all</a>
+          {
+            tagCollations.map((tag) => (
+              <a
+                class="filter-chip"
+                data-kind="tag"
+                data-value={tag.titleSlug}
+                href={`/archives?tag=${encodeURIComponent(tag.titleSlug)}`}
+              >
+                {tag.title}
+                <span class="chip-count">{tag.entries.length}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <div class="archive-years mt-6" id="archive-years">
+      {
+        years.map((year) => (
+          <section class="archive-year" data-year>
+            <h2 class="archive-year-title">{year}</h2>
+            <ul class="archive-list">
+              {postsByYear[year].map((post) => {
+                const postTagSlugs = (post.data.tags || []).map((tag) => slug(tag.trim()))
+                return (
+                  <li
+                    class="archive-item"
+                    data-post
+                    data-tags={postTagSlugs.join(',')}
+                  >
+                    <time class="archive-date">{dateString(post.data.published).slice(5)}</time>
+                    <a class="archive-link" href={`/posts/${post.id}`}>
+                      {post.data.title}
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const params = new URLSearchParams(window.location.search)
+  let activeTag = params.get('tag') ?? 'all'
+
+  const chips = Array.from(document.querySelectorAll('.filter-chip'))
+  const posts = Array.from(document.querySelectorAll('[data-post]'))
+  const yearBlocks = Array.from(document.querySelectorAll('[data-year]'))
+  const totalCount = document.getElementById('archives-total-count')
+  let displayedCount = Number(totalCount?.textContent || '0')
+
+  const setActiveChipStyles = () => {
+    chips.forEach((chip) => {
+      const value = chip.getAttribute('data-value')
+      const selected = value === activeTag
+      chip.setAttribute('data-active', selected ? 'true' : 'false')
+    })
+  }
+
+  const applyFilters = () => {
+    let visibleCount = 0
+    posts.forEach((post) => {
+      const postTags = (post.getAttribute('data-tags') || '').split(',').filter(Boolean)
+
+      const matchesTag = activeTag === 'all' || postTags.includes(activeTag)
+      const visible = matchesTag
+
+      post.classList.toggle('is-hidden', !visible)
+      post.setAttribute('aria-hidden', visible ? 'false' : 'true')
+      if (visible) visibleCount += 1
+    })
+
+    yearBlocks.forEach((year) => {
+      const visiblePosts = year.querySelectorAll('[data-post]:not(.is-hidden)')
+      year.classList.toggle('is-hidden', visiblePosts.length === 0)
+    })
+
+    if (totalCount) {
+      const start = displayedCount
+      const end = visibleCount
+      const duration = 380
+      const startTime = performance.now()
+      totalCount.classList.add('is-updating')
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - startTime) / duration)
+        const eased = 1 - (1 - progress) * (1 - progress)
+        const nextValue = Math.round(start + (end - start) * eased)
+        totalCount.textContent = String(nextValue)
+        if (progress < 1) {
+          requestAnimationFrame(step)
+        } else {
+          displayedCount = end
+          totalCount.classList.remove('is-updating')
+        }
+      }
+      requestAnimationFrame(step)
+    }
+    setActiveChipStyles()
+  }
+
+  const syncUrl = () => {
+    const next = new URLSearchParams()
+    if (activeTag !== 'all') next.set('tag', activeTag)
+    const query = next.toString()
+    const nextUrl = query ? `/archives?${query}` : '/archives'
+    window.history.replaceState({}, '', nextUrl)
+  }
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', (event) => {
+      event.preventDefault()
+      const value = chip.getAttribute('data-value') || 'all'
+      activeTag = value
+
+      syncUrl()
+      applyFilters()
+    })
+  })
+
+  applyFilters()
+</script>
+
+<style>
+  .archives-total {
+    color: color-mix(in oklab, var(--theme-foreground) 90%, transparent);
+  }
+
+  #archives-total-count {
+    display: inline-block;
+    min-width: 1.5ch;
+    color: var(--theme-accent);
+    transition:
+      transform 180ms ease,
+      color 180ms ease;
+  }
+
+  #archives-total-count.is-updating {
+    transform: translateY(-1px);
+    color: color-mix(in oklab, var(--theme-accent) 70%, white 30%);
+  }
+
+  .archive-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    border-top: 1px solid color-mix(in oklab, var(--theme-accent) 16%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--theme-accent) 16%, transparent);
+    padding: 0.75rem 0;
+  }
+
+  .filter-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    text-transform: lowercase;
+    opacity: 0.85;
+    min-width: 3.7rem;
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.16rem 0.62rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklab, var(--theme-accent) 20%, transparent);
+    background: color-mix(in oklab, var(--theme-accent) 1%, transparent);
+    color: color-mix(in oklab, var(--theme-accent) 88%, var(--theme-foreground) 12%);
+    text-decoration: none;
+    line-height: 1.2;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease;
+  }
+
+  .filter-chip[data-active='true'] {
+    border-color: color-mix(in oklab, var(--theme-accent) 45%, transparent);
+    background: color-mix(in oklab, var(--theme-accent) 10%, transparent);
+    color: var(--theme-accent);
+  }
+
+  .chip-count {
+    opacity: 0.8;
+    font-size: 0.8rem;
+  }
+
+  .archive-years {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .archive-year {
+    display: grid;
+    grid-template-columns: minmax(4rem, auto) 1fr;
+    gap: 0.3rem 1rem;
+    align-items: start;
+    padding-top: 0.35rem;
+    max-height: 120rem;
+    opacity: 1;
+    overflow: hidden;
+    transition:
+      opacity 260ms ease,
+      max-height 340ms ease,
+      padding-top 260ms ease,
+      border-color 260ms ease;
+  }
+
+  .archive-year + .archive-year {
+    border-top: 1px solid color-mix(in oklab, var(--theme-accent) 16%, transparent);
+    padding-top: 0.6rem;
+  }
+
+  .archive-year.is-hidden {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    border-top-color: transparent;
+    pointer-events: none;
+  }
+
+  .archive-year-title {
+    margin: 0;
+    font-size: 1.06rem;
+    line-height: 1.35;
+    color: var(--theme-heading2);
+    letter-spacing: 0.02em;
+  }
+
+  .archive-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.05rem 0 0 0;
+    display: grid;
+    gap: 0.15rem;
+    position: relative;
+  }
+
+  .archive-list::before {
+    content: '';
+    position: absolute;
+    left: 0.33rem;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    width: 1px;
+    background: color-mix(in oklab, var(--theme-accent) 26%, transparent);
+  }
+
+  .archive-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0.1rem 0.45rem 0.1rem 1.1rem;
+    max-height: 2.3rem;
+    opacity: 1;
+    transform: translateY(0);
+    overflow: hidden;
+    position: relative;
+    border-radius: 0.45rem;
+    transition:
+      opacity 260ms ease,
+      transform 260ms ease,
+      max-height 340ms ease,
+      padding 260ms ease,
+      background-color 140ms ease;
+  }
+
+  .archive-item::before {
+    content: '';
+    position: absolute;
+    left: 0.08rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklab, var(--theme-accent) 46%, transparent);
+    background: color-mix(in oklab, var(--theme-accent) 20%, transparent);
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease,
+      transform 140ms ease;
+  }
+
+  .archive-item:hover {
+    background: color-mix(in oklab, var(--theme-accent) 7%, transparent);
+  }
+
+  .archive-item:hover::before {
+    border-color: color-mix(in oklab, var(--theme-accent) 70%, transparent);
+    background: color-mix(in oklab, var(--theme-accent) 36%, transparent);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .archive-item.is-hidden {
+    opacity: 0;
+    transform: translateY(-5px);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    pointer-events: none;
+  }
+
+  .archive-date {
+    width: 5ch;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in oklab, var(--theme-foreground) 65%, transparent);
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+
+  .archive-link {
+    text-decoration: none;
+    color: color-mix(in oklab, var(--theme-link) 90%, var(--theme-foreground) 10%);
+    line-height: 1.35;
+    transition: color 120ms ease;
+  }
+
+  .archive-link:hover {
+    text-decoration: underline;
+    color: var(--theme-link);
+  }
+
+  @media (max-width: 640px) {
+    .archive-year {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .archive-year,
+    .archive-item,
+    .archive-link,
+    #archives-total-count {
+      transition: none !important;
+    }
+  }
+</style>

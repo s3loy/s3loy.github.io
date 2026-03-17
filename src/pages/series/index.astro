@@ -1,0 +1,71 @@
+---
+import Layout from '~/layouts/Layout.astro'
+import PageHeader from '~/components/PageHeader.astro'
+import { SeriesGroup, dateString } from '~/utils'
+
+const seriesGroup = await SeriesGroup.build()
+const seriesList = seriesGroup.sortCollationsMostRecent()
+---
+
+<Layout title="Series" description="All series">
+  <div class="mt-2 sm:mt-0">
+    <PageHeader title="series" />
+    <p class="mt-5 mb-4 text-foreground/90">
+      there are {seriesList.length} series in total.
+    </p>
+
+    <ul class="series-index-list">
+      {
+        seriesList.map((series) => {
+          const posts = [...series.entries].reverse()
+          const latest = posts[0]
+          return (
+            <li class="series-index-item">
+              <a class="series-link" href={series.url}>
+                {series.title}
+              </a>
+              <span class="series-meta">
+                {series.entries.length} posts
+                {latest && ` · latest ${dateString(latest.data.published)}`}
+              </span>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</Layout>
+
+<style>
+  .series-index-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .series-index-item {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    border-top: 1px solid color-mix(in oklab, var(--theme-accent) 16%, transparent);
+    padding-top: 0.6rem;
+  }
+
+  .series-link {
+    text-decoration: none;
+    color: var(--theme-link);
+    font-size: 1.1rem;
+  }
+
+  .series-link:hover {
+    text-decoration: underline;
+  }
+
+  .series-meta {
+    color: color-mix(in oklab, var(--theme-foreground) 72%, transparent);
+    font-size: 0.95rem;
+  }
+</style>
