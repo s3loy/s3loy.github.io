@@ -4,6 +4,3 @@ avatarImage:
   alt: 'My avatar'
 ---
 
-# xwx
-
-More espresso, less depresso.

@@ -1232,23 +1232,3 @@ $ docker run -it \
 
 感觉性能优化的时候用得到
 ```
-
-## 27. Trick(MTU test)::Network
-
-因为发现向`google drive`上传的时候很慢，刚刚好看一下是不是这一块的问题
-
-```shell
-$ ping -c 3 -M do -s 1453 8.8.8.8
-ping: sendmsg: 消息过长
-PING 8.8.8.8 (8.8.8.8) 1453(1481) 字节的数据。
-
-$ ping -c 3 -M do -s 1452 8.8.8.8
-PING 8.8.8.8 (8.8.8.8) 1452(1480) 字节的数据。
-1460 字节，来自 8.8.8.8: icmp_seq=1 ttl=112 时间=45.7 毫秒
-```
-
-顺手把`tun`模式换成了`System`,因为`System`快
-
-## 28. Preview(Desktop)
-
-![desktop](My-Fedora-Journey/desktop.png)
