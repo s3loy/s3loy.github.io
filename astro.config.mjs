@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap'
 import mdx from '@astrojs/mdx'
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeMermaid from 'rehype-mermaid'
 import expressiveCode from 'astro-expressive-code'
 import siteConfig from './src/site.config'
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
@@ -12,7 +13,6 @@ import remarkDescription from './src/plugins/remark-description' /* Add descript
 import remarkReadingTime from './src/plugins/remark-reading-time' /* Add reading time to frontmatter */
 import rehypeTitleFigure from './src/plugins/rehype-title-figure' /* Wraps titles in figures */
 import { remarkGithubCard } from './src/plugins/remark-github-card'
-import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import rehypeExternalLinks from 'rehype-external-links'
 import remarkDirective from 'remark-directive' /* Handle ::: directives as nodes */
 import rehypeUnwrapImages from 'rehype-unwrap-images'
@@ -30,6 +30,10 @@ export default defineConfig({
   trailingSlash: siteConfig.trailingSlashes ? 'always' : 'never',
   prefetch: true,
   markdown: {
+    syntaxHighlight: {
+      type: 'shiki',
+      excludeLangs: ['mermaid'],
+    },
     remarkPlugins: [
       [remarkDescription, { maxChars: 200 }],
       remarkReadingTime,
@@ -43,6 +47,7 @@ export default defineConfig({
     ],
     rehypePlugins: [
       [rehypeHeadingIds, { headingIdCompat: true }],
+      [rehypeMermaid, { strategy: 'pre-mermaid' }],
       [rehypeAutolinkHeadings, { behavior: 'wrap' }],
       rehypeTitleFigure,
       [

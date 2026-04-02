@@ -334,6 +334,21 @@ article img {
     }
   }
 
+  pre.mermaid {
+    @apply my-8 overflow-x-auto rounded-xl border-2 border-foreground/8 bg-foreground/4 p-4 text-sm;
+    white-space: pre-wrap;
+  }
+
+  pre.mermaid[data-mermaid-rendered='true'] {
+    white-space: normal;
+  }
+
+  pre.mermaid svg {
+    @apply block h-auto;
+    margin-inline: auto;
+    max-width: 100%;
+  }
+
   ul,
   ol {
     @apply pl-8 sm:pl-9.5;
