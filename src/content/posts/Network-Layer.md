@@ -3,8 +3,7 @@ title: Network Layer
 published: 2025-02-24T12:00:00
 tags:
   - network
-  - "408"
-series: "计算机网络"
+series: "Computer Network"
 ---
 
 > 网络层是`OSI`模型中的第三层，它负责在不同网络之间（端到端）提供数据包的路由和转发。网络互联的本质是通过`IP`协议实现的，而数据传输的基本单元是`IP`数据报。本章将详细介绍网络层的核心协议与技术。

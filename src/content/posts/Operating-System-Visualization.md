@@ -306,4 +306,7 @@ sequenceDiagram
     OS->>OS: 回收资源（内存/PCB）
 ```
 
-正在缓慢更新中qwq
+但是这个方法在虚拟化CPU的时候会有问题
+
+咕咕咕 ing
+最近很忙

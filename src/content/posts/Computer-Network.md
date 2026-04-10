@@ -3,8 +3,7 @@ title: Computer Network
 published: 2025-10-28
 tags:
   - network
-  - "408"
-series: "计算机网络"
+series: "Computer Network"
 ---
 
 ## 网络全貌 / Network Overview
