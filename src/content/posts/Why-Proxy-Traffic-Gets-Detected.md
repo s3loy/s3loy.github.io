@@ -1,25 +1,566 @@
 ---
-title: Why Proxy Traffic Gets Detected
+title: Why-Proxy-Traffic-Gets-Detected
 published: 2026-04-09T10:00:00
+
 tags:
   - proxy
   - network
 ---
 
 :::warning
-本文仅知识拓展，无任何不良影响
+本文只讨论公开论文、协议标准、公开泄漏分析里已经出现过的机制
 :::
 
 ## 序
 
-Q: *代理流量为啥会被检测出来*
+> 代理流量有特征,所以会被发现
 
-要回答这个问题，我们需要简单理清概念
+说点大家不知道的
 
-何为代理，代理流量机制，如何检测，代理协议发展趋势
+但随着时间的演变,技术也都在不断改进
 
-## 何 代理
+- 代理协议一直在换壳
+- 审查系统也一直在换抓手
 
-如果想看全一点的就看[Proxy Server](/posts/proxy-server)
+**协议怎么变,审查就怎么跟着变。**
 
-不过不想说那么多
+```mermaid
+graph LR
+    subgraph Pipeline [核心检测流水线]
+        direction LR
+        A[<b>流量观测</b><br/>IP / 端口 / ASN<br/>首包特征<br/>握手形态] --> B[<b>候选集粗筛</b><br/>异常端点行为<br/>异常信息熵值<br/>异常握手序列]
+        B --> C[<b>探测与确认</b><br/>主动探测<br/>短期阻断测试<br/>多维度复测]
+        C --> D[<b>规则与资产库</b><br/>流量指纹特征库<br/>动态黑白名单<br/>集群状态同步]
+    end
+
+    E[<b>服务端 / 产品画像</b><br/>协议族推断<br/>应用或厂商识别<br/>云服务/网段归属] --> B
+    F[<b>用户行为画像</b><br/>已知代理用户标记<br/>新代理服务发现<br/>行为与设备关联图谱] --> D
+
+    class A,B,C,D box;
+    class E auxiliary;
+    class F auxiliary2;
+```
+
+## 密文之前
+
+你是如何看待“流量被检测”的
+
+有个大系统坐在那里,把你的密文拆开、看懂、分类、下结论
+
+现实世界里当然也有更重的检查,但大规模系统要稳定运行下去,机制通常都很朴素：
+
+1. 挑出可疑目标
+2. 决定是否多花成本
+3. 讲确认过的沉淀成规则、指纹、名单、画像
+4. 减少后续处理时间
+
+所以“被检测”在很多时候更接近这些状态：
+
+- 进了候选集
+- 被打了主动探针
+- 被触发短时残余封锁
+- 被归进某种协议 / 某个产品 / 某家服务商的指纹库
+- 被挂到用户画像或服务器画像里
+
+这就带来一个很关键的事实：**payload 黑下来以后,shape 还在**
+
+网络上依旧能看到很多东西：
+
+- `IP / Port / AS`
+- 第一包长度
+- 第一包像不像正常协议
+- 握手字段顺序如何
+- 有没有很稳定的实现习惯
+- 包长分布和时序是否合理
+- 这个端点以前有没有上过名单
+- 这个用户以前有没有被标过
+
+于是问题就变成了：**代理到底把哪一层藏住了,又把哪一层留在了外面**
+
+## 从零开始的打代理生活: 显式代理和固定端点
+
+很早期的代理其实挺诚实的
+
+显式 `HTTP proxy` 会有 `CONNECT`,`SOCKS5` 会有自己的 greeting,目标端点也常常很固定
+
+如果一个代理服务长期挂在某个云厂商、某个热门端口、某个已经被重点盯住的网段上,它先天就比普通业务更容易进候选集
+
+这一步看起来土,实际很有用
+
+因为“端点发现”本来就是最便宜的一层筛选
+
+早期的 `Tor` 也绕不过这个问题
+
+:::note
+[What is Tor](https://zh.wikipedia.org/wiki/Tor)
+源于“The Onion Router”（洋葱路由）的英语缩写,实现匿名通信的自由软件
+:::
+
+```mermaid
+sequenceDiagram
+    participant U as 用户客户端
+    participant D as 公开目录
+    participant G as Guard/入口节点
+    participant M as 中继节点
+    participant E as 出口节点
+    participant S as 目标网站
+
+    U->>D: 获取网络共识与入口信息
+    U->>G: 连接入口节点
+    G->>M: 转发流量
+    M->>E: 转发流量
+    E->>S: 访问目标网站
+    S-->>E: 返回响应
+    E-->>M: 回传数据
+    M-->>G: 回传数据
+    G-->>U: 返回给用户
+```
+
+这一阶段的关键问题很直接：入口一旦可枚举，就可以被集中封锁
+2012 年 Phil Winter 和 Stefan Lindskog 的研究已经把这个阶段描述得很清楚：早期 GFW 可以通过字符串匹配和 IP 封锁，直接打掉一批 Tor 入口
+参考：[How the Great Firewall of China Is Blocking Tor](https://www.usenix.org/sites/default/files/conference/protected-files/winter_foci12_slides.pdf)
+
+所以这条演进线非常自然：
+
+入口公开 → 容易被封
+开始“藏入口”（Bridge）
+再进一步给流量加外壳（如 TLS 封装）
+对抗焦点从“明文特征”转向“握手指纹、实现细节、时序与主动探测”
+
+## re:从零开始的打代理生活: TLS 握手
+
+`Tor bridge` 的思路很直接：
+
+既然公开 relay 容易被一锅端,那就把入口做小、做散、做私有
+
+```mermaid
+sequenceDiagram
+    participant U as 用户客户端
+    participant B as Bridge
+    participant C as 审查方
+    participant T as Tor网络
+
+    U->>U: 通过 BridgeDB/其他渠道获取 Bridge
+    U->>B: 使用 PT 建立混淆连接
+    C->>C: 难以直接枚举（可能主动探测）
+    B->>T: 转入 Tor 路由
+    T-->>U: 建立匿名电路
+```
+
+随后也被检测方通过握手特征与主动探测反制
+
+入口虽然藏起来了,握手还是要干的
+
+2012 年那组测量里,一个经典发现就是：
+
+当时 GFW 可以根据 `TLS ClientHello` 里的特定模式,把疑似 Tor 连接先挑出来；接着再从中国境内不同 IP 发起回连,对对应的 bridge 做主动探测。探测成功,`IP:port` 就会进入封锁流程
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as 用户客户端
+    participant G as GFW/DPI
+    participant B as Bridge
+    participant T as Tor网络
+
+    Note over U,G: 1) 先建立 TCP 连接
+    U->>B: TCP SYN
+    B-->>U: SYN/ACK
+    U->>B: ACK
+
+    Note over U,G: 2) TLS 握手开始（关键可观测点）
+    U->>B: ClientHello（版本/扩展/套件/长度/时序）
+    G->>G: 被动特征分析（指纹+行为）
+    B-->>U: ServerHello + 证书 + ...
+    U->>B: Finished
+    B-->>U: Finished
+
+    Note over U,B: 3) 进入加密应用数据（内容已不可见）
+    U->>B: Encrypted Application Data
+    B->>T: 转发到 Tor 路径
+
+    alt 被动阶段判为“可疑入口”
+        G->>G: 记录可疑 IP:Port
+        G->>B: 主动探测连接（验证是否为特定代理行为）
+        B-->>G: 若响应模式可识别 -> 提高置信度
+        G->>G: 执行封锁策略（该入口被干扰/阻断）
+    else 未触发高置信度
+        G->>G: 暂不处理或继续观察
+    end
+```
+
+这就是后来很多检测链的母版：
+
+- 先被动观察
+- 再主动探测
+
+被动观察便宜,适合大规模运行
+
+主动探测需要的成本高,但此时目标已经缩小了
+
+而且主动探测很吃实现细节
+
+代理服务端只要在某些探针输入下,反应得足够稳定,足够像某个实现,那就会留下证据
+
+## rere: 细节
+
+再往后,大家当然也会想：
+
+>干脆装成别的协议行不行？
+
+装成 `HTTP`
+
+装成 `Skype`
+
+装成“一个普通网站”
+
+甚至干脆装成随机噪声
+
+这个思路当年非常自然,问题在于,协议伪装这件事真做起来很难
+2013年的`The Parrot is Dead: Observing Unobservable Network Communications`这篇论文主要击穿了“模仿某个白名单协议即可隐身”的假设：抗审查系统若仅复制报文格式，而无法完整复制目标协议在状态机、错误处理、边界条件和双端协同行为上的语义细节，仍会被识别
+[The Parrot is Dead](https://dedis.cs.yale.edu/dissent/papers/parrot-abs/)
+
+但我们可以先看看parrot系统
+
+```mermaid
+flowchart TD
+    subgraph Parrot系统
+      A[SkypeMorph]
+      B[StegoTorus]
+      C[CensorSpoofer]
+    end
+
+    subgraph 模仿目标协议
+      Skype[Skype VoIP Protocol]
+      HTTP[HTTP/Web Protocol]
+      SIP[标准 VoIP SIP + RTP]
+    end
+    
+    A -->|模仿 Skype 视频流量| Skype
+    B -->|Embed 模式模仿 Skype VoIP| Skype
+    B -->|HTTP 模式模仿 HTTP 请求/响应| HTTP
+    C -->|模仿 SIP / RTP VoIP 流量| SIP
+```
+
+那parrot如何死的
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as 用户(混淆客户端)
+    participant O as 观察者/审查者
+    participant S as 伪装服务端
+    participant P as 目标协议真实生态
+
+    U->>S: 发送“看起来像目标协议”的初始流量
+    O->>O: 先做被动比对（字段/长度/方向/时序）
+
+    Note over O,P: 对照真实生态分布与实现习惯
+    O->>O: 发现语义层不一致
+
+    O->>S: 主动探测（异常输入/边界序列）
+    S-->>O: 返回与真实协议栈不同的响应模式
+
+    O->>O: 提升置信度：这是伪装通道
+    O-->>U: 阻断/限速/标记该通道
+```
+
+字段顺序、错误处理、边界条件、重传习惯、时序、分片、客户端和服务端配套行为,这些都得像
+
+2015 年的 `Seeing through Network-Protocol Obfuscation` 又把这个问题往前推了一截
+[Seeing through Network-Protocol Obfuscation](https://pages.cs.wisc.edu/~akella/papers/ccsfp653-wangA.pdf)
+
+作者把各种混淆协议丢进更真实的流量背景里去测,最后得到的感觉很统一：
+
+你以为自己在“看起来像别人”
+
+系统眼里更像“长得像,行为有点歪”
+
+so,审查点慢慢从“抓某个固定明文特征”转向：
+
+- 实现
+- 时序
+- 错误输入时返回结果
+- 被动观察和主动探测是否出问题
+
+抗审查系统的难点不再只是“把字节伪装得像”，而是“把整个通信过程伪装得像”。
+
+```mermaid
+flowchart LR
+  A[明文特征]-->B[TLS混淆]-->C[协议拟态]-->D[语义破绽]-->E[统计识别]-->F[分布对齐]
+```
+
+这使得对抗重心从“协议拟态”转向“分布拟态”：不仅要像某个协议，还要长期稳定地落在真实生态流量分布里，并在被动观察与主动探测下都不露馅
+
+## rerere: 首包变黑
+
+再后来,事情会继续往一个方向卷：**让第一个包尽量别说人话**
+
+`Shadowsocks`、`VMess`、`Obfs4` 这一类东西给人的第一印象就是黑。
+
+首包更像随机数,字段不再像老老实实的应用层协议,很多显式特征被压下去了
+
+```mermaid
+sequenceDiagram
+    participant C as 客户端
+    participant S as Shadowsocks服务器
+    participant W as 目标网站
+
+    Note over C,S: 1) 先建立 TCP 连接（到 SS 服务器）
+    C->>S: TCP SYN / ACK
+
+    Note over C,S: 2) 客户端首包即加密发送（含目标地址信息）
+    C->>S: [加密] 目标地址/端口 + 首段业务数据
+    Note right of S: 服务端解密后\n拿到真实目标
+
+    Note over S,W: 3) 服务端代为连接目标网站
+    S->>W: 建立到目标站的 TCP/TLS 连接
+    W-->>S: 返回响应数据
+
+    Note over S,C: 4) 回程数据再加密回传
+    S-->>C: [加密] 响应数据
+```
+
+看起来很安全对吧
+
+可这一步把另一个问题放大了：
+
+***黑***
+
+什么黑,五彩斑斓的黑吗
+
+在普通互联网里,大量正常协议哪怕已经加密,开头仍旧会留下很多“像正常业务”的痕迹
+
+- `TLS` 会有自己的握手结构
+- `HTTP` 会留下可打印字符
+- 一部分 App 会有稳定的长度模式
+
+而 fully encrypted first packet 往往更像“一坨高熵东西”,这反而能进候选集
+
+:::note
+Shannon entropy（香农熵）可用于衡量首包字节分布的“随机性”
+
+设首包字节序列为 $X$，长度为 $N$，字节取值范围为 $0..255$，对每个字节值 $b$，
+
+其出现频率为 $p_b=\frac{count(b)}{N}$，
+
+熵定义为 $H(X)=-\sum_{b=0}^{255}p_b\log_2 p_b$
+
+- 单位：bits/byte
+- 取值范围：0 到 8
+  - 越接近 8：字节分布越接近随机（高熵）
+  - 越接近 0：分布越集中、结构性越强（低熵）
+
+在流量分析里，熵通常与首包长度、方向和时序等特征一起使用，而不是单独作为判定条件
+:::
+
+2020 年关于 `Shadowsocks` 的 IMC 论文把这个阶段拆得很细。  
+[How China Detects and Blocks Shadowsocks](https://gfw.report/publications/imc20/en/)
+
+研究者观察到：
+
+- 系统会先根据首包长度和熵去圈疑似目标
+- 然后再对服务器发多类主动探针
+- 探针命中之后,封锁才跟上来
+
+到这里你会发现一件很妙的事：
+
+协议设计者在努力把明文特征压下去
+
+审查系统就在努力把“高熵首包本身”变成特征
+
+接着时间来到 **2021 年 11 月 6 日**。
+
+USENIX Security 2023 那篇论文测到,GFW 开始对多类 fully encrypted traffic 做纯被动实时封锁,影响到 `Shadowsocks`、`VMess`、`Obfs4` 等协议。  
+[USENIX Security 2023](https://gfw.report/publications/usenixsecurity23/en)
+
+最有意思的点在于它的思路：
+
+它不需要先知道“你具体是谁”。
+
+它先做的事情更像是：
+
+**把正常流量尽量放走,把剩下那撮很黑、又不太像常见协议的东西留下。**
+
+论文总结出来的几条规则很有味道：
+
+- 前几个字节如果像 `HTTP / TLS`,那就放
+- 可打印字符很多,放
+- 长段连续 printable,放
+- bit 分布很怪,像正常文本或正常协议,放
+
+剩下那些既黑、又不像常见握手、又不在豁免里的首包,就危险了。
+
+这一步非常值得记一下。
+
+因为它说明了一个现实：
+
+**全加密没有让问题消失,它只是把视线推到了更靠前的地方。**
+
+## QUIC 上来以后,视线继续前移到 Initial
+
+很多人看到 `QUIC` 会有一个错觉：
+
+基于 `UDP`
+
+握手更新
+
+`HTTP/3`
+
+看起来更现代,也更难摸。
+
+然后 2025 年那篇论文告诉大家,事情没有这么轻松。  
+[China's Great Firewall is now blocking QUIC with the SNI field](https://gfw.report/publications/usenixsecurity25/en/)
+
+研究者观测到,从 **2024 年 4 月 7 日** 开始,GFW 已经能解出 `QUIC Initial` 里封装的 `TLS ClientHello`,再根据里面的 `SNI` 去做封锁。
+
+这件事听起来像“QUIC 被拆了”,实际原因写在 `RFC 9001` 里。  
+[RFC 9001](https://datatracker.ietf.org/doc/html/rfc9001)
+
+`Initial` 阶段使用的密钥本来就能由路径观察者推导。
+
+于是协议一换,审查点也跟着再前挪一步：
+
+- 以前盯 `TCP` 首包
+- 现在盯 `QUIC Initial`
+- 以前看应用层明文
+- 现在看加密握手前半段里仍可恢复出来的结构
+
+这步之后就很清楚了。
+
+协议往前卷,视线就往更前面卷。
+
+## 到 Geedge 这一步,系统已经开始认产品,顺手认人
+
+如果只看学术论文,故事讲到 `Tor -> 混淆 -> fully encrypted -> QUIC` 这里,已经够完整了。
+
+但你给的 `Geedge / MESA leak` 之所以很有冲击力,是因为它把“论文里测出来的现象”往“真实产品栈可能怎么做”推了一大步。  
+[GFW Report 中文分析](https://gfw.report/blog/geedge_and_mesa_leak/zh/)  
+[InterSecLab 报告](https://interseclab.org/research/the-internet-coup/)
+
+这部分材料的来源属性得说清楚：
+
+它来自公开泄漏和公开交叉分析。
+
+但就目前披露出来的内容看,很多东西已经很说明问题了。
+
+### 1. 检测对象开始从“协议”变成“产品”
+
+泄漏分析里提到 `AppSketch` 指纹库,提到买 VPN 账号、养带 VPN App 的移动设备、做静态逆向和动态流量分析。
+
+这味道就完全不一样了。
+
+盯的对象已经变成：
+
+- 某款 App 的握手习惯
+- 某家服务商的证书与 `JA3 / JA4`
+- 某种客户端和服务端组合出来的行为特征
+
+事情走到这一步,问“这像不像代理协议”已经不太够用了。
+
+系统更像在问：
+
+> 这像哪家的东西？
+
+### 2. 确认结果会被沉淀成长期资产
+
+泄漏里出现的 `Maat`、`SAPP`、`Stellar` 这些组件,看起来都更像平台层。
+
+也就是说,命中过的样本、写下来的规则、同步出去的指纹,并不会随着一次封锁结束就散掉。
+
+它们会留下来。
+
+然后下一次处理得更快。
+
+### 3. 最怪的一步：它开始认人了
+
+GFW Report 对泄漏材料的分析里有个点非常扎眼：
+
+某些系统已经能把流量往用户身份上归因,甚至把某个体标成“已知 VPN 用户”。
+
+这意味着什么。
+
+意味着链条方向开始反过来了。
+
+早一点的时候,大家更熟悉的是：
+
+> 先发现服务器,再去看谁连它
+
+现在逐渐能想象的是：
+
+> 先盯住高风险用户,再沿着他的后续连接去捞新的服务器、新的服务商、新的产品
+
+于是后面的研究也开始往图分析、关系建模、行为聚类上走。  
+[Identifying VPN Servers through Graph-Represented Behaviors](https://openreview.net/forum?id=tnljBcXhmz)
+
+这一步已经很难再用“DPI”三个字概括了。
+
+它更像一个持续进货、持续标注、持续运营的风控系统。
+
+## 所以到底露在哪里
+
+写到这边,答案其实已经很明显了。
+
+代理流量会露,不是因为每次都有人把密文完全掰开看懂。
+
+更接近下面这件事：
+
+**代理为了真的可用,必须在网络上留下很多稳定结构。**
+
+比如：
+
+- 它得存在于某个端点上
+- 它得握手
+- 它得兼容客户端
+- 它得对错误输入有反应
+- 它得维持某种稳定时序
+- 它得被用户持续使用
+- 它得在一段时间里反复出现
+
+你要服务,就得稳定。
+
+你一稳定,指纹就有了。
+
+于是整个演进过程读下来,会有一种很强的感觉：
+
+**payload 越往后缩,审查点就越往前挪。**
+
+从端点,到握手,到首包,到 `Initial`,再到产品画像和用户画像。
+
+线路一直在变。
+
+枪口也一直在变。
+
+## 一张表
+
+| 阶段 | 协议 / 形态 | 设计者想藏住什么 | 后来被盯上的点 |
+| --- | --- | --- | --- |
+| 早期显式代理 | HTTP proxy / SOCKS5 | 让流量先走中间点 | 固定端点、明文握手、固定服务 |
+| Tor relay / bridge | 入口位置 | 公网 relay 之后转向 `TLS ClientHello` 和主动探测 |
+| 协议伪装期 | 装成常见协议 | 实现细节、异常处理、时序、重传 |
+| fully encrypted 首包 | 首包语义 | 长度、熵、豁免规则、短时封锁 |
+| QUIC / HTTP3 | 更靠后的握手内容 | `QUIC Initial`、`TLS ClientHello`、`SNI` |
+| 产品化 VPN | 协议表面 | `JA3 / JA4`、App 指纹、服务商画像、用户画像 |
+
+## refs
+
+- Tor 早期封锁与主动探测  
+  [How the Great Firewall of China Is Blocking Tor](https://www.usenix.org/conference/foci12/how-great-firewall-china-blocking-tor)
+- USENIX ;login: 扩展版  
+  [PDF](https://www.usenix.org/system/files/login/articles/login1212_winter.pdf)
+- 协议模仿为什么很难  
+  [The Parrot is Dead](https://dedis.cs.yale.edu/dissent/papers/parrot-abs/)
+- 协议混淆为何仍会露  
+  [Seeing through Network-Protocol Obfuscation](https://pages.cs.wisc.edu/~akella/papers/ccsfp653-wangA.pdf)
+- GFW 如何检测和封锁 Shadowsocks  
+  [IMC 2020](https://gfw.report/publications/imc20/en/)
+- GFW 对 fully encrypted traffic 的被动封锁  
+  [USENIX Security 2023](https://gfw.report/publications/usenixsecurity23/en)
+- GFW 对 QUIC SNI 的封锁  
+  [USENIX Security 2025](https://gfw.report/publications/usenixsecurity25/en/)
+- Geedge / MESA 泄漏中文分析  
+  [GFW Report](https://gfw.report/blog/geedge_and_mesa_leak/zh/)
+- Geedge 外泄调查  
+  [InterSecLab](https://interseclab.org/research/the-internet-coup/)
+- VPN 服务器图行为识别  
+  [OpenReview](https://openreview.net/forum?id=tnljBcXhmz)
