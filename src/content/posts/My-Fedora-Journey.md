@@ -13,6 +13,16 @@ tags:
 > - fedora的重音是这样的 fe'dora
 > 叠甲：仅限个人使用，有错误是正常的
 
+## 0. the beginning and the ending
+
+beginning : I use arch btw
+
+那难道除了arch我们就不能玩点别的吗
+
+I chose fedora btw.
+
+ending : 当折腾完一切的时候回望过去，才意识到我珍惜的是折腾的时光。
+
 ## 1. Desktop(KDE plasma 6)::stop using GNOME
 
 前端本来用的是默认的`GNOME`，因为没有桌面很难受所以换成了`KDE plasma`
