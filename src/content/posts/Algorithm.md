@@ -1021,5 +1021,96 @@ dd = defaultdict(lambda: 'N/A')
 使用`lambda` 可创建默认值
 否则的话默认是0
 
+### 2.7. 输入输出模板
+
+#### 2.7.1. 基础读取
+
+```python
+# 读取一行字符串
+s = input().strip()
+
+# 读取一个整数
+n = int(input())
+
+# 读取一行多个整数
+a, b, c = map(int, input().split())
+
+# 读取一行变长整数列表
+nums = list(map(int, input().split()))
+```
+
+#### 2.7.2. 读取多行数据 (已知行数)
+
+```python
+n = int(input())
+arr = []
+for _ in range(n):
+    line = list(map(int, input().split()))
+    arr.append(line)
+
+# 或者列表推导式
+arr = [list(map(int, input().split())) for _ in range(n)]
+```
+
+#### 2.7.3. 读取到 EOF (文件结束)
+
+```python
+import sys
+
+# 方法1: 逐行读取
+for line in sys.stdin:
+    a, b = map(int, line.split())
+    # ... 处理逻辑
+
+# 方法2: 全部读入再处理
+data = sys.stdin.read().strip().split()
+# data 是所有按空白分割的字符串列表
+it = iter(data)
+n = int(next(it))
+nums = [int(next(it)) for _ in range(n)]
+```
+
+#### 2.7.4. T 组测试数据
+
+```python
+T = int(input())
+for _ in range(T):
+    n = int(input())
+    nums = list(map(int, input().split()))
+    # ... 每组逻辑
+    print(solve(n, nums))
+```
+
+#### 2.7.5. 输出格式
+
+```python
+# 单个输出
+print(ans)
+
+# 空格分隔输出列表
+print(' '.join(map(str, nums)))
+
+# 多行输出
+for x in ans:
+    print(x)
+
+# 末尾无空格
+print(*nums)  # 自动空格分隔
+```
+
+#### 2.7.6. 加速输入
+
+```python
+import sys
+# 将 input 重绑定为快速读取
+input = sys.stdin.readline
+
+n = int(input())
+nums = list(map(int, input().split()))
+
+# input() 重绑定后仍然可用 strip()
+s = input().strip()
+```
+
 >这边还在等待更新中
 >其实是刷题刷着刷着觉得应该开始总结经验还有防止忘记
