@@ -5,6 +5,7 @@ tags:
   - fedora
   - linux
 ---
+
 > 冷知识:
 >
 > - F2是机械革命翼龙15pro开bios的按键
@@ -20,8 +21,6 @@ beginning : I use arch btw
 那难道除了arch我们就不能玩点别的吗
 
 I chose fedora btw.
-
-ending : 当折腾完一切的时候回望过去，才意识到我珍惜的是折腾的时光。
 
 ## 1. Desktop(KDE plasma 6)::stop using GNOME
 
