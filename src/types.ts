@@ -164,6 +164,13 @@ export type GiscusConfig = {
   reactionsEnabled: boolean
 }
 
+export interface FriendLink {
+  name: string
+  url: string
+  description: string
+  avatar: string
+}
+
 export interface SiteConfig {
   site: string
   font: string

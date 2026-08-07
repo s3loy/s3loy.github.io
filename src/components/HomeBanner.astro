@@ -10,7 +10,7 @@ interface Props {
 const { avatarImage, githubCalendar } = Astro.props
 ---
 
-<div class="my-6 md:mx-2">
+<div class="my-4 md:mx-2">
   <div
     class="flex flex-col sm:flex-row items-center justify-around sm:gap-5 max-w-full mb-6"
   >
@@ -20,7 +20,7 @@ const { avatarImage, githubCalendar } = Astro.props
           priority
           src={avatarImage.src}
           alt={avatarImage.alt}
-          class="rounded-full border-8 border-accent/15 size-36 aspect-square box-content shrink-0"
+          class="rounded-full border-2 border-accent/15 size-36 aspect-square box-content shrink-0"
           widths={[288]}
           height={144}
           width={144}

@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 import sitemap from '@astrojs/sitemap'
 import mdx from '@astrojs/mdx'
-import { rehypeHeadingIds } from '@astrojs/markdown-remark'
+import { rehypeHeadingIds, unified } from '@astrojs/markdown-remark'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeMermaid from 'rehype-mermaid'
 import expressiveCode from 'astro-expressive-code'
@@ -34,33 +34,35 @@ export default defineConfig({
       type: 'shiki',
       excludeLangs: ['mermaid'],
     },
-    remarkPlugins: [
-      [remarkDescription, { maxChars: 200 }],
-      remarkReadingTime,
-      remarkDirective,
-      remarkGithubCard,
-      remarkAdmonitions,
-      [remarkCharacterDialogue, { characters: siteConfig.characters }],
-      remarkUnknownDirectives,
-      remarkMath,
-      remarkGemoji,
-    ],
-    rehypePlugins: [
-      [rehypeHeadingIds, { headingIdCompat: true }],
-      [rehypeMermaid, { strategy: 'pre-mermaid' }],
-      [rehypeAutolinkHeadings, { behavior: 'wrap' }],
-      rehypeTitleFigure,
-      [
-        rehypeExternalLinks,
-        {
-          rel: ['noreferrer', 'noopener'],
-          target: '_blank',
-        },
+    processor: unified({
+      remarkPlugins: [
+        [remarkDescription, { maxChars: 200 }],
+        remarkReadingTime,
+        remarkDirective,
+        remarkGithubCard,
+        remarkAdmonitions,
+        [remarkCharacterDialogue, { characters: siteConfig.characters }],
+        remarkUnknownDirectives,
+        remarkMath,
+        remarkGemoji,
       ],
-      rehypeUnwrapImages,
-      rehypePixelated,
-      rehypeKatex,
-    ],
+      rehypePlugins: [
+        [rehypeHeadingIds, { headingIdCompat: true }],
+        [rehypeMermaid, { strategy: 'pre-mermaid' }],
+        [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+        rehypeTitleFigure,
+        [
+          rehypeExternalLinks,
+          {
+            rel: ['noreferrer', 'noopener'],
+            target: '_blank',
+          },
+        ],
+        rehypeUnwrapImages,
+        rehypePixelated,
+        rehypeKatex,
+      ],
+    }),
   },
   image: {
     responsiveStyles: true,

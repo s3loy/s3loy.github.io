@@ -93,7 +93,7 @@ a {
 }
 
 a.button {
-  @apply inline-flex text-accent border-3 border-accent/30 border-double py-1.5 px-3 whitespace-nowrap hover:bg-accent/8 rounded-xl transition-colors;
+  @apply inline-flex text-accent border border-accent/30 py-1 px-3 whitespace-nowrap hover:bg-accent/8 rounded transition-colors;
 }
 
 header button,
@@ -106,7 +106,7 @@ button {
 }
 
 article img {
-  @apply block max-w-full border-8 border-foreground/10 rounded-xl overflow-hidden mx-auto;
+  @apply block max-w-full border-8 border-foreground/10 overflow-hidden mx-auto;
 
   &[data-pixelated] {
     image-rendering: pixelated;
@@ -114,10 +114,10 @@ article img {
 }
 
 .prose {
-  @apply text-base/7;
+  @apply text-base/[1.65] font-light;
 
   code:not(.expressive-code code) {
-    @apply text-sm text-foreground/90 bg-foreground/5 px-2 py-1 rounded-lg whitespace-nowrap;
+    @apply text-sm text-foreground/90 bg-foreground/5 px-1.5 py-0.5 whitespace-nowrap;
   }
 
   & > *:not(div.expressive-code, img, figure, video, hr, blockquote, aside),
@@ -126,9 +126,12 @@ article img {
   }
 
   div.expressive-code {
-    @apply my-8;
+    @apply my-3;
 
     --ec-codeFontFml: var(--default-mono-font-family);
+    --ec-frm-edgRad: 0;
+    --ec-codePad: 0.75rem 1rem;
+    --ec-codeLineHt: 1.5;
 
     /* Prevent italics in code blocks */
     /* Feel free to remove this if you want italics */
@@ -146,7 +149,7 @@ article img {
     }
 
     figure {
-      @apply border-2 border-foreground/8 !rounded-xl;
+      @apply border-2 border-foreground/8;
       box-shadow: none !important;
 
       &.has-title div.copy,
@@ -162,7 +165,7 @@ article img {
       }
 
       figcaption {
-        border-radius: 10px 10px 0 0 !important;
+        border-radius: 0 !important;
         background: transparent !important;
         padding-block: 0 !important;
         border: none !important;
@@ -177,7 +180,7 @@ article img {
           width: 100%;
           font-family: var(--theme-font);
           font-size: var(--ec-codeFontSize);
-          border-radius: 10px 10px 0 0 !important;
+          border-radius: 0 !important;
           border-bottom-width: 0 !important;
           padding: 0 12px !important;
 
@@ -189,7 +192,7 @@ article img {
       }
 
       & > pre {
-        border-radius: 10px !important;
+        border-radius: 0 !important;
         border: none !important;
         scrollbar-width: thin;
         background: transparent !important;
@@ -200,7 +203,7 @@ article img {
   blockquote,
   aside {
     div.expressive-code {
-      @apply my-3;
+      @apply my-2;
     }
   }
 
@@ -210,7 +213,7 @@ article img {
   h4,
   h5,
   h6 {
-    @apply my-6.5 font-semibold;
+    @apply font-semibold;
 
     a {
       @apply underline-offset-3 text-inherit no-underline;
@@ -218,7 +221,7 @@ article img {
   }
 
   h1 {
-    @apply text-[1.75rem] text-heading1 mt-8;
+    @apply text-[1.75rem] text-heading1 mt-3 mb-1.5;
 
     &::before {
       @apply mr-2 content-['#'];
@@ -230,7 +233,7 @@ article img {
   }
 
   h2 {
-    @apply text-[1.6rem] text-heading2 mt-12;
+    @apply text-[1.6rem] text-heading2 mt-4 mb-2;
 
     &::before {
       @apply mr-2 content-['##'];
@@ -242,7 +245,7 @@ article img {
   }
 
   h3 {
-    @apply text-2xl text-heading3 mt-10;
+    @apply text-2xl text-heading3 mt-3 mb-1.5;
 
     &::before {
       @apply mr-2 content-['###'];
@@ -254,7 +257,7 @@ article img {
   }
 
   h4 {
-    @apply text-2xl text-heading4 mt-8;
+    @apply text-2xl text-heading4 mt-3 mb-2;
 
     &::before {
       @apply mr-2 content-['####'];
@@ -266,7 +269,7 @@ article img {
   }
 
   h5 {
-    @apply text-lg text-heading5;
+    @apply text-lg text-heading5 my-2.5;
 
     &::before {
       @apply mr-2 content-['#####'];
@@ -278,7 +281,7 @@ article img {
   }
 
   h6 {
-    @apply text-lg text-heading6;
+    @apply text-lg text-heading6 my-2.5;
 
     &::before {
       @apply mr-2 content-['######'];
@@ -299,14 +302,14 @@ article img {
   blockquote,
   aside,
   .github-card {
-    @apply my-6.5;
+    @apply my-2.5;
   }
 
   b,
   strong,
   th,
   button {
-    @apply font-semibold;
+    @apply font-semibold text-accent;
   }
 
   a {
@@ -323,11 +326,11 @@ article img {
   }
 
   button {
-    @apply font-bold text-center text-accent py-1 px-4.5 border-4 border-accent rounded-xl cursor-pointer hover:bg-accent/15 transition-colors;
+    @apply font-bold text-center text-accent py-1 px-4.5 border-4 border-accent cursor-pointer hover:bg-accent/15 transition-colors;
   }
 
   figure:not(.expressive-code figure) {
-    @apply block mx-auto rounded-xl py-2;
+    @apply block mx-auto py-1;
 
     figcaption {
       @apply text-center italic;
@@ -335,7 +338,7 @@ article img {
   }
 
   pre.mermaid {
-    @apply my-8 overflow-x-auto rounded-xl border-2 border-foreground/8 bg-foreground/4 p-4 text-sm;
+    @apply my-3 overflow-x-auto border-2 border-foreground/8 bg-foreground/4 p-2 text-sm;
     white-space: pre-wrap;
   }
 
@@ -355,7 +358,7 @@ article img {
   }
 
   li {
-    @apply pl-2 my-4 marker:text-list;
+    @apply pl-2 my-0.5 marker:text-list;
   }
 
   ul li {
@@ -367,12 +370,12 @@ article img {
   }
 
   hr {
-    @apply h-0.5 my-16 bg-separator border-none rounded-xl;
+    @apply h-0.5 my-6 bg-separator border-none;
   }
 
   blockquote,
   aside {
-    @apply px-7 md:px-6 rounded-xl py-6;
+    @apply px-4 md:px-3 py-3;
 
     & > *:not(div.expressive-code, img, figure, video, hr),
     figcaption {
@@ -514,7 +517,7 @@ article img {
   }
 
   .github-card {
-    @apply bg-foreground/5 rounded-xl px-4 py-3;
+    @apply bg-foreground/5 px-4 py-3;
 
     .gh-title {
       @apply relative flex items-center gap-2 text-base;

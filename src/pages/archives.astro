@@ -216,17 +216,20 @@ const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a))
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.16rem 0.62rem;
-    border-radius: 1rem;
-    border: 1px solid color-mix(in oklab, var(--theme-accent) 20%, transparent);
-    background: color-mix(in oklab, var(--theme-accent) 1%, transparent);
-    color: color-mix(in oklab, var(--theme-accent) 88%, var(--theme-foreground) 12%);
+    padding: 0.25rem 0.75rem;
+    border: 1px solid transparent;
+    background: color-mix(in oklab, var(--theme-accent) 7%, transparent);
+    color: color-mix(in oklab, var(--theme-foreground) 90%, transparent);
     text-decoration: none;
     line-height: 1.2;
     transition:
       background-color 140ms ease,
       border-color 140ms ease,
       color 140ms ease;
+  }
+
+  .filter-chip:hover {
+    border-color: color-mix(in oklab, var(--theme-accent) 20%, transparent);
   }
 
   .filter-chip[data-active='true'] {

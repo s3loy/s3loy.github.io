@@ -3,10 +3,8 @@ import Layout from '~/layouts/Layout.astro'
 import { getSortedPosts } from '~/utils'
 import { getCollection, render } from 'astro:content'
 import PostPreview from '~/components/PostPreview.astro'
-import Pagination from '~/components/Pagination.astro'
 import BlockHeader from '~/components/BlockHeader.astro'
 import HomeBanner from '~/components/HomeBanner.astro'
-import siteConfig from '~/site.config'
 import TagsSection from '~/components/TagsSection.astro'
 import SeriesSection from '~/components/SeriesSection.astro'
 
@@ -56,14 +54,8 @@ const postsHaveSeries = sortedPosts.some((post) => post.data.series)
   {
     sortedPosts.length > 0 && (
       <section>
-        <BlockHeader>Latest Posts</BlockHeader>
-        {sortedPosts
-          .reverse()
-          .slice(0, Math.floor(siteConfig.pageSize / 2))
-          .map((post) => (
-            <PostPreview post={post} />
-          ))}
-        <Pagination nextLink="/posts" nextText="More" />
+        <BlockHeader>Posts</BlockHeader>
+        {sortedPosts.reverse().map((post) => <PostPreview post={post} />)}
       </section>
     )
   }

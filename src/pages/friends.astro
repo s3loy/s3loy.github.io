@@ -1,0 +1,18 @@
+---
+import siteConfig from '~/site.config'
+import Layout from '../layouts/Layout.astro'
+import FriendCard from '../components/FriendCard.astro'
+import friends from '../data/links.json'
+---
+
+<Layout title={`友情链接 - ${siteConfig.title}`} description={siteConfig.description}>
+  <main class="mt-2 sm:mt-0">
+    <section class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {
+        friends.map((friend) => (
+          <FriendCard friend={friend} />
+        ))
+      }
+    </section>
+  </main>
+</Layout>

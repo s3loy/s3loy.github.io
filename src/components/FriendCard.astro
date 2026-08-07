@@ -1,0 +1,28 @@
+---
+import type { FriendLink } from '~/types'
+
+interface Props {
+  friend: FriendLink
+}
+
+const { friend } = Astro.props
+---
+
+<a
+  href={friend.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group flex items-center gap-3 p-3 border border-foreground/10 hover:border-accent/30 hover:bg-accent/4 transition-colors"
+>
+  <img
+    src={friend.avatar}
+    alt={friend.name}
+    class="size-10 object-cover shrink-0"
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="min-w-0">
+    <p class="text-sm font-medium text-foreground truncate">{friend.name}</p>
+    <p class="text-xs text-foreground/60 truncate">{friend.description}</p>
+  </div>
+</a>

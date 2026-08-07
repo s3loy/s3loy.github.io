@@ -4,10 +4,9 @@ const config: SiteConfig = {
   // Absolute URL to the root of your published site, used for generating links and sitemaps.
   site: 'https://blog.s3loy.tech',
   // The name of your site, used in the title and for SEO.
-  title: 's3loy\'s blog',
+  title: "s3loy's blog",
   // The description of your site, used for SEO and RSS feed.
-  description:
-    'Neither emo nor demo',
+  description: 'Neither emo nor demo',
   // The author of the site, used in the footer, SEO, and RSS feed.
   author: 's3loy',
   // Keywords for SEO, used in the meta tags.
@@ -21,7 +20,7 @@ const config: SiteConfig = {
   font: 'JetBrains Mono Variable',
   // For pagination, the number of posts to display per page.
   // The homepage will display half this number in the "Latest Posts" section.
-  pageSize: 6,
+  pageSize: 15,
   // Whether Astro should resolve trailing slashes in URLs or not.
   // This value is used in the astro.config.mjs file and in the "Search" component to make sure pagefind links match this setting.
   // It is not recommended to change this, since most links existing in the site currently do not have trailing slashes.
@@ -41,8 +40,8 @@ const config: SiteConfig = {
       url: '/archives',
     },
     {
-      name: 'Links',
-      url: '/links',
+      name: 'Friends',
+      url: '/friends',
     },
   ],
   // The theming configuration for the site.
