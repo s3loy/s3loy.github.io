@@ -1,4 +1,6 @@
 ---
+lang: zh
+translationKey: hgame-2024
 title: Hgame 2024 WP
 published: 2025-02-18T18:00:00
 tags:
@@ -59,7 +61,7 @@ ctrl+C   ctrl+shift+v
 
 ~~好抽象的题目（x~~
 
-![image-20250208142201503](hgame-2024/image-20250208142201503.png)
+![image-20250208142201503](../hgame-2024/image-20250208142201503.png)
 
 txt下下来发现是16进制文件但是txt，遂转换。
 
@@ -74,7 +76,7 @@ print("文件已成功合成")
 
 打开压缩包发现需要密码，继续寻找信息，同时发现压缩包里flag.txt很小，怀疑还藏了东西。
 
-![image-20250208142651795](hgame-2024/image-20250208142651795.png)
+![image-20250208142651795](../hgame-2024/image-20250208142651795.png)
 
 发现最后有倒转的PNG，那大概压缩包后半段有其他内容。
 
@@ -97,7 +99,7 @@ reverse_png(input_path, output_path)
 
 用crc算出宽度为：576    高度为：779，于是修改。
 
-![image-20250208143211975](hgame-2024/image-20250208143211975.png)
+![image-20250208143211975](../hgame-2024/image-20250208143211975.png)
 
 `To_f1nd_th3_QQ`,一开始以为还得把人qq找到当密码用，整半天弄不出来，结果这个就是密码。
 
@@ -295,7 +297,7 @@ Decoy Flag (直接提取): flag{fake_flag}
 
 简单溯源121.41.34.25
 
-![image-20250209200331199](hgame-2024/image-20250209200331199.png)
+![image-20250209200331199](../hgame-2024/image-20250209200331199.png)
 
 `hav3_cleaned_th3`
 
@@ -313,7 +315,7 @@ Decoy Flag (直接提取): flag{fake_flag}
 >
 > 为了研究其工作原理，在获取镜像后，你将微控制器与USB接口芯片的通信引线引出，接入逻辑分析仪（如下图），之后使用附带的上位机软件设置了一个新的HOTP密钥，同时观察通信波形。
 
-![连线示意图](hgame-2024/media.png)
+![连线示意图](../hgame-2024/media.png)
 
 > 根据提供的固件、EEPROM镜像与sigrok波形文件，分析并计算以下内容：
 >
@@ -323,7 +325,7 @@ Decoy Flag (直接提取): flag{fake_flag}
 >
 > **Flag格式**：`hgame{X1_X2_Y1_Y2}`，其中每个HOTP以十进制表示，左补0至该验证器所使用的位数。例如，假设该验证器产生8位HOTP，则一个符合格式的flag为`hgame{00000000_00000001_00000022_00000333}`。
 
-![image-20250209201340962](hgame-2024/image-20250209201340962.png)
+![image-20250209201340962](../hgame-2024/image-20250209201340962.png)
 
 `capture.sr`是sigrok波形文件
 
@@ -335,9 +337,9 @@ Decoy Flag (直接提取): flag{fake_flag}
 
 首先从hotp看起
 
-![image-20250209201758271](hgame-2024/image-20250209201758271.png)
+![image-20250209201758271](../hgame-2024/image-20250209201758271.png)
 
-![image-20250209230154880](hgame-2024/image-20250209230154880.png)
+![image-20250209230154880](../hgame-2024/image-20250209230154880.png)
 
 收集过足够信息之后先把生成hotp的脚本搓出来
 
@@ -399,7 +401,7 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
 
 使用IDA pro打开，
 
-[image-20250209203754718](hgame-2024/image-20250209203754718.png)
+![image-20250209203754718](../hgame-2024/image-20250209203754718.png)
 
 不过ida不能反汇编。
 
@@ -470,23 +472,23 @@ undefined2 i2cOnReceive(undefined2 param_1)
 
 ~~ps：这个软件不支持中文路径，自己试试就知道了~~
 
-![image-20250209230900783](hgame-2024/image-20250209230900783.png)
+![image-20250209230900783](../hgame-2024/image-20250209230900783.png)
 
 打开之后看到这四条，不过根据前面图上只需要`D0`和`D1`，选择直接删除`D2`和`D3`
 
-![image-20250209231152619](hgame-2024/image-20250209231152619.png)
+![image-20250209231152619](../hgame-2024/image-20250209231152619.png)
 
 添加I^2^C解码器
 
-![image-20250209231509824](hgame-2024/image-20250209231509824.png)
+![image-20250209231509824](../hgame-2024/image-20250209231509824.png)
 
 这个`address read` 顾名思义，不是我们要的东西，所以看`data write`后面的东西
 
-![image-20250209233233437](hgame-2024/image-20250209233233437.png)
+![image-20250209233233437](../hgame-2024/image-20250209233233437.png)
 
 不过我不知道这大老远还有一个是什么，但是出于前面看起来太规整了，于是先收集了前面的数据
 
-![image-20250209233909607](hgame-2024/image-20250209233909607.png)
+![image-20250209233909607](../hgame-2024/image-20250209233909607.png)
 
 这么多数据我怎么用呢
 
@@ -648,7 +650,7 @@ undefined2 EepromData::serialize(undefined2 param_1)
 
 可以看出来这28位分成了8位和20位，那根据sha1要求的20字节，不难得出前8位是`secret`,后20位是`counter`
 
-![image-20250209221957408](hgame-2024/image-20250209221957408.png)
+![image-20250209221957408](../hgame-2024/image-20250209221957408.png)
 
 这个刚刚好和eeprom里面有用的字节对应上了。
 
@@ -893,7 +895,7 @@ Nulla nec ligula neque. Etiam et viverra nunc, vel bibendum risus. Donec.`
 
 不知道是什么
 
-![image-20250210010324581](hgame-2024/image-20250210010324581.png)
+![image-20250210010324581](../hgame-2024/image-20250210010324581.png)
 
 ### 2.Turtle
 
@@ -909,7 +911,7 @@ Nulla nec ligula neque. Etiam et viverra nunc, vel bibendum risus. Donec.`
 
 把脱壳过的exe丢到IDA里面去看看，
 
-![image-20250210010712366](hgame-2024/image-20250210010712366.png)
+![image-20250210010712366](../hgame-2024/image-20250210010712366.png)
 
 逮着`ctrl+X`打开
 
@@ -1117,7 +1119,7 @@ Decrypted flag: hgame{Y0u'r3_re4l1y_g3t_0Ut_of_th3_upX!}
 
 然后你就可以获得
 
-![image-20250210011838647](hgame-2024/image-20250210011838647.png)
+![image-20250210011838647](../hgame-2024/image-20250210011838647.png)
 
 `here is your gift:aGFldTRlcGNhXzR0cmdte19yX2Ftbm1zZX0=`
 
@@ -1288,19 +1290,19 @@ func main() {
 
  使用这个里面的字典爆密码
 
-![image-20250210155017045](hgame-2024/image-20250210155017045.png)
+![image-20250210155017045](../hgame-2024/image-20250210155017045.png)
 
 看到这个`888888`的反应时间不同
 
-![image-20250210155055727](hgame-2024/image-20250210155055727.png)
+![image-20250210155055727](../hgame-2024/image-20250210155055727.png)
 
 于是`username`=`shallot`    `password`=`888888`
 
-![image-20250210155232331](hgame-2024/image-20250210155232331.png)
+![image-20250210155232331](../hgame-2024/image-20250210155232331.png)
 
 看到留言框就想到xss，
 
-![image-20250210155420211](hgame-2024/image-20250210155420211.png)
+![image-20250210155420211](../hgame-2024/image-20250210155420211.png)
 
 可以看到里面包含了我们的cookie。那加上访问`/admin`可以模拟admin访问，xss的目标就是获取cookie
 
@@ -1312,15 +1314,15 @@ func main() {
 
 提交评论之后访问`/admin`，然后就有cookie了
 
-![image-20250210160712459](hgame-2024/image-20250210160712459.png)
+![image-20250210160712459](../hgame-2024/image-20250210160712459.png)
 
 这边是服务器返回的cookie
 
 抓一个自己访问`/flag`的包，然后改一下cookie就可以拿到flag了
 
-![image-20250210160857419](hgame-2024/image-20250210160857419.png)
+![image-20250210160857419](../hgame-2024/image-20250210160857419.png)
 
-![image-20250210160915368](hgame-2024/image-20250210160915368.png)
+![image-20250210160915368](../hgame-2024/image-20250210160915368.png)
 
 > hgame{W0w_y0u_5r4_9o0d_4t_xss}
 
@@ -1338,7 +1340,7 @@ func main() {
 
 访问了`/robots.txt`
 
-![image-20250210162531617](hgame-2024/image-20250210162531617.png)
+![image-20250210162531617](../hgame-2024/image-20250210162531617.png)
 
 然后继续访问了`/app.conf`
 
@@ -1364,7 +1366,7 @@ ProxyPass "/app/" "http://127.0.0.1:5000/"
 
 能看到这个`app.py`不能访问
 
-![image-20250210163535781](hgame-2024/image-20250210163535781.png)
+![image-20250210163535781](../hgame-2024/image-20250210163535781.png)
 
 询问ai构建了脚本来访问`app.py`
 
@@ -1495,7 +1497,7 @@ if __name__ == '__main__':
 #具有一定的随机性，属实是在硬爆
 ```
 
-![image-20250210164629237](hgame-2024/image-20250210164629237.png)
+![image-20250210164629237](../hgame-2024/image-20250210164629237.png)
 
 > hgame{y0u_fInd_the-K3Y_To-RrR@cE-0UuUUt2ce20df}
 
@@ -1507,7 +1509,7 @@ if __name__ == '__main__':
 >
 > flag为：hgame{可执行恶意文件名称} （不带后缀）
 
-![5b9f6203f022840796653e53f5719c81](hgame-2024/5b9f6203f022840796653e53f5719c81.png)
+![5b9f6203f022840796653e53f5719c81](../hgame-2024/5b9f6203f022840796653e53f5719c81.png)
 
 > hgame{B4ck_D0_oR}
 
@@ -1568,6 +1570,6 @@ Hint 75: 11010000011000010100001010000111011010100001111010100100100000111110110
 
 草稿纸如图
 
-![image-20250217231109313](hgame-2024/image-20250217231109313.png)
+![image-20250217231109313](../hgame-2024/image-20250217231109313.png)
 
 > hgame{Aug5YMkf3o99ACi7Lr0gQSCKaWy2Azq3ti691DhNlCbxu8rR2mCAD5LEwLdmHa42}

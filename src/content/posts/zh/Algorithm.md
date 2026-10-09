@@ -1,4 +1,6 @@
 ---
+lang: zh
+translationKey: algorithm
 title: Algorithm
 published: 2025-10-29
 tags:

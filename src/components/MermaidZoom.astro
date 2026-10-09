@@ -1,0 +1,8 @@
+<script>
+  import { setupMediaViewer } from '../scripts/media-viewer'
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMediaViewer, { once: true })
+  } else {
+    setupMediaViewer()
+  }
+</script>

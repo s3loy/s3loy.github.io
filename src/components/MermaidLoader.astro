@@ -1,5 +1,6 @@
 <script>
-  import { setupMermaid } from '../scripts/mermaid'
-
-  setupMermaid()
+  if (document.querySelector('pre.mermaid')) {
+    const { setupMermaid } = await import('../scripts/mermaid')
+    setupMermaid()
+  }
 </script>

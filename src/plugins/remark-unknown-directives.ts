@@ -4,11 +4,9 @@ import { directiveToMarkdown } from 'mdast-util-directive'
 import { toMarkdown } from 'mdast-util-to-markdown'
 import type { Plugin } from 'unified'
 import { visit } from 'unist-util-visit'
-import { h as _h } from 'hastscript'
 import type { Node } from 'mdast'
 import type { Directives } from 'mdast-util-directive'
 
-/** Checks if a node is a directive. */
 function isNodeDirective(node: Node): node is Directives {
   return (
     node.type === 'containerDirective' ||

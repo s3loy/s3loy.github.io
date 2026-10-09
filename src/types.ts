@@ -1,39 +1,5 @@
-import type { MarkdownHeading } from 'astro'
 import type { BundledShikiTheme } from 'astro-expressive-code'
 import type { CollectionEntry, DataEntryMap } from 'astro:content'
-
-export type WeekdayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 // 0 = Sunday, 1 = Monday etc.
-
-export type GitHubActivityDay = {
-  date: string
-  count: number
-  level: 0 | 1 | 2 | 3 | 4
-}
-
-export type GitHubActivityWeek = Array<GitHubActivityDay | undefined>
-
-export type GitHubActivityApiResponse = {
-  total: {
-    [year: number]: number
-    [year: string]: number // 'lastYear;
-  }
-  contributions: Array<GitHubActivityDay>
-  error?: string
-}
-
-export type GitHubActivityMonthLabel = {
-  weekIndex: number
-  label: string
-}
-
-export interface TocItem extends MarkdownHeading {
-  children: TocItem[]
-}
-
-export interface TocOpts {
-  maxHeadingLevel?: number | undefined
-  minHeadingLevel?: number | undefined
-}
 
 export interface FrontmatterImage {
   alt: string
@@ -56,8 +22,6 @@ export interface CollationGroup<CollectionType extends keyof DataEntryMap> {
   title: string
   url: string
   collations: Collation<CollectionType>[]
-  // Return this.collations to allow chaining
-  sortCollationsAlpha(): Collation<CollectionType>[]
   sortCollationsMostRecent(): Collation<CollectionType>[]
   sortCollationsLargest(): Collation<CollectionType>[]
   add(item: CollectionEntry<CollectionType>, rawKey: string): void
@@ -68,7 +32,6 @@ export interface CollationGroup<CollectionType extends keyof DataEntryMap> {
 export type NavLink = {
   name: string
   url: string
-  external?: boolean
 }
 
 export type AdmonitionType = 'tip' | 'note' | 'important' | 'caution' | 'warning'
@@ -77,7 +40,6 @@ export const themeKeys = [
   'foreground',
   'background',
   'accent',
-  // Markdown styles
   'heading1',
   'heading2',
   'heading3',
@@ -88,13 +50,11 @@ export const themeKeys = [
   'separator',
   'italic',
   'link',
-  // For admonition styling
   'note',
   'tip',
   'important',
   'caution',
   'warning',
-  // For Giscus syntax highlighting only
   'comment',
   'constant',
   'entity',
@@ -103,7 +63,6 @@ export const themeKeys = [
   'string',
   'variable',
   'regexp',
-  // Terminal colors for user customization only, not used by default
   'blue',
   'green',
   'red',
@@ -114,35 +73,22 @@ export const themeKeys = [
 
 export type ThemeKey = (typeof themeKeys)[number]
 
-// const example: TextmateStyles = {
-//   foreground: ['editor.foreground'],
-//   background: ['editor.background'],
-// }
 export type TextmateStyles = {
   [key in ThemeKey]: string[]
 }
 
-// const example: ColorStyles = {
-//   foreground: '#000000',
-//   background: '#ffffff',
-// }
 export type ColorStyles = {
   [key in ThemeKey]: string
 }
 
-// const example: ThemesWithColorStyles = {
-//   'github-light': {
-//     foreground: '#24292e',
-//     background: '#ffffff',
-//   },
-// }
 export type ThemesWithColorStyles = Partial<Record<BundledShikiTheme, ColorStyles>>
-export type ThemeOverrides = Partial<Record<BundledShikiTheme, Partial<ColorStyles>>>
+export type ThemeOverrides = Partial<Record<SiteTheme, Partial<ColorStyles>>>
+
+export type SiteTheme = 'github-light' | 'github-dark'
 
 export interface ThemesConfig {
-  default: BundledShikiTheme | 'auto'
-  mode: 'single' | 'light-dark-auto' | 'select'
-  include: BundledShikiTheme[]
+  default: SiteTheme
+  include: ['github-light', 'github-dark']
   overrides?: ThemeOverrides
 }
 
@@ -173,7 +119,6 @@ export interface FriendLink {
 
 export interface SiteConfig {
   site: string
-  font: string
   title: string
   description: string
   author: string
@@ -184,6 +129,6 @@ export interface SiteConfig {
   themes: ThemesConfig
   socialLinks: SocialLinks
   navLinks: NavLink[]
-  giscus: GiscusConfig | undefined,
+  giscus: GiscusConfig | undefined
   characters: Record<string, string>
 }

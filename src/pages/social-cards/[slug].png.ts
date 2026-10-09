@@ -8,11 +8,10 @@ import path from 'path'
 import fs from 'fs'
 import type { ReactNode } from 'react'
 
-// Load the font file as binary data
 const fontPath = path.resolve(
   './node_modules/@expo-google-fonts/jetbrains-mono/400Regular/JetBrainsMono_400Regular.ttf',
 )
-const fontData = fs.readFileSync(fontPath) // Reads the file as a Buffer
+const fontData = fs.readFileSync(fontPath)
 
 const avatarPath = path.resolve(siteConfig.socialCardAvatarImage)
 let avatarData: Buffer | undefined
@@ -26,10 +25,7 @@ if (
   avatarBase64 = `data:image/jpeg;base64,${avatarData.toString('base64')}`
 }
 
-const defaultTheme =
-  siteConfig.themes.default === 'auto'
-    ? siteConfig.themes.include[0]
-    : siteConfig.themes.default
+const defaultTheme = siteConfig.themes.default
 
 const themeStyles = await resolveThemeColorStyles(
   [defaultTheme],
@@ -44,7 +40,6 @@ if (!bg || !fg || !accent) {
 }
 
 const ogOptions: SatoriOptions = {
-  // debug: true,
   fonts: [
     {
       data: fontData,
@@ -81,7 +76,7 @@ export async function GET(context: APIContext) {
   const { pubDate, title, author } = context.props as Props
   const svg = await satori(markup(title, pubDate, author) as ReactNode, ogOptions)
   const png = new Resvg(svg).render().asPng()
-  return new Response(png, {
+  return new Response(new Uint8Array(png), {
     headers: {
       'Cache-Control': 'public, max-age=31536000, immutable',
       'Content-Type': 'image/png',
@@ -90,7 +85,7 @@ export async function GET(context: APIContext) {
 }
 
 export async function getStaticPaths() {
-  const posts = await getSortedPosts()
+  const posts = await getSortedPosts('all')
   return posts
     .map((post) => ({
       params: { slug: post.id },

@@ -41,8 +41,6 @@ const createCss = (styles: ColorStyles) => {
   const green = styles.green
   const blue = styles.blue
   const yellow = styles.yellow
-  // const magenta = styles.magenta
-  // const cyan = styles.cyan
 
   const altBackground = muted(foreground, 5).mix(Color(background), 0.5).hex()
   return `

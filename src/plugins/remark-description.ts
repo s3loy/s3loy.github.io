@@ -31,9 +31,11 @@ const remarkDescription: RemarkPlugin = (options?: { maxChars?: number }) => {
     }
     let description = data.astro?.frontmatter?.description || findFirstParagraph(tree)
     if (description && data.astro?.frontmatter) {
-      if (description.length > maxChars) {
-        const lastSpace = description.slice(0, maxChars).lastIndexOf(' ')
-        description = description.slice(0, lastSpace) + '…'
+      const characters = Array.from(description as string)
+      if (characters.length > maxChars) {
+        const excerpt = characters.slice(0, maxChars).join('')
+        const lastSpace = excerpt.lastIndexOf(' ')
+        description = (lastSpace > 0 ? excerpt.slice(0, lastSpace) : excerpt) + '…'
       }
       data.astro.frontmatter.description = description
     }

@@ -26,3 +26,9 @@ pnpm-debug.log*
 draft/
 
 docs/
+
+# superpowers SDD scratch (ledger, briefs, review packages)
+.superpowers/
+
+# examples lab node toolchain
+examples/*/node_modules/

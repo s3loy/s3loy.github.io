@@ -1,4 +1,6 @@
 ---
+lang: zh
+translationKey: proxy-server
 title: Proxy Server
 published: 2025-12-13T10:00:00
 tags:
@@ -195,7 +197,7 @@ curl -v -x http://127.0.0.1:11451 https://www.baidu.com
 ```
 
 然后这个请求就没有出网了，这只是假代理看看两边连接
-![http-proxy](Proxy-server/http-proxy.jpg)
+![http-proxy](../Proxy-server/http-proxy.jpg)
 
 ### 透明出口代理
 

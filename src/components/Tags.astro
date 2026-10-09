@@ -1,22 +1,17 @@
 ---
 import type { Collation } from '~/types'
-
 interface Props {
   tags: Collation<'posts'>[]
 }
-
 const { tags } = Astro.props
 ---
 
-<div class="flex flex-wrap gap-3 text-sm">
+<ul class="link-list" aria-label="Tags">
   {
     tags.map((tag) => (
-      <a
-        href={`/archives?tag=${encodeURIComponent(tag.titleSlug)}`}
-        class="py-1 px-3 bg-accent/7 hover:bg-accent/8 border-1 border-transparent hover:border-accent/20 text-foreground/90 transition-colors"
-      >
-        {tag.title}
-      </a>
+      <li>
+        <a href={`/archives?tag=${encodeURIComponent(tag.titleSlug)}`}>{tag.title}</a>
+      </li>
     ))
   }
-</div>
+</ul>

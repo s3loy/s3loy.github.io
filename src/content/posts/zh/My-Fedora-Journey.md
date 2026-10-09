@@ -1,4 +1,6 @@
 ---
+lang: zh
+translationKey: my-fedora-journey
 title: My Fedora Journey
 published: 2026-03-02T14:30:00
 tags:
@@ -468,7 +470,7 @@ omf install z
 使用的是`pure`主题
 
 > 主题预览
-![preview](My-Fedora-Journey/pure.png)
+![preview](../My-Fedora-Journey/pure.png)
 
 ## 12. Tool(Fcitx5)::Input method
 

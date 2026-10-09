@@ -1,10 +1,12 @@
 ---
+lang: zh
+translationKey: oauth-and-oidc
 title: OAuth and OIDC
 published: 2026-09-07T01:15:00
 tags:
   - OAuth
   - backend
-series: "Backend"
+series: 'Backend'
 ---
 
 ## start from OAuth 2.0
@@ -22,7 +24,7 @@ OAuth 1 早已过时 [RFC 5849](https://www.rfc-editor.org/info/rfc5849/)
 - OAuth 是 授权框架
 - OAuth 协议 是 授权协议
 - OAuth 2.0 是 授权协议
-- OAuth 2.0 框架 是 授权框架 
+- OAuth 2.0 框架 是 授权框架
 
 (嗯)
 
@@ -34,7 +36,7 @@ OAuth 2.0 框架能让第三方应用以有限的权限访问 HTTP 服务，可�
 
 OAuth 协议的设计目的:
 
-*让最终用户通过OAuth 将他们在受保护资源上的部分权限**委托**给客户端应用*
+_让最终用户通过OAuth 将他们在受保护资源上的部分权限**委托**给客户端应用_
 
 受保护资源依赖授权服务器向客户端颁发专用的安全凭据 OAuth 访问令牌
 
@@ -153,7 +155,7 @@ OAuth 本来就是为了避免这件事才存在的，ROPC 却是把它明面化
 
 一个后端服务要访问另一个后端服务的 API，那怎么办？
 
-*资源拥有者什么的，不需要了*
+_资源拥有者什么的，不需要了_
 
 客户端可直接使用 client_id + client_secret去 Token Endpoint 换 token：
 
@@ -185,7 +187,7 @@ access token 短命，但过期了不代表用户要重新登录一遍
 
 客户端跳到 Authorization Endpoint 之前生成会一个随机值进 `state`，授权服务器完成后校验 `state`
 
-*防CSRF*
+_防CSRF_
 
 ### 优缺点
 
@@ -204,7 +206,7 @@ OAuth 2.0 的可扩展性和模块化是其最大的优势之一，因为这使�
 
 1. OAuth 没有定义 `HTTP` 协议之外的情形
 
-bearer令牌的OAuth 2.0 不提供消息签名，因此需要 `TLS` 类的传输机制来保护信息 
+bearer令牌的OAuth 2.0 不提供消息签名，因此需要 `TLS` 类的传输机制来保护信息
 [RFC7628: A Set of Simple Authentication and Security Layer (SASL) Mechanisms for OAuth](https://datatracker.ietf.org/doc/html/rfc7628)
 
 当然现在不乏非TLS链接之上的尝试
@@ -268,11 +270,11 @@ sequenceDiagram
 
     Client->>Client: Generate code_verifier = "XYZ123"<br/>(plain mode: code_challenge = "XYZ123")
     Client->>AS: Authorization Request (code_challenge=XYZ123, method=plain)
-    
-    Note over Client,Attacker: ⚠️ Attacker sniffs request and steals code_verifier directly!
+
+    Note over Client,Attacker:wrap: ⚠️ Attacker sniffs request and steals code_verifier directly!
 
     AS-->>Client: Return Authorization Code
-    Note over Client,Attacker: Attacker intercepts Authorization Code
+    Note over Client,Attacker:wrap: Attacker intercepts Authorization Code
 
     Attacker->>AS: POST /token (code + code_verifier=XYZ123)
     AS-->>Attacker: ⚠️ 200 OK (PKCE bypassed! Token issued to Attacker)
@@ -292,7 +294,7 @@ sequenceDiagram
 
     User->>Browser: Click "Login with OAuth"
     Browser->>AS: GET /authorize?response_type=token...
-    AS-->>Browser: 302 Redirect to https://app.com/#access_token=secret_token
+    AS-->>Browser: 302 Redirect to https://app.com/#35;access_token=secret_token
 
     Note over Browser: ⚠️ Token is exposed in URL Fragment & Browser History
 
@@ -304,25 +306,41 @@ sequenceDiagram
 3. ROPC（Resource Owner Password Credentials）被移除
 
 ```mermaid
+%% @style editorial
+%% @title ROPC · 密码经过客户端
 sequenceDiagram
     autonumber
-    actor User as Resource Owner (User)
-    participant Client as Client Application
-    participant AS as Authorization Server
-    participant RS as Resource Server
+    participant User as 用户
+    participant Client as 客户端
+    participant AS as 授权服务器
+    participant RS as 资源服务器
 
-    Note over User,Client: ⚠️ High Risk: User enters raw credentials into Client
-    User->>Client: 1. Submit Username & Password
-    
-    Note over Client: ⚠️ Risk Point 1:<br/>Plaintext password exposed in<br/>Client memory, logs, or 3rd-party SDKs
+    User->>Client: 提交用户名与密码
+    Note over Client: 密码暴露给客户端
+    Client->>AS: 用密码申请令牌
+    AS-->>Client: 返回 Access Token
+    Client->>RS: 携带令牌请求资源
+    RS-->>Client: 返回受保护资源
+```
 
-    Client->>AS: 2. POST /token (grant_type=password, username, password)
-    
-    Note over AS: ⚠️ Risk Point 2:<br/>Bypasses MFA, Passkeys, SSO & Consent Screen
+**这条链路的问题**：用户把原始凭据交给了客户端，明文密码可能出现在客户端内存、日志或第三方 SDK 中；直接换取令牌也绕开了 MFA、Passkeys、SSO 和授权确认页面。
 
-    AS-->>Client: 3. 200 OK (Issue Access Token)
-    Client->>RS: 4. GET /resource (Authorization: Bearer <token>)
-    RS-->>Client: 5. Protected Resource Data
+图中的请求细节保留在这里，避免把整张图横向撑开：
+
+```http
+POST /token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&username=<username>&password=<password>
+
+HTTP/1.1 200 OK
+```
+
+拿到 Access Token 后，客户端通过请求头访问资源：
+
+```http
+GET /resource
+Authorization: Bearer <token>
 ```
 
 4. `redirect_uri` 必须逐字符精确匹配
@@ -340,7 +358,7 @@ sequenceDiagram
     participant Attacker
 
     Client->>Proxy: GET /api/orders?access_token=secret_jwt_token
-    
+
     Note over Proxy: ⚠️ Token logged in plaintext to access.log & metrics
 
     Proxy->>RS: Forward Request
@@ -441,7 +459,7 @@ OIDC 提供商（eg. Google、Auth0）在 `/.well-known/openid-configuration` �
 ```bash
 $ curl https://link.sast.fun/v2/.well-known/openid-configuration
 
-{"authorization_endpoint":"https://link.sast.fun/v2/oauth/authorize","claim_types_supported":["normal"],"claims_parameter_supported":false,"claims_supported":["sub","iss","aud","exp","iat","nonce","name","picture","preferred_username","role","email","email_verified","updated_at"],"code_challenge_methods_supported":["S256"],"grant_types_supported":["authorization_code","refresh_token"],"id_token_signing_alg_values_supported":["EdDSA"],"issuer":"https://link.sast.fun/v2","jwks_uri":"https://link.sast.fun/v2/.well-known/jwks.json","request_parameter_supported":false,"request_uri_parameter_supported":false,"response_modes_supported":["query"],"response_types_supported":["code"],"revocation_endpoint":"https://link.sast.fun/v2/oauth/revoke","scopes_supported":["openid","profile","email","admin:read","admin:write","user:read","user:write"],"subject_types_supported":["public"],"token_endpoint":"https://link.sast.fun/v2/oauth/token","token_endpoint_auth_methods_supported":["none","client_secret_post"],"userinfo_endpoint":"https://link.sast.fun/v2/userinfo"} 
+{"authorization_endpoint":"https://link.sast.fun/v2/oauth/authorize","claim_types_supported":["normal"],"claims_parameter_supported":false,"claims_supported":["sub","iss","aud","exp","iat","nonce","name","picture","preferred_username","role","email","email_verified","updated_at"],"code_challenge_methods_supported":["S256"],"grant_types_supported":["authorization_code","refresh_token"],"id_token_signing_alg_values_supported":["EdDSA"],"issuer":"https://link.sast.fun/v2","jwks_uri":"https://link.sast.fun/v2/.well-known/jwks.json","request_parameter_supported":false,"request_uri_parameter_supported":false,"response_modes_supported":["query"],"response_types_supported":["code"],"revocation_endpoint":"https://link.sast.fun/v2/oauth/revoke","scopes_supported":["openid","profile","email","admin:read","admin:write","user:read","user:write"],"subject_types_supported":["public"],"token_endpoint":"https://link.sast.fun/v2/oauth/token","token_endpoint_auth_methods_supported":["none","client_secret_post"],"userinfo_endpoint":"https://link.sast.fun/v2/userinfo"}
 ```
 
 ### 标准 Claims
@@ -457,6 +475,7 @@ OIDC 定义了一套标准 claims（声明），分散在三个来源：
 OIDC Core 定义的标准 claims 分几类：
 
 **必需 / 核心 claims**（in ID Token）：
+
 - `sub`：Subject Identifier，用户唯一标识符，同 OP（OpenID Provider）下永远不变
 - `iss`：Issuer，签发者，OP URL
 - `aud`：Audience，受众，通常是客户端的 `client_id`
@@ -464,6 +483,7 @@ OIDC Core 定义的标准 claims 分几类：
 - `iat`：Issued At，签发时间戳
 
 **profile scope** 对应的 claims：
+
 - `name`：全名
 - `family_name` / `given_name`：姓 / 名
 - `middle_name`：中间名
@@ -479,19 +499,22 @@ OIDC Core 定义的标准 claims 分几类：
 - `updated_at`：资料最后更新时间戳
 
 **email scope** 对应的 claims：
+
 - `email`：邮箱地址
 - `email_verified`：邮箱是否已验证（boolean）
 
 **address scope** 对应的 claims：
+
 - `address`：JSON 对象，包含 `formatted`（完整地址）、`street_address`、`locality`（城市）、`region`（省/州）、`postal_code`、`country`
 
 **phone scope** 对应的 claims：
+
 - `phone_number`：电话号码（E.164 格式，如 `+86 138...`）
 - `phone_number_verified`：电话是否已验证
 
 #### 可选 claims
 
-- `nonce`：客户端在授权请求里传的随机值 *防重放攻击* Note:(重放攻击)[https://en.wikipedia.org/wiki/Replay_attack]
+- `nonce`：客户端在授权请求里传的随机值 _防重放攻击_ Note:(重放攻击)[https://en.wikipedia.org/wiki/Replay_attack]
 - `auth_time`：用户真实认证的时间戳
 - `acr`：Authentication Context Class Reference，认证上下文等级（eg. `urn:mace:incommon:iap:silver` 表示多因素认证）
 - `amr`：Authentication Methods References，认证方式数组（eg. `["pwd", "otp"]` 表示密码 + OTP）
@@ -520,7 +543,7 @@ OIDC Core 定义的标准 claims 分几类：
 
 安全关键的决策永远不只依赖 token 里的 claims snapsho ，后端必须从数据库重新读
 
-*token 里的值只是用来路由请求或者前端显示*
+_token 里的值只是用来路由请求或者前端显示_
 
 ## JWT 结构与验证
 
@@ -611,7 +634,7 @@ Base64URL 解码 Payload：
 }
 ```
 
-- `kid`: `link-v2-active` 
+- `kid`: `link-v2-active`
 - `kty`: `OKP` 表示 Octet Key Pair（[RFC 8037](https://datatracker.ietf.org/doc/html/rfc8037/)）
 - `crv`: `Ed25519` 椭圆曲线
 - `x`: 公钥坐标，Base64URL 编码的 32 字节
@@ -659,25 +682,25 @@ sequenceDiagram
 
     Note over Client: 1. 生成 code_verifier<br/>43-128 字符的随机串<br/>（[A-Za-z0-9._~-]）
     Client->>Client: code_verifier = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
-    
+
     Note over Client: 2. 计算 code_challenge<br/>SHA256 + Base64URL
     Client->>Client: code_challenge = BASE64URL(SHA256(code_verifier))
-    
+
     Client->>Browser: 3. 重定向到 /authorize
     Browser->>AS: 4. GET /authorize?<br/>response_type=code<br/>&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM<br/>&code_challenge_method=S256<br/>&client_id=xxx<br/>&redirect_uri=xxx<br/>&state=xyz
-    
+
     Note over AS: 5. 存储 code_challenge + method<br/>跟 authorization code 绑定
-    
+
     AS-->>Browser: 6. 用户登录 + 同意授权
     AS->>Browser: 7. 302 重定向到 callback
     Browser->>Client: 8. GET /callback?code=AUTH_CODE&state=xyz
-    
+
     Note over Client: 9. 验证 state，准备换 token
-    
+
     Client->>AS: 10. POST /token<br/>grant_type=authorization_code<br/>&code=AUTH_CODE<br/>&code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk<br/>&client_id=xxx<br/>&redirect_uri=xxx
-    
+
     Note over AS: 11. 验证：<br/>BASE64URL(SHA256(code_verifier))<br/>== 存储的 code_challenge ?
-    
+
     alt 验证通过
         AS-->>Client: 12. 200 OK (access_token + refresh_token)
     else 验证失败
@@ -719,18 +742,18 @@ sequenceDiagram
 
     Note over Client: 1. 准备授权参数
     Client->>AS: 2. POST /as/par<br/>Content-Type: application/x-www-form-urlencoded<br/>Authorization: Basic client_id:client_secret<br/><br/>response_type=code<br/>&client_id=xxx<br/>&redirect_uri=...<br/>&scope=openid profile email<br/>&state=xyz<br/>&nonce=abc<br/>&code_challenge=...<br/>&code_challenge_method=S256
-    
+
     Note over AS: 3. 验证客户端身份<br/>存储参数，生成 request_uri
-    
+
     AS-->>Client: 4. 200 OK<br/>{ "request_uri": "urn:ietf:params:oauth:request_uri:6esc_11ACC5bwc014ltc14eY22c",<br/>  "expires_in": 90 }
-    
+
     Note over Client: 5. request_uri 有效期 90 秒<br/>只能用一次
-    
+
     Client->>Browser: 6. 重定向到 /authorize
     Browser->>AS: 7. GET /authorize?<br/>client_id=xxx<br/>&request_uri=urn:ietf:params:oauth:request_uri:6esc_...
-    
+
     Note over AS: 8. 根据 request_uri 取出存储的参数<br/>继续标准授权流程
-    
+
     AS-->>Browser: 9. 显示登录 + 同意页面
 ```
 
@@ -752,19 +775,19 @@ sequenceDiagram
     participant AS as Authorization Server
 
     Client->>RS: 1. GET /api/data<br/>Authorization: Bearer opaque_token_xyz123
-    
+
     Note over RS: 2. token 是不透明的<br/>无法解析，必须问 AS
-    
+
     RS->>AS: 3. POST /introspect<br/>Authorization: Basic rs_id:rs_secret<br/><br/>token=opaque_token_xyz123<br/>&token_type_hint=access_token
-    
+
     Note over AS: 4. 查库：token 存在？<br/>未撤销？未过期？
-    
+
     alt Token 有效
         AS-->>RS: 5. 200 OK<br/>{ "active": true,<br/>  "scope": "read write",<br/>  "client_id": "client_123",<br/>  "username": "user@example.com",<br/>  "exp": 1700000000,<br/>  "sub": "user_id_456" }
     else Token 无效
         AS-->>RS: 5. 200 OK<br/>{ "active": false }
     end
-    
+
     alt active: true
         RS-->>Client: 6. 200 OK (返回受保护资源)
     else active: false
@@ -780,12 +803,12 @@ sequenceDiagram
 
 #### JWT vs Opaque ：
 
-| Dimension | JWT | Opaque Token |
-|------|-----|--------------|
-| 资源服务器负载 | 低（离线验证，仅签名） | 高（每次请求都要调 introspection） |
-| 即时撤销 | 难（过期前一直有效，除非资源服务器也查库） | 易（AS 标记撤销，introspection 即 false） |
-| 信息泄露风险 | 高（Base64） | 低（opaque token 不携带信息，只是随机串） |
-| 跨服务传递 | 易（资源服务器 A 可以把 JWT 转发给 B过） | 难（每个资源服务器都要回调 AS） |
+| Dimension      | JWT                                        | Opaque Token                              |
+| -------------- | ------------------------------------------ | ----------------------------------------- |
+| 资源服务器负载 | 低（离线验证，仅签名）                     | 高（每次请求都要调 introspection）        |
+| 即时撤销       | 难（过期前一直有效，除非资源服务器也查库） | 易（AS 标记撤销，introspection 即 false） |
+| 信息泄露风险   | 高（Base64）                               | 低（opaque token 不携带信息，只是随机串） |
+| 跨服务传递     | 易（资源服务器 A 可以把 JWT 转发给 B过）   | 难（每个资源服务器都要回调 AS）           |
 
 如果是分布式架构，opaque token + introspection 可能就是更好的选择
 
@@ -816,23 +839,23 @@ sequenceDiagram
 
     Note over Client: 1. 生成 RSA 或 EC 密钥对
     Client->>Client: Generate key pair (public + private)
-    
+
     Client->>AS: 2. POST /token<br/>grant_type=authorization_code<br/>&code=...<br/>&code_verifier=...<br/>DPoP: <DPoP proof JWT>
-    
+
     Note over Client: DPoP proof 包含：<br/>{ "typ": "dpop+jwt",<br/>  "alg": "ES256",<br/>  "jwk": { 客户端公钥 } }<br/>.<br/>{ "jti": "uuid",<br/>  "htm": "POST",<br/>  "htu": "https://as.example.com/token",<br/>  "iat": 1700000000 }<br/>. <私钥签名>
-    
+
     Note over AS: 3. 验证 DPoP proof：<br/>- 签名是否匹配公钥<br/>- htm/htu 是否匹配当前请求<br/>- iat 是否在合理范围
-    
+
     Note over AS: 4. 签发 token，在 cnf claim 里<br/>记录公钥的 JWK Thumbprint
-    
-    AS-->>Client: 5. 200 OK<br/>{ "access_token": "eyJ...",  # 包含 cnf: { jkt: "thumbprint" }<br/>  "token_type": "DPoP",  # 不是 Bearer！<br/>  "expires_in": 3600 }
-    
+
+    AS-->>Client: 5. 200 OK<br/>{ "access_token": "eyJ...",  #35; 包含 cnf: { jkt: "thumbprint" }<br/>  "token_type": "DPoP",  #35; 不是 Bearer！<br/>  "expires_in": 3600 }
+
     Client->>RS: 6. GET /api/data<br/>Authorization: DPoP eyJ...<br/>DPoP: <另一个 DPoP proof JWT>
-    
+
     Note over Client: 这次的 DPoP proof：<br/>htm=GET, htu=/api/data<br/>还要加上 ath (access token hash)
-    
+
     Note over RS: 7. 验证两层：<br/>① token 签名和 exp<br/>② DPoP proof 签名、htm/htu/ath<br/>③ proof 的公钥指纹 == token 里的 jkt
-    
+
     alt 验证通过
         RS-->>Client: 8. 200 OK (返回数据)
     else 验证失败
@@ -843,6 +866,7 @@ sequenceDiagram
 **DPoP proof 的结构**：
 
 Header:
+
 ```json
 {
   "typ": "dpop+jwt",
@@ -857,6 +881,7 @@ Header:
 ```
 
 Payload (请求 `/token` 时):
+
 ```json
 {
   "jti": "unique-uuid",
@@ -867,13 +892,14 @@ Payload (请求 `/token` 时):
 ```
 
 Payload (请求资源时):
+
 ```json
 {
   "jti": "another-uuid",
   "htm": "GET",
   "htu": "https://rs.example.com/api/data",
   "iat": 1700000100,
-  "ath": "fUHyO2r2Z3DZ53EsNrWBb0xWXoaNy59IiKCAqksmQEo"  // BASE64URL(SHA256(access_token))
+  "ath": "fUHyO2r2Z3DZ53EsNrWBb0xWXoaNy59IiKCAqksmQEo" // BASE64URL(SHA256(access_token))
 }
 ```
 
@@ -907,17 +933,17 @@ sequenceDiagram
     participant RS as Resource Server
 
     Note over Client: 1. 客户端有自己的 TLS 证书<br/>（企业 PKI 签发 或 自签名）
-    
+
     Client->>AS: 2. POST /token (TLS 握手时出示客户端证书)
     Note over AS: 3. TLS 层验证客户端证书<br/>提取证书指纹（SHA-256）
     Note over AS: 4. 签发 token，在 cnf claim 里<br/>记录客户端证书指纹
-    
+
     AS-->>Client: 5. 200 OK (access_token)
-    
+
     Client->>RS: 6. GET /api/data (TLS 握手时出示同一张证书)
     Note over RS: 7. TLS 层验证客户端证书<br/>提取证书指纹
-    Note over RS: 8. 解码 token，对比：<br/>token.cnf.x5t#S256 == TLS 证书指纹？
-    
+    Note over RS: 8. 解码 token，对比：<br/>token.cnf.x5t#35;S256 == TLS 证书指纹？
+
     alt 指纹匹配
         RS-->>Client: 9. 200 OK
     else 指纹不匹配
@@ -957,22 +983,22 @@ sequenceDiagram
     participant User as 用户（手机/电脑）
 
     Device->>AS: 1. POST /device_authorization<br/>client_id=tv_app
-    
+
     Note over AS: 2. 生成：<br/>device_code（设备轮询用）<br/>user_code（用户输入用，短码）<br/>verification_uri（用户访问的 URL）
-    
-    AS-->>Device: 3. 200 OK<br/>{ "device_code": "GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS",<br/>  "user_code": "WDJB-MJHT",  # 短码，方便输入<br/>  "verification_uri": "https://example.com/device",<br/>  "expires_in": 1800,<br/>  "interval": 5 }  # 轮询间隔（秒）
-    
+
+    AS-->>Device: 3. 200 OK<br/>{ "device_code": "GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS",<br/>  "user_code": "WDJB-MJHT",  #35; 短码，方便输入<br/>  "verification_uri": "https://example.com/device",<br/>  "expires_in": 1800,<br/>  "interval": 5 }  #35; 轮询间隔（秒）
+
     Note over Device: 4. 显示：<br/>请在手机/电脑上打开<br/>https://example.com/device<br/>输入代码：WDJB-MJHT
-    
+
     Device->>Device: 5. 开始轮询（每 5 秒一次）
-    
+
     User->>AS: 6. 打开 verification_uri，输入 user_code
     Note over AS: 7. 显示登录页 + 同意授权页
     User->>AS: 8. 登录并同意授权
-    
+
     loop 设备轮询
         Device->>AS: 9. POST /token<br/>grant_type=urn:ietf:params:oauth:grant-type:device_code<br/>&device_code=GmRh...<br/>&client_id=tv_app
-        
+
         alt 用户还没授权
             AS-->>Device: 10. 400 Bad Request<br/>{ "error": "authorization_pending" }
         else 用户拒绝授权
@@ -983,7 +1009,7 @@ sequenceDiagram
             AS-->>Device: 10. 400 Bad Request<br/>{ "error": "expired_token" }
         end
     end
-    
+
     Note over Device: 11. 拿到 token，停止轮询<br/>开始访问 API
 ```
 
@@ -1014,7 +1040,7 @@ OAuth 流程常常有不可逾越的**跨域问题**
 fetch('https://auth.example.com/token', {
   method: 'POST',
   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  body: 'grant_type=authorization_code&code=...'
+  body: 'grant_type=authorization_code&code=...',
 })
 ```
 
@@ -1045,10 +1071,10 @@ sequenceDiagram
 
     Browser->>BFF: 1. POST /api/auth/callback<br/>code=AUTH_CODE
     Note over BFF: 2. 同域请求，无 CORS 问题
-    
+
     BFF->>AS: 3. POST /token<br/>code=AUTH_CODE<br/>&client_secret=...
     Note over BFF: 4. 服务端请求，无 CORS 限制
-    
+
     AS-->>BFF: 5. 200 OK (token)
     BFF-->>Browser: 6. Set-Cookie: session=...<br/>或返回 token（不推荐）
 ```
@@ -1078,7 +1104,7 @@ Link 里我们就用的 BFF 模式 zwz——前端收到授权码后，调 `/oau
 ```
 
 每个客户端都要验证 `aud` **包含**自己的 `client_id`
-但如果你是 `client_b`，你还要检查 `azp`（Authorized Party）是否是可信的——`azp` 
+但如果你是 `client_b`，你还要检查 `azp`（Authorized Party）是否是可信的——`azp`
 
 ## 新兴标准与实践
 
@@ -1098,18 +1124,18 @@ RFC 9068 统一了这些字段，让资源服务器可以用同一套逻辑验�
 
 #### 标准 Claims
 
-| Claim | 必需 | 说明 |
-|-------|------|------|
-| `iss` | ✓ | 签发者（OP 的 URL） |
-| `exp` | ✓ | 过期时间 |
-| `aud` | ✓ | 受众（资源服务器的标识符，可以是数组） |
-| `sub` | ✓ | 主体（用户标识符） |
-| `client_id` | ✓ | 客户端 ID（**固定字段名**） |
-| `iat` | ✓ | 签发时间 |
-| `jti` | ✓ | Token ID |
-| `scope` | — | 权限范围（**空格分隔的字符串**），client credentials grant 必需 |
-| `auth_time` | — | 用户真实认证时刻 |
-| `acr` / `amr` | — | 认证上下文 / 认证方式 |
+| Claim         | 必需 | 说明                                                            |
+| ------------- | ---- | --------------------------------------------------------------- |
+| `iss`         | ✓    | 签发者（OP 的 URL）                                             |
+| `exp`         | ✓    | 过期时间                                                        |
+| `aud`         | ✓    | 受众（资源服务器的标识符，可以是数组）                          |
+| `sub`         | ✓    | 主体（用户标识符）                                              |
+| `client_id`   | ✓    | 客户端 ID（**固定字段名**）                                     |
+| `iat`         | ✓    | 签发时间                                                        |
+| `jti`         | ✓    | Token ID                                                        |
+| `scope`       | —    | 权限范围（**空格分隔的字符串**），client credentials grant 必需 |
+| `auth_time`   | —    | 用户真实认证时刻                                                |
+| `acr` / `amr` | —    | 认证上下文 / 认证方式                                           |
 
 #### example
 
@@ -1166,13 +1192,13 @@ Link 的 JWT access token 虽然是自包含的，但 **资源服务器每次都
 func (a *Authenticator) RequireAdminAuth(ctx context.Context, header string) (Principal, error) {
     // 1. 验证 JWT 签名、exp、aud
     claims := verifyJWT(header)
-    
+
     // 2. 从数据库读 token 元数据
     tokenMeta := db.QueryOne("SELECT revoked_at FROM oauth_access_tokens WHERE jti = ?", claims.JTI)
     if tokenMeta.RevokedAt != nil {
         return nil, ErrTokenRevoked
     }
-    
+
     // 3. 从数据库读用户当前状态
     user := db.QueryOne("SELECT role, state, token_version FROM user WHERE id = ?", claims.Sub)
     if user.TokenVersion != claims.TokenVersion {
@@ -1181,12 +1207,12 @@ func (a *Authenticator) RequireAdminAuth(ctx context.Context, header string) (Pr
     if user.State == "is_deleted" {
         return nil, ErrAccountClosed
     }
-    
+
     // 4. 验证权限
     if user.Role != "admin" && user.Role != "lecturer" {
         return nil, ErrForbidden
     }
-    
+
     return Principal{UserID: claims.Sub, Role: user.Role}, nil
 }
 ```
@@ -1257,7 +1283,6 @@ RAR 的 `authorization_details` 可以表达任意结构：
 
 OIDC 的 Discovery 文档是标准入口，客户端拿到 `/.well-known/openid-configuration` 就能知道所有端点
 
-
 ```bash
 $ curl -s https://link.sast.fun/v2/.well-known/openid-configuration | jq .
 ```
@@ -1270,13 +1295,35 @@ $ curl -s https://link.sast.fun/v2/.well-known/openid-configuration | jq .
   "userinfo_endpoint": "https://link.sast.fun/v2/userinfo",
   "jwks_uri": "https://link.sast.fun/v2/.well-known/jwks.json",
   "revocation_endpoint": "https://link.sast.fun/v2/oauth/revoke",
-  "scopes_supported": ["openid", "profile", "email", "admin:read", "admin:write", "user:read", "user:write"],
+  "scopes_supported": [
+    "openid",
+    "profile",
+    "email",
+    "admin:read",
+    "admin:write",
+    "user:read",
+    "user:write"
+  ],
   "response_types_supported": ["code"],
   "grant_types_supported": ["authorization_code", "refresh_token"],
   "subject_types_supported": ["public"],
   "id_token_signing_alg_values_supported": ["EdDSA"],
   "token_endpoint_auth_methods_supported": ["none", "client_secret_post"],
-  "claims_supported": ["sub", "iss", "aud", "exp", "iat", "nonce", "name", "picture", "preferred_username", "role", "email", "email_verified", "updated_at"],
+  "claims_supported": [
+    "sub",
+    "iss",
+    "aud",
+    "exp",
+    "iat",
+    "nonce",
+    "name",
+    "picture",
+    "preferred_username",
+    "role",
+    "email",
+    "email_verified",
+    "updated_at"
+  ],
   "code_challenge_methods_supported": ["S256"],
   "response_modes_supported": ["query"],
   "claim_types_supported": ["normal"],
@@ -1316,11 +1363,13 @@ $ curl -s https://link.sast.fun/v2/.well-known/jwks.json | jq .
 #### Step 1: 读取 Discovery 文档
 
 ```javascript
-const discovery = await fetch('https://link.sast.fun/v2/.well-known/openid-configuration').then(r => r.json());
+const discovery = await fetch(
+  'https://link.sast.fun/v2/.well-known/openid-configuration',
+).then((r) => r.json())
 
-console.log(discovery.authorization_endpoint);  // https://link.sast.fun/v2/oauth/authorize
-console.log(discovery.token_endpoint);          // https://link.sast.fun/v2/oauth/token
-console.log(discovery.userinfo_endpoint);       // https://link.sast.fun/v2/userinfo
+console.log(discovery.authorization_endpoint) // https://link.sast.fun/v2/oauth/authorize
+console.log(discovery.token_endpoint) // https://link.sast.fun/v2/oauth/token
+console.log(discovery.userinfo_endpoint) // https://link.sast.fun/v2/userinfo
 ```
 
 **从 Discovery 得知**：
@@ -1335,46 +1384,46 @@ console.log(discovery.userinfo_endpoint);       // https://link.sast.fun/v2/user
 ```javascript
 // 生成 43-128 字节的随机 code_verifier
 function generateCodeVerifier() {
-  const array = new Uint8Array(32);  // 32 字节 = 43 字符 base64url
-  crypto.getRandomValues(array);
-  return base64urlEncode(array);
+  const array = new Uint8Array(32) // 32 字节 = 43 字符 base64url
+  crypto.getRandomValues(array)
+  return base64urlEncode(array)
 }
 
 // S256: code_challenge = BASE64URL(SHA256(ASCII(code_verifier)))
 async function generateCodeChallenge(verifier) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(verifier);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return base64urlEncode(new Uint8Array(hash));
+  const encoder = new TextEncoder()
+  const data = encoder.encode(verifier)
+  const hash = await crypto.subtle.digest('SHA-256', data)
+  return base64urlEncode(new Uint8Array(hash))
 }
 
-const codeVerifier = generateCodeVerifier();
-const codeChallenge = await generateCodeChallenge(codeVerifier);
+const codeVerifier = generateCodeVerifier()
+const codeChallenge = await generateCodeChallenge(codeVerifier)
 
 // 存到 sessionStorage，等 callback 回来时用
-sessionStorage.setItem('pkce_verifier', codeVerifier);
+sessionStorage.setItem('pkce_verifier', codeVerifier)
 ```
 
 #### Step 3: 重定向到授权端点
 
 ```javascript
-const state = generateRandomString();  // 防 CSRF
-const nonce = generateRandomString();  // 防 ID Token 重放
+const state = generateRandomString() // 防 CSRF
+const nonce = generateRandomString() // 防 ID Token 重放
 
-sessionStorage.setItem('oauth_state', state);
-sessionStorage.setItem('oauth_nonce', nonce);
+sessionStorage.setItem('oauth_state', state)
+sessionStorage.setItem('oauth_nonce', nonce)
 
-const authUrl = new URL(discovery.authorization_endpoint);
-authUrl.searchParams.set('response_type', 'code');
-authUrl.searchParams.set('client_id', 'my-app-client-id');
-authUrl.searchParams.set('redirect_uri', 'https://my-app.com/callback');
-authUrl.searchParams.set('scope', 'openid profile email');
-authUrl.searchParams.set('state', state);
-authUrl.searchParams.set('nonce', nonce);
-authUrl.searchParams.set('code_challenge', codeChallenge);
-authUrl.searchParams.set('code_challenge_method', 'S256');
+const authUrl = new URL(discovery.authorization_endpoint)
+authUrl.searchParams.set('response_type', 'code')
+authUrl.searchParams.set('client_id', 'my-app-client-id')
+authUrl.searchParams.set('redirect_uri', 'https://my-app.com/callback')
+authUrl.searchParams.set('scope', 'openid profile email')
+authUrl.searchParams.set('state', state)
+authUrl.searchParams.set('nonce', nonce)
+authUrl.searchParams.set('code_challenge', codeChallenge)
+authUrl.searchParams.set('code_challenge_method', 'S256')
 
-window.location.href = authUrl.href;
+window.location.href = authUrl.href
 ```
 
 #### Step 4: 处理 Callback
@@ -1382,17 +1431,17 @@ window.location.href = authUrl.href;
 ```javascript
 // 用户授权后，Link 重定向到 https://my-app.com/callback?code=xxx&state=yyy
 
-const urlParams = new URLSearchParams(window.location.search);
-const code = urlParams.get('code');
-const state = urlParams.get('state');
+const urlParams = new URLSearchParams(window.location.search)
+const code = urlParams.get('code')
+const state = urlParams.get('state')
 
 // 验证 state
 if (state !== sessionStorage.getItem('oauth_state')) {
-  throw new Error('State mismatch (CSRF detected)');
+  throw new Error('State mismatch (CSRF detected)')
 }
 
 // 换 token
-const codeVerifier = sessionStorage.getItem('pkce_verifier');
+const codeVerifier = sessionStorage.getItem('pkce_verifier')
 const tokenResponse = await fetch(discovery.token_endpoint, {
   method: 'POST',
   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -1401,13 +1450,13 @@ const tokenResponse = await fetch(discovery.token_endpoint, {
     code: code,
     redirect_uri: 'https://my-app.com/callback',
     client_id: 'my-app-client-id',
-    client_secret: 'my-secret',  // 如果是机密客户端
+    client_secret: 'my-secret', // 如果是机密客户端
     code_verifier: codeVerifier,
   }),
-});
+})
 
-const tokens = await tokenResponse.json();
-console.log(tokens);
+const tokens = await tokenResponse.json()
+console.log(tokens)
 // {
 //   access_token: "eyJhbGciOi...",
 //   token_type: "Bearer",
@@ -1422,14 +1471,14 @@ console.log(tokens);
 
 ```javascript
 // 1. 拆分 JWT
-const [headerB64, payloadB64, signatureB64] = tokens.id_token.split('.');
-const header = JSON.parse(base64urlDecode(headerB64));
-const payload = JSON.parse(base64urlDecode(payloadB64));
+const [headerB64, payloadB64, signatureB64] = tokens.id_token.split('.')
+const header = JSON.parse(base64urlDecode(headerB64))
+const payload = JSON.parse(base64urlDecode(payloadB64))
 
 // 2. 从 JWKS 获取公钥
-const jwks = await fetch(discovery.jwks_uri).then(r => r.json());
-const key = jwks.keys.find(k => k.kid === header.kid);
-if (!key) throw new Error('kid not found in JWKS');
+const jwks = await fetch(discovery.jwks_uri).then((r) => r.json())
+const key = jwks.keys.find((k) => k.kid === header.kid)
+if (!key) throw new Error('kid not found in JWKS')
 
 // 3. 验证签名（用 Web Crypto API）
 const publicKey = await crypto.subtle.importKey(
@@ -1437,28 +1486,29 @@ const publicKey = await crypto.subtle.importKey(
   key,
   { name: 'EdDSA', namedCurve: 'Ed25519' },
   false,
-  ['verify']
-);
+  ['verify'],
+)
 
 const signatureValid = await crypto.subtle.verify(
   'EdDSA',
   publicKey,
   base64urlDecode(signatureB64),
-  new TextEncoder().encode(headerB64 + '.' + payloadB64)
-);
+  new TextEncoder().encode(headerB64 + '.' + payloadB64),
+)
 
-if (!signatureValid) throw new Error('Signature verification failed');
+if (!signatureValid) throw new Error('Signature verification failed')
 
 // 4. 验证 claims
-if (payload.iss !== discovery.issuer) throw new Error('iss mismatch');
-if (payload.aud !== 'my-app-client-id') throw new Error('aud mismatch');
-if (payload.exp < Date.now() / 1000) throw new Error('ID Token expired');
-if (payload.nonce !== sessionStorage.getItem('oauth_nonce')) throw new Error('nonce mismatch');
+if (payload.iss !== discovery.issuer) throw new Error('iss mismatch')
+if (payload.aud !== 'my-app-client-id') throw new Error('aud mismatch')
+if (payload.exp < Date.now() / 1000) throw new Error('ID Token expired')
+if (payload.nonce !== sessionStorage.getItem('oauth_nonce'))
+  throw new Error('nonce mismatch')
 
 // 5. 提取用户信息
-console.log('User ID:', payload.sub);
-console.log('Name:', payload.name);
-console.log('Email:', payload.email);
+console.log('User ID:', payload.sub)
+console.log('Name:', payload.name)
+console.log('Email:', payload.email)
 ```
 
 #### Step 6: 调用 UserInfo（可选）
@@ -1467,9 +1517,9 @@ console.log('Email:', payload.email);
 // ID Token 里的 claims 是精简版，如果需要完整资料，调 UserInfo
 const userinfo = await fetch(discovery.userinfo_endpoint, {
   headers: { Authorization: `Bearer ${tokens.access_token}` },
-}).then(r => r.json());
+}).then((r) => r.json())
 
-console.log(userinfo);
+console.log(userinfo)
 // {
 //   sub: "250",
 //   name: "Sean",
@@ -1493,11 +1543,11 @@ const refreshResponse = await fetch(discovery.token_endpoint, {
     grant_type: 'refresh_token',
     refresh_token: tokens.refresh_token,
     client_id: 'my-app-client-id',
-    client_secret: 'my-secret',  // 如果是机密客户端
+    client_secret: 'my-secret', // 如果是机密客户端
   }),
-});
+})
 
-const newTokens = await refreshResponse.json();
+const newTokens = await refreshResponse.json()
 // {
 //   access_token: "eyJhbGciOi...",  // 新的
 //   token_type: "Bearer",
@@ -1517,9 +1567,9 @@ const newTokens = await refreshResponse.json();
 await fetch('https://link.sast.fun/v2/auth/logout', {
   method: 'POST',
   headers: { Authorization: `Bearer ${tokens.access_token}` },
-});
+})
 
 // 如果是第三方应用，只需要清空本地 token，不需要通知 Link
-sessionStorage.removeItem('access_token');
-sessionStorage.removeItem('refresh_token');
+sessionStorage.removeItem('access_token')
+sessionStorage.removeItem('refresh_token')
 ```

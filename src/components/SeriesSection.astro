@@ -1,28 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import { SeriesGroup } from '~/utils'
-
 interface Props {
   posts: CollectionEntry<'posts'>[]
 }
-
-const { posts } = Astro.props
-
-const seriesGroup = await SeriesGroup.build(posts)
+const group = await SeriesGroup.build(Astro.props.posts)
 ---
 
-<ul class="flex flex-wrap gap-x-2 gap-y-2 my-3">
+<ul class="link-list">
   {
-    seriesGroup.sortCollationsMostRecent().map((series) => (
+    group.sortCollationsMostRecent().map((series) => (
       <li>
-        <a
-          href={series.url}
-          class="flex items-start gap-2 py-1 px-3 bg-accent/7 rounded border-transparent hover:border-accent/20 border-1 text-foreground/90"
-        >
+        <a href={series.url}>
           {series.title}
-          <span class="rounded bg-foreground/7 text-foreground/90 px-1.5 py-0.5 text-xs font-semibold">
-            {series.entries.length}
-          </span>
+          <span>{series.entries.length}</span>
         </a>
       </li>
     ))

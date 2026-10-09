@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { articleLanguages, type ArticleLanguage } from '~/article-languages'
+interface Props {
+  versions: CollectionEntry<'posts'>[]
+}
+const { versions } = Astro.props
+const currentPath = Astro.url.pathname.replace(/\/$/, '')
+const languages = Object.entries(articleLanguages) as [ArticleLanguage, string][]
+---
+
+<nav class="article-languages" aria-label="Article language" data-pagefind-ignore>
+  {
+    languages.map(([language, label], index) => {
+      const version = versions.find((entry) => entry.data.lang === language)
+      const href = version ? `/posts/${version.id}` : undefined
+      return (
+        <>
+          {index > 0 && <span aria-hidden="true">/</span>}
+          {href === currentPath ? (
+            <span lang={language} aria-current="page">
+              {label}
+            </span>
+          ) : href ? (
+            <a href={href} lang={language} hreflang={language} rel="alternate">
+              {label}
+            </a>
+          ) : (
+            <span
+              lang={language}
+              aria-disabled="true"
+              title={`${language === 'en' ? 'English' : 'Chinese'} translation not available`}
+            >
+              {label}
+            </span>
+          )}
+        </>
+      )
+    })
+  }
+</nav>

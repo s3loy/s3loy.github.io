@@ -1,4 +1,6 @@
 ---
+lang: zh
+translationKey: leetcode-review
 title: LeetCode Review
 published: 2026-03-02T15:45:00
 tags:

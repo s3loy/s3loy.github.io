@@ -1,0 +1,47 @@
+---
+import Layout from '~/layouts/Layout.astro'
+import siteConfig from '~/site.config'
+import { getSortedPosts, dateString } from '~/utils'
+const posts = (await getSortedPosts()).sort(
+  (a, b) => b.data.published.getTime() - a.data.published.getTime(),
+)
+const feedURL = new URL('/rss.xml', siteConfig.site).href
+---
+
+<Layout title="RSS" description="Subscribe to new posts with your feed reader">
+  <h1 class="page-title">Follow the feed</h1>
+  <label for="feed-url">RSS feed URL</label>
+  <div class="feed-controls">
+    <input id="feed-url" readonly value={feedURL} />
+    <button id="copy-feed">Copy URL</button>
+  </div>
+  <p id="feed-status" role="status"></p>
+  <a href="/rss.xml" download="rss.xml">Download RSS XML ↓</a>
+  <h2 class="section-heading">Recent posts</h2>
+  <ul class="feed-posts">
+    {
+      posts.map((post) => (
+        <li>
+          <time datetime={post.data.published.toISOString()}>
+            {dateString(post.data.published)}
+          </time>
+          <a href={`/posts/${post.id}`}>{post.data.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
+<script>
+  document.querySelector('#copy-feed')?.addEventListener('click', async () => {
+    const input = document.querySelector<HTMLInputElement>('#feed-url')!
+    const status = document.querySelector('#feed-status')!
+    try {
+      await navigator.clipboard.writeText(input.value)
+      status.textContent = 'Feed URL copied.'
+    } catch {
+      input.focus()
+      input.select()
+      status.textContent = 'Select and copy the feed URL above.'
+    }
+  })
+</script>

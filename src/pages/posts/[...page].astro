@@ -7,10 +7,9 @@ import siteConfig from '~/site.config'
 import PostPreview from '~/components/PostPreview.astro'
 import PageHeader from '~/components/PageHeader.astro'
 
-// Note: Pagination like '/', '/2', '/3' only works with spread param like [...page]
 export const getStaticPaths = (async ({ paginate }) => {
   const sortedPosts = await getSortedPosts()
-  return paginate(sortedPosts.reverse(), { pageSize: siteConfig.pageSize })
+  return paginate(sortedPosts, { pageSize: siteConfig.pageSize })
 }) satisfies GetStaticPaths
 
 const { page } = Astro.props
@@ -18,8 +17,8 @@ const pageTitle = 'Posts' + (page.currentPage > 1 ? ` - Page ${page.currentPage}
 ---
 
 <Layout title={pageTitle} description="All posts">
-  <div class="mt-2 sm:mt-0">
-    <PageHeader />
+  <section>
+    <PageHeader title={pageTitle} />
     {page.data.map((post) => <PostPreview post={post} />)}
     <Pagination
       prevLink={page.url.prev ? page.url.prev : undefined}
@@ -27,5 +26,5 @@ const pageTitle = 'Posts' + (page.currentPage > 1 ? ` - Page ${page.currentPage}
       nextLink={page.url.next ? page.url.next : undefined}
       nextText="Older Posts"
     />
-  </div>
+  </section>
 </Layout>

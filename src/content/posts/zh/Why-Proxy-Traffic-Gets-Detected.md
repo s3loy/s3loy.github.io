@@ -1,4 +1,6 @@
 ---
+lang: zh
+translationKey: why-proxy-traffic-gets-detected
 title: Why-Proxy-Traffic-Gets-Detected
 published: 2026-04-09T10:00:00
 
@@ -168,7 +170,7 @@ sequenceDiagram
     B-->>U: SYN/ACK
     U->>B: ACK
 
-    Note over U,G: 2) TLS 握手开始（关键可观测点）
+    Note over U,G:wrap: 2) TLS 握手开始（关键可观测点）
     U->>B: ClientHello（版本/扩展/套件/长度/时序）
     G->>G: 被动特征分析（指纹+行为）
     B-->>U: ServerHello + 证书 + ...

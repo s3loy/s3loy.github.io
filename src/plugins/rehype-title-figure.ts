@@ -19,7 +19,7 @@ export const rehypeTitleFigure: RehypePlugin = (_options?) => {
           if (child.tagName === 'img') {
             return buildFigure(child)
           } else {
-            transformTree(child) // Recursively process child nodes
+            transformTree(child)
           }
         }
         return child
@@ -27,7 +27,7 @@ export const rehypeTitleFigure: RehypePlugin = (_options?) => {
     }
   }
   return function (tree: hast.Root) {
-    transformTree(tree) // Start the recursive transformation
+    transformTree(tree)
   }
 }
 

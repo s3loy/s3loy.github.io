@@ -1,4 +1,6 @@
 ---
+lang: zh
+translationKey: computer-network
 title: Computer Network
 published: 2025-10-28
 tags:
@@ -34,7 +36,7 @@ Core：**网络 = 物理互连 + 通信协议**
 - **中间设备 (Intermediary Device)**: 网络的核心，负责数据转发（如路由器 Router、交换机 Switch）
 - **链路 (Links)**: 连接节点的物理通道
 
-![network](Computer-Network/network.png)
+![network](../Computer-Network/network.png)
 
 ### 逻辑规则 / Logical Rules
 
@@ -80,7 +82,7 @@ Core：**网络 = 物理互连 + 通信协议**
 每一层都在给数据贴标签，这层贴完给下一层，下一层根本不看里面的内容，只看标签办事
 > 在此处一定要记住这个概念，在见到没见过的东西你可以安慰自己说它是封装很好（
 
-![UDP_encapsulation](Computer-Network/UDP_encapsulation.svg)
+![UDP_encapsulation](../Computer-Network/UDP_encapsulation.svg)
 
 #### 分组交换 / Packet Switching
 
@@ -164,7 +166,7 @@ Core：**网络 = 物理互连 + 通信协议**
 
 > **注意**: 在 TCP/IP 模型中，会话管理（Session）和数据表示（Presentation）的功能被下放给应用程序开发者自行实现，操作系统内核不负责这两层
 
-![osivstcpip](Computer-Network/osivstcpip.png)
+![osivstcpip](../Computer-Network/osivstcpip.png)
 
 ## 应用层 / Application Layer
 
@@ -194,11 +196,11 @@ Core：**网络 = 物理互连 + 通信协议**
 没有中心服务器，任意端系统之间直接通信
 虽然这个方法扩展性强，但难以管理
 `BitTorrent` 就是使用了这个架构
-![CSP2P](Computer-Network/CSP2P.jpg)
+![CSP2P](../Computer-Network/CSP2P.jpg)
 
 #### 浏览器-服务器架构 / B/S Architecture
 
-![BrowserServer](Computer-Network/BrowserServer.jpg)
+![BrowserServer](../Computer-Network/BrowserServer.jpg)
 
 ### 进程寻址 / Process Addressing
 
@@ -218,11 +220,11 @@ Core：**网络 = 物理互连 + 通信协议**
     - 在 Linux/Unix 中，Socket 表现为一个**文件描述符 (File Descriptor)**
     - 应用程序通过读写这个“文件”来与网络另一端的进程通信，而无需关心底层的 TCP/IP 传输细节
 
-![socket](Computer-Network/socket.png)
+![socket](../Computer-Network/socket.png)
 
 ### 基础设施 / Infrastructure
 
-![L7L4relationship](Computer-Network/L7L4relationship.jpg)
+![L7L4relationship](../Computer-Network/L7L4relationship.jpg)
 
 #### DNS域名系统 / DNS
 
@@ -315,7 +317,7 @@ A：**负载均衡**
 
 如果你在中国，服务器在美国，物理距离导致的**延迟**就无法通过加宽带解决
 所以出现了CDN技术
-![CND](Computer-Network/CND.webp)
+![CND](../Computer-Network/CND.webp)
 
 - **核心原理**:
   - **边缘服务器 (Edge Server)**: 部署在全球各地的节点
@@ -359,7 +361,7 @@ http有这两个特点:
 - PUT: 向服务器发送数据，用以替换目标资源当前的表示
 - DELETE: 请求服务器删除 Request-URI 所标识的资源
 
-![http](Computer-Network/http.png)
+![http](../Computer-Network/http.png)
 
 由于 HTTP 协议的无状态性 (Statelessness)，服务器无法仅凭协议层面的信息识别连续请求是否来自同一客户端
 为此，引入了 **Cookie** 机制（RFC 6265）：
@@ -538,7 +540,7 @@ Server public key is 2048 bit
 
 - **机制**: 文本协议，支持持久连接
 - **缺陷**: **应用层队头阻塞 (HOL Blocking)**。请求必须串行排队，前一个请求未完成，后续请求只能等待
-![HOL](Computer-Network/HOL.png)
+![HOL](../Computer-Network/HOL.png)
 
 ##### HTTP/2
 
@@ -643,7 +645,7 @@ $ curl --http1.1 -i -N \
 
 服务器会返回 `HTTP/1.1 101 Switching Protocols`
 它标志着 TCP 连接的**所有权**发生了转移，建立了一条原始的 TCP 管道，直接传输 WebSocket 的**二进制帧 (Frame)**
-![websocket](Computer-Network/websocket.png)
+![websocket](../Computer-Network/websocket.png)
 
 #### WebTransport 协议 / WebTransport
 
@@ -712,7 +714,7 @@ SFTP 并不是 FTP 的加密版，它是 **SSH 协议的一个子系统**，直�
 我们来看看一个真实的 UDP 数据包。你会发现它的结构**十分干净**，没有复杂的握手序列，头部只有区区 **8 个字节**。
 这是[SampleCaptures - Wireshark Wiki](https://wiki.wireshark.org/SampleCaptures)上下载下来的一个[Fetching Title#3h26](https://wiki.wireshark.org/uploads/e2b98423e5f0dc85e0b1228ebbd044e2/protobuf_udp_addressbook.pcapng)
 我们可以用`wireshark`这个软件打开它看看，安装自己去弄[Wireshark • Go Deep \| Download](https://www.wireshark.org/download.html)
-![UDPpackage](Computer-Network/UDPpackage.png)
+![UDPpackage](../Computer-Network/UDPpackage.png)
 
 你会发现它的头部极其干净，只有区区 **8 个字节**：
 
@@ -732,7 +734,7 @@ SFTP 并不是 FTP 的加密版，它是 **SSH 协议的一个子系统**，直�
 
 **TCP** 是互联网的基石
 它的任务极其艰巨：**在不可靠的 IP 层之上，构建一个可靠的传输通道**。为了实现“无差错、不丢失、不乱序”的承诺，TCP 被设计成了一个极其复杂的**有限状态机 (FSM)**
-![TCP](Computer-Network/TCP.jpg)
+![TCP](../Computer-Network/TCP.jpg)
 
 #### 三次握手 / Three-Way Handshake
 
@@ -740,7 +742,7 @@ TCP 是面向连接的，通信前必须先“打通电话”。这不仅仅是�
 
 - TCP 是双工的，A 要告诉 B 它的 ISN，B 也要告诉 A 它的 ISN，且都需要确认
 - SYN(A) -> SYN(B) + ACK(A) -> ACK(B)
-![TCPconnect](Computer-Network/TCPconnect.png)
+![TCPconnect](../Computer-Network/TCPconnect.png)
 **为什么要三次？**
 这主要是为了防止**已失效的连接请求**突然又传到了服务端，导致服务端错误地建立连接，浪费资源
 
@@ -753,7 +755,7 @@ TCP 并没有采用“发一个包，等一个确认”的低效模式，而是�
 
 当数据传输结束，断开连接的过程也充满了设计的智慧
 注意，TCP 是**全双工**的（双向独立通道），所以关闭时需要两个方向分别关闭
-![TCPclose](Computer-Network/TCPclose.png)
+![TCPclose](../Computer-Network/TCPclose.png)
 
 1. 客户端发 `FIN`：“我没数据发了。”
 2. 服务器回 `ACK`：“知道了。”（此时连接处于**半关闭**状态，服务器可能还有数据没传完）
@@ -777,13 +779,13 @@ TCP 必须具备感知网络拥堵的能力。它维护着一个**拥塞窗口 (
 ##### Take a look at TCP
 
 我们可以看看这样一个完整的tcp流程
-![protobufTCP](Computer-Network/protobufTCP.png)
+![protobufTCP](../Computer-Network/protobufTCP.png)
 
 ## 网络层 / Network Layer
 
 网络层位于协议栈的核心位置，其主要职责是实现**主机到主机 (Host-to-Host)** 的逻辑通信。与数据链路层关注相邻节点间的帧传输不同，网络层必须解决如何在复杂的、由异构网络互连的互联网中，找到从源主机到目的主机的最佳路径
 
-![Lan](Computer-Network/Lan.png)
+![Lan](../Computer-Network/Lan.png)
 
 ### IP 服务模型 / IP Service Model
 
@@ -792,7 +794,7 @@ TCP 必须具备感知网络拥堵的能力。它维护着一个**拥塞窗口 (
 #### IPv4 数据报 / IPv4 Datagram
 
 IPv4 数据报由**首部**和**数据部分**组成。首部的前 20 字节是固定的，包含了网络传输所需的最关键控制信息。深入理解这些字段是掌握网络层机制的基础
-![ipv4header](Computer-Network/ipv4header.png)
+![ipv4header](../Computer-Network/ipv4header.png)
 
 **基础控制字段**
 首部的开始部分包含版本号与长度信息。**版本 (Version)** 字段占 4 位，对于 IPv4 来说该值为 4
@@ -803,7 +805,7 @@ IPv4 数据报由**首部**和**数据部分**组成。首部的前 20 字节是
 **分片与重组字段**
 由于底层物理网络存在**最大传输单元 (MTU)** 的限制（如以太网 MTU 为 1500 字节），过大的数据报必须被切分
 **标识 (Identification)** 字段是一个计数器，用于标记属于同一个原始数据报的所有分片。**标志 (Flags)** 字段占 3 位，其中最低位 MF (More Fragments) 为 1 表示后面还有分片，中间位 DF (Don't Fragment) 为 1 表示禁止分片。**片偏移 (Fragment Offset)** 指出该分片在原数据报中的相对位置，以 **8 字节**为单位。路由器利用这些字段进行分片，而目的主机利用它们完成重组
-![ipfragmentation](Computer-Network/ipfragmentation.jpg)
+![ipfragmentation](../Computer-Network/ipfragmentation.jpg)
 
 **生命周期与协议分用**
 **生存时间 (TTL)** 字段至关重要，它代表数据报在网络中允许经过的最大跳数。每经过一个路由器，TTL 减 1，减为 0 时数据报被丢弃，从而防止路由环路。**协议 (Protocol)** 字段指示 IP 数据报的数据部分封装了何种上层协议（如 TCP=6, UDP=17, ICMP=1）。该字段实现了网络层的**分用**功能，告诉接收端应将数据上交给哪个模块
@@ -823,7 +825,7 @@ IPv4 数据报由**首部**和**数据部分**组成。首部的前 20 字节是
 | **B 类** | `10` | 128 - 191 | /16 | 16,384 | 65,534 |
 | **C 类** | `110` | 192 - 223 | /24 | 2,097,152 | 254 |
 
-![subnet](Computer-Network/subnet.png)
+![subnet](../Computer-Network/subnet.png)
 
 :::warning
 
@@ -845,7 +847,7 @@ IPv4 数据报由**首部**和**数据部分**组成。首部的前 20 字节是
 > **子网掩码 (Subnet Mask)**：用于指示 IP 地址中哪些位是网络位，哪些位是主机位
 > 这里的逻辑运算是：`网络地址 = IP 地址 AND 子网掩码`
 
-![subnet_mask](Computer-Network/subnet_mask.png)
+![subnet_mask](../Computer-Network/subnet_mask.png)
 
 ##### CIDR
 
@@ -892,7 +894,7 @@ So `n = 2`
 
 IPv6 并非仅仅是扩展了地址空间，它对报文首部进行了彻底的重新设计，以适应现代高速网络的需求
 
-![ipv6](Computer-Network/ipv6.png)
+![ipv6](../Computer-Network/ipv6.png)
 **地址空间的飞跃**
 IPv6 最显著的变化是将地址长度从 32 位扩展到了 **128 位**，从根本上解决了地址耗尽问题。这使得我们可以为地球上的每一粒沙子分配一个 IP 地址
 
@@ -902,7 +904,7 @@ IPv6 采用了固定的 **40 字节**基本首部，去除了 IPv4 中许多不�
 1. **取消了首部长度字段**：因为首部长度固定为 40 字节。
 2. **取消了首部校验和字段**：现代链路层（如以太网、光纤）已具备很强的差错检测能力，传输层也有校验机制。去除该字段消除了路由器每跳重新计算校验和的开销，显著提升了转发速度
 3. **取消了分片字段**：IPv6 规定**分片仅在源主机进行**。如果路由器收到大于 MTU 的包，直接丢弃并回送 ICMPv6“分组过大”报文。这减轻了中间路由器的负担
-![basic-IPv6-address](Computer-Network/basic-IPv6-address.gif)
+![basic-IPv6-address](../Computer-Network/basic-IPv6-address.gif)
 **灵活的扩展机制**
 IPv4 中的“协议”字段在 IPv6 中被**下一个首部 (Next Header)** 字段取代
 它不仅可以指向 TCP 或 UDP，还可以指向各种**扩展首部**（如逐跳选项、路由选择、分片扩展等）
@@ -924,12 +926,12 @@ DHCP协议是一个局域网网络协议，使用 UDP 协议（67/68 端口）
     3. **Request**: 客户端广播“我要用 192.168.1.100。”
     4. **Acknowledge**: 服务器广播“确认分配，租期 24 小时。”
 
-![DHCPv4](Computer-Network/DHCPv4.png)
+![DHCPv4](../Computer-Network/DHCPv4.png)
 
 #### 网络地址转换 / NAT
 
 NAT 通过将私有 IP 转换为公网 IP，延缓了 IPv4 的耗尽
-![NAT](Computer-Network/NAT.png)
+![NAT](../Computer-Network/NAT.png)
 
 > **Tip**
 > 这个软件是PNETlab
@@ -940,7 +942,7 @@ NAT 通过将私有 IP 转换为公网 IP，延缓了 IPv4 的耗尽
 
 **ICMP**：Internet Control Message Protocol，因特网控制报文协议
 方向：主机/路由器 -> 源站(发送方)
-![ICMP](Computer-Network/ICMP.jpeg)
+![ICMP](../Computer-Network/ICMP.jpeg)
 `ICMP` 报文分为两大类:
 `差错报告报文`和`提供信息的报文(询问报文)`
 
@@ -961,7 +963,7 @@ NAT 通过将私有 IP 转换为公网 IP，延缓了 IPv4 的耗尽
   - `18` 地址掩码应答 `Address Mask Reply`
 其中`3`、`11`、`0`、`8`常用
 
-![ICMPcontent](Computer-Network/ICMPcontent.jpg)
+![ICMPcontent](../Computer-Network/ICMPcontent.jpg)
 
 #### PING(Packet InterNet Groper)
 
@@ -976,14 +978,14 @@ PING 是应用层直接使用网络层 ICMP 的例子，它没有通过传输层
 ### 路由器体系结构 / Router Architecture
 
 路由器是网络层的核心专用计算机，其功能逻辑分为控制平面和数据平面
-![route](Computer-Network/route.png)
+![route](../Computer-Network/route.png)
 **控制平面**负责运行路由协议（如 OSPF、BGP），计算并生成路由表。**数据平面**则负责根据转发表，将输入端口到达的数据报通过交换结构，以线速交换到合适的输出端口
 
 ### 路由选择协议 / Routing Protocols
 
 互联网被划分为许多**自治系统 (AS)**，路由协议因此分为内部网关协议 (IGP) 和外部网关协议 (EGP)
 
-![AS](Computer-Network/AS.png)
+![AS](../Computer-Network/AS.png)
 
 **内部网关协议 (IGP)** 主要处理 AS 内部路由。**RIP** 基于距离向量算法，受限于 15 跳，存在“坏消息传得慢”的问题。**OSPF** 基于链路状态算法，通过泛洪链路状态构建全网拓扑，并利用 **Dijkstra 算法** 计算最短路径，收敛快，适合大型网络
 
@@ -996,7 +998,7 @@ PING 是应用层直接使用网络层 ICMP 的例子，它没有通过传输层
 ### 封装成帧 / Framing
 
 数据链路层将网络层传递下来的数据报（Packet）添加首部和尾部，封装成**帧 (Frame)**。帧不仅是数据链路层的传输单元，也界定了数据的起止位置（帧同步）
-![frametransport](Computer-Network/frametransport.png)
+![frametransport](../Computer-Network/frametransport.png)
 
 **透明传输机制**
 为了防止数据载荷中出现的特定比特组合被误判为帧定界符（即“假标志”），必须采取透明传输措施：
@@ -1069,7 +1071,7 @@ $ arp -a
 虽然交换机隔离了冲突域，但所有端口仍属于同一个**广播域**。为了控制广播风暴和增强安全性，引入了 VLAN 技术（IEEE 802.1Q 标准）
 通过在以太网帧中插入 **VLAN Tag（标签）**，管理员可以在逻辑上将物理网络划分为多个独立的广播域。不同 VLAN 之间的通信无法直接通过二层交换实现，必须经过第三层设备（路由器或三层交换机）进行路由转发
 
-![VLAN](Computer-Network/VLAN.png)
+![VLAN](../Computer-Network/VLAN.png)
 > 小知识点
 
 - 集线器 (Hub)：既不隔离冲突，也不隔离广播
@@ -1083,7 +1085,7 @@ $ arp -a
 - **PPP (Point-to-Point Protocol)**：目前最广泛使用的广域网协议。它支持多种网络层协议，提供错误检测、链路配置（LCP）和网络控制（NCP）。PPP 是面向字节的，采用字节填充法实现透明传输
 - **HDLC (High-Level Data Link Control)**：一种面向比特的同步数据链路层协议，采用零比特填充法。虽然具有较高的理论价值，但在实际互联网应用中已被 PPP 取代
 
-![PPP](Computer-Network/PPP.png)
+![PPP](../Computer-Network/PPP.png)
 
 ## 物理层 / Physical Layer
 
@@ -1096,7 +1098,7 @@ $ arp -a
 - **基带传输**：直接传输数字基带信号的电压脉冲，通常用于近距离传输（如局域网）。
 - **频带传输**：利用载波将数字信号搬移到较高的频段。常见的调制方法包括调幅 (ASK)、调频 (FSK) 和调相 (PSK)
 
-![QAM](Computer-Network/QAM.png)
+![QAM](../Computer-Network/QAM.png)
 
 ### 奈奎斯特定理 / Nyquist Theorem
 
@@ -1128,19 +1130,19 @@ NRZ 用高低电平直接表示 1 和 0。其主要缺陷是缺乏自同步能�
 
 **差分曼彻斯特编码**
 这是一种抗干扰能力更强的编码。它同样在位中心跳变用于同步，但利用**位开始边界**是否发生跳变来表示数据（如无跳变表示 1，有跳变表示 0）
-![01010101](Computer-Network/01010101.png)
+![01010101](../Computer-Network/01010101.png)
 
 ### 传输介质与模式 / Media & Modes
 
 物理层的传输介质主要分为导引型（如双绞线、光纤）和非导引型（如无线电波）。光纤利用光的全反射原理传输，其中**单模光纤**因纤芯极细、无模间色散而适用于长距离主干传输；**多模光纤**则适用于短距离传输
-![Single_mode_vs_Multimode_fiber](Computer-Network/Single_mode_vs_Multimode_fiber.png)
+![Single_mode_vs_Multimode_fiber](../Computer-Network/Single_mode_vs_Multimode_fiber.png)
 
 在通信交互方式上，分为三种模式：
 
 - **单工**：仅允许单方向传输
 - **半双工**：允许双向传输，但某一时刻只能单向进行
 - **全双工**：允许通信双方同时进行双向传输
-![full_duplex_half_duplex](Computer-Network/full_duplex_half_duplex.jpg)
+![full_duplex_half_duplex](../Computer-Network/full_duplex_half_duplex.jpg)
 
 ### 互连设备 / Interconnection Devices
 

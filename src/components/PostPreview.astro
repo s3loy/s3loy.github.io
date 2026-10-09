@@ -1,32 +1,25 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import { render } from 'astro:content'
 import { dateString } from '~/utils'
-
 interface Props {
   post: CollectionEntry<'posts'>
 }
-
 const { post } = Astro.props
-
-const { remarkPluginFrontmatter } = await render(post)
-const description = remarkPluginFrontmatter.description || post.data.description
-const samePage = Astro.url.pathname === `/posts/${post.id}`
-const articleLink = samePage ? `#${post.id}` : `/posts/${post.id}`
+const modified = post.data.modified ?? post.data.published
+const articleLink =
+  Astro.url.pathname.replace(/\/$/, '') === `/posts/${post.id}`
+    ? `#${post.id}`
+    : `/posts/${post.id}`
 ---
 
-<article class="w-full py-2.5 border-b border-foreground/10">
-  <div class="flex items-baseline justify-between gap-3">
-    <h1 class="text-lg text-heading1">
-      <a href={articleLink}># {post.data.title}</a>
-    </h1>
-    <time class="shrink-0 text-sm text-foreground/60">
-      {dateString(post.data.published)}
-    </time>
+<article class="post-preview">
+  <div class="post-preview-row">
+    <h2 class="post-preview-title"><a href={articleLink}>{post.data.title}</a></h2>
+    <div class="post-preview-dates">
+      <time datetime={post.data.published.toISOString()}
+        >published {dateString(post.data.published)}</time
+      >
+      <time datetime={modified.toISOString()}>updated {dateString(modified)}</time>
+    </div>
   </div>
-  {
-    description && (
-      <p class="mt-0.5 text-sm text-foreground/70 line-clamp-1">{description}</p>
-    )
-  }
 </article>

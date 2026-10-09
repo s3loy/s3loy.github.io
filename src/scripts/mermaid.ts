@@ -1,5 +1,9 @@
+import { setupMediaViewer, openMediaViewer } from './media-viewer'
 import mermaid from 'mermaid'
+import { namespaceSVG } from './svg-ids'
 import type { MermaidConfig } from 'mermaid'
+
+mermaid.initialize({ startOnLoad: false })
 
 const MERMAID_SELECTOR = 'pre.mermaid'
 
@@ -22,12 +26,10 @@ function parseColor(value: string): [number, number, number] | null {
       number,
     ]
   }
-  if (/^#[0-9a-f]{6}$/.test(hex)) {
-    return [0, 2, 4].map((index) => Number.parseInt(hex.slice(index + 1, index + 3), 16)) as [
-      number,
-      number,
-      number,
-    ]
+  if (/^#[0-9a-f]{6}([0-9a-f]{2})?$/.test(hex)) {
+    return [0, 2, 4].map((index) =>
+      Number.parseInt(hex.slice(index + 1, index + 3), 16),
+    ) as [number, number, number]
   }
 
   const rgbMatch = value.match(
@@ -57,7 +59,7 @@ function mixColors(base: string, accent: string, accentWeight: number): string {
   return `rgb(${mixChannel(0)}, ${mixChannel(1)}, ${mixChannel(2)})`
 }
 
-function getMermaidConfig(): MermaidConfig {
+function getMermaidConfig(editorial = false): MermaidConfig {
   const foreground = readThemeVar('--theme-foreground', '#1f2328')
   const background = readThemeVar('--theme-background', '#ffffff')
   const accent = readThemeVar('--theme-accent', foreground)
@@ -68,13 +70,20 @@ function getMermaidConfig(): MermaidConfig {
   const separator = readThemeVar('--theme-separator', foreground)
   const font = readThemeVar('--theme-font', 'JetBrains Mono Variable')
 
-  return {
+  const config: MermaidConfig = {
     startOnLoad: false,
     theme: 'base',
     look: 'classic',
     fontFamily: `${font}, monospace`,
+    sequence: {
+      useMaxWidth: true,
+      wrap: false,
+      mirrorActors: true,
+    },
     flowchart: {
       useMaxWidth: true,
+      curve: 'basis',
+      padding: 18,
     },
     themeVariables: {
       fontFamily: `${font}, monospace`,
@@ -110,42 +119,108 @@ function getMermaidConfig(): MermaidConfig {
       signalTextColor: foreground,
     },
   }
+  if (editorial) {
+    const diagramFont =
+      'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    config.fontFamily = diagramFont
+    Object.assign(config.sequence!, {
+      actorFontFamily: diagramFont,
+      messageFontFamily: diagramFont,
+      noteFontFamily: diagramFont,
+      actorFontSize: 16,
+      messageFontSize: 16,
+      noteFontSize: 14,
+      actorFontWeight: 600,
+      actorMargin: 40,
+      messageMargin: 36,
+      width: 120,
+      height: 48,
+      diagramMarginX: 20,
+      diagramMarginY: 20,
+    })
+    Object.assign(config.themeVariables!, {
+      fontFamily: diagramFont,
+      actorBkg: mixColors(background, accent, 0.06),
+      actorBorder: mixColors(background, foreground, 0.25),
+      actorLineColor: mixColors(background, foreground, 0.2),
+      signalColor: mixColors(background, foreground, 0.65),
+      noteBkgColor: mixColors(background, warning, 0.07),
+      noteBorderColor: mixColors(background, warning, 0.3),
+      sequenceNumberColor: background,
+    })
+  }
+  return config
 }
 
 function getMermaidBlocks(): HTMLElement[] {
   return Array.from(document.querySelectorAll<HTMLElement>(MERMAID_SELECTOR))
 }
 
-function resetMermaidBlocks(blocks: HTMLElement[]): void {
-  for (const block of blocks) {
-    const source = block.dataset.mermaidSource ?? block.textContent ?? ''
-    const trimmedSource = source.trim()
-    if (!trimmedSource) {
-      continue
-    }
-
-    block.dataset.mermaidSource = trimmedSource
-    block.dataset.mermaidRendered = 'false'
-    block.removeAttribute('data-processed')
-    block.textContent = trimmedSource
-  }
+function prepareDiagram(block: HTMLElement, index: number) {
+  if (block.parentElement?.classList.contains('diagram-figure')) return
+  const figure = document.createElement('figure')
+  figure.className = 'diagram-figure'
+  const caption = document.createElement('figcaption')
+  caption.className = 'diagram-caption'
+  const label = document.createElement('span')
+  label.className = 'diagram-label'
+  label.textContent = `DIAGRAM ${String(index + 1).padStart(2, '0')}`
+  const expand = document.createElement('button')
+  expand.type = 'button'
+  expand.textContent = 'Expand ↗'
+  expand.setAttribute('aria-label', `Expand diagram ${index + 1}`)
+  expand.addEventListener('click', () => openMediaViewer(block))
+  caption.append(label, expand)
+  block.before(figure)
+  figure.append(caption, block)
 }
 
 async function renderMermaidBlocks(): Promise<void> {
   const blocks = getMermaidBlocks()
-  if (!blocks.length) {
-    return
-  }
-
-  resetMermaidBlocks(blocks)
-  mermaid.initialize(getMermaidConfig())
-  await mermaid.run({ nodes: blocks, suppressErrors: false })
-
-  for (const block of blocks) {
-    if (block.dataset.mermaidSource) {
+  if (!blocks.length) return
+  await document.fonts.ready
+  let rendered = 0
+  for (const [index, block] of blocks.entries()) {
+    const source = (block.dataset.mermaidSource ?? block.textContent ?? '').trim()
+    if (!source) continue
+    const editorial = /^%% @style editorial$/m.test(source)
+    mermaid.initialize(getMermaidConfig(editorial))
+    prepareDiagram(block, index)
+    const figure = block.parentElement!
+    figure.classList.toggle('diagram-figure--editorial', editorial)
+    const title = source.match(/^%% @title (.+)$/m)?.[1]
+    const label = figure.querySelector('.diagram-label')
+    if (label)
+      label.textContent = title || `DIAGRAM ${String(index + 1).padStart(2, '0')}`
+    const previousHeight = block.getBoundingClientRect().height
+    if (block.querySelector('svg')) block.style.minHeight = `${previousHeight}px`
+    block.dataset.mermaidSource = source
+    block.dataset.mermaidRendered = 'false'
+    block.setAttribute('aria-busy', 'true')
+    block.removeAttribute('data-processed')
+    block.removeAttribute('data-render-error')
+    block.textContent = source
+    const button = block.parentElement?.querySelector('button')
+    if (button) button.disabled = true
+    try {
+      await mermaid.run({ nodes: [block], suppressErrors: false })
+      const svg = block.querySelector('svg')
+      if (!svg) throw new Error('Mermaid returned no SVG')
+      namespaceSVG(svg, `diagram-${index + 1}-`)
       block.dataset.mermaidRendered = 'true'
+      rendered += 1
+      if (button) button.disabled = false
+    } catch (error) {
+      block.dataset.renderError = 'true'
+      block.textContent = `Diagram could not be rendered. Source:\n\n${source}`
+      console.error('[mermaid] Diagram render failed', { index, error })
+    } finally {
+      block.removeAttribute('aria-busy')
+      block.style.removeProperty('min-height')
     }
   }
+  setupMediaViewer()
+  console.debug('[mermaid] Render complete', { rendered, total: blocks.length })
 }
 
 async function flushRenderQueue(): Promise<void> {
@@ -201,7 +276,6 @@ export function setupMermaid(): void {
 
   isSetup = true
   observeThemeChanges()
-  document.addEventListener('astro:page-load', queueMermaidRender)
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', queueMermaidRender, { once: true })

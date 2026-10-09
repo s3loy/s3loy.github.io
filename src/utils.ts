@@ -4,26 +4,20 @@ import {
   type ThemeKey,
   themeKeys,
   type ThemeOverrides,
+  type SiteTheme,
   type Collation,
   type CollationGroup,
 } from '~/types'
-import {
-  loadShikiTheme,
-  type BundledShikiTheme,
-  type ExpressiveCodeTheme,
-} from 'astro-expressive-code'
+import { loadShikiTheme, type ExpressiveCodeTheme } from 'astro-expressive-code'
 import { getCollection, type CollectionEntry } from 'astro:content'
 import Color from 'color'
 import { slug } from 'github-slugger'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
+import { getArticleList, type ArticleLanguage } from '~/article-languages'
 
 export function dateString(date: Date) {
   return date.toISOString().split('T')[0]
-}
-
-export function pick(obj: Record<string, any>, keys: string[]) {
-  return Object.fromEntries(
-    keys.filter((key) => key in obj).map((key) => [key, obj[key]]),
-  )
 }
 
 export function flattenThemeColors(theme: ExpressiveCodeTheme): {
@@ -46,7 +40,6 @@ export function flattenThemeColors(theme: ExpressiveCodeTheme): {
 }
 
 const unresolvedStyles: TextmateStyles = {
-  // VSCode Command: Inspect Editor Tokens And Scopes
   foreground: ['editor.foreground'],
   background: ['editor.background'],
   accent: [
@@ -56,7 +49,6 @@ const unresolvedStyles: TextmateStyles = {
     'markup.heading',
     'editor.foreground',
   ],
-  // Markdown styles
   heading1: [
     'heading.1.markdown entity.name',
     'heading.1.markdown',
@@ -112,13 +104,11 @@ const unresolvedStyles: TextmateStyles = {
   ],
   link: ['string.other.link.title.markdown', 'markup.link', 'editor.foreground'],
   separator: ['meta.separator.markdown', 'meta.separator', 'editor.foreground'],
-  // For admonition styling
   note: ['terminal.ansiBlue', 'terminal.ansiBrightBlue'],
   tip: ['terminal.ansiGreen', 'terminal.ansiBrightGreen'],
   important: ['terminal.ansiMagenta', 'terminal.ansiBrightMagenta'],
   caution: ['terminal.ansiYellow', 'terminal.ansiBrightYellow'],
   warning: ['terminal.ansiRed', 'terminal.ansiBrightRed'],
-  // For Giscus syntax highlighting only
   comment: ['comment', 'punctuation.definition.comment', 'foreground'],
   constant: ['constant.language.boolean', 'constant.language', 'foreground'],
   entity: ['entity.name.function', 'support.function', 'function', 'foreground'],
@@ -150,7 +140,6 @@ const unresolvedStyles: TextmateStyles = {
     'string',
     'foreground',
   ],
-  // Terminal colors for user customization only, not used by default
   blue: ['terminal.ansiBlue', 'terminal.ansiBrightBlue'],
   green: ['terminal.ansiGreen', 'terminal.ansiBrightGreen'],
   red: ['terminal.ansiRed', 'terminal.ansiBrightRed'],
@@ -160,11 +149,10 @@ const unresolvedStyles: TextmateStyles = {
 }
 
 export async function resolveThemeColorStyles(
-  themes: BundledShikiTheme[],
+  themes: SiteTheme[],
   overrides?: ThemeOverrides,
 ): Promise<ThemesWithColorStyles> {
   const validateColor = (color: string) => {
-    // Check if the color is a valid hex, rgb, or hsl color via regex
     const colorRegex = /^(#|rgb|hsl)/i
     if (!colorRegex.test(color)) return undefined
     try {
@@ -185,7 +173,6 @@ export async function resolveThemeColorStyles(
           result[themeKey] = override
           continue
         }
-        // If the override is not a valid color, try to resolve it as a highlight group
         if (themeKeys.includes(override as ThemeKey)) {
           for (const textmateGroup of unresolvedStyles[override as ThemeKey]) {
             if (flattenedTheme[textmateGroup]) {
@@ -214,14 +201,71 @@ export async function resolveThemeColorStyles(
   return Object.fromEntries(await Promise.all(resolvedThemes)) as ThemesWithColorStyles
 }
 
-export async function getSortedPosts() {
-  const allPosts = await getCollection('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
+const execFileAsync = promisify(execFile)
+const modifiedDateCache = new Map<string, Date | null>()
+
+async function getPostModifiedDate(post: CollectionEntry<'posts'>): Promise<Date> {
+  if (post.data.modified) return post.data.modified
+
+  const cached = modifiedDateCache.get(post.id)
+  if (cached) return cached
+  if (cached === null) return post.data.published
+
+  try {
+    const filePath = post.filePath ?? `src/content/posts/${post.id}`
+    const legacyPath = filePath
+      .replace(/\/zh\//, '/')
+      .replace(/\/en\/(.*)\.(mdx?)$/, '/$1-en.$2')
+    let { stdout } = await execFileAsync('git', [
+      'log',
+      '--follow',
+      '-1',
+      '--format=%cI',
+      '--',
+      filePath,
+    ])
+    if (!stdout.trim() && legacyPath !== filePath) {
+      ;({ stdout } = await execFileAsync('git', [
+        'log',
+        '--follow',
+        '-1',
+        '--format=%cI',
+        '--',
+        legacyPath,
+      ]))
+    }
+    const modified = new Date(stdout.trim())
+    if (!stdout.trim() || Number.isNaN(modified.getTime()))
+      throw new Error('invalid date')
+    modifiedDateCache.set(post.id, modified)
+    return modified
+  } catch (error) {
+    modifiedDateCache.set(post.id, null)
+    console.warn(
+      `[posts] Unable to derive modified date for "${post.id}"; falling back to published date.`,
+      error,
+    )
+    return post.data.published
+  }
+}
+export async function getSortedPosts(language: ArticleLanguage | 'all' = 'zh') {
+  const allPosts = await getCollection('posts', ({ data }) =>
+    import.meta.env.PROD ? data.draft !== true : true,
+  )
+  const selected = language === 'all' ? allPosts : getArticleList(allPosts, language)
+  const postsWithModified = await Promise.all(
+    selected.map(async (post) => ({
+      ...post,
+      data: { ...post.data, modified: await getPostModifiedDate(post) },
+    })),
+  )
+  return postsWithModified.sort((a, b) => {
+    if (a.data.pin !== b.data.pin) return a.data.pin ? -1 : 1
+    const modified = b.data.modified.getTime() - a.data.modified.getTime()
+    if (modified !== 0) return modified
+    const published = b.data.published.getTime() - a.data.published.getTime()
+    return published !== 0 ? published : a.data.title.localeCompare(b.data.title)
   })
-  const sortedPosts = allPosts.sort((a, b) => {
-    return a.data.published < b.data.published ? -1 : 1
-  })
-  return sortedPosts
 }
 
 abstract class PostsCollationGroup implements CollationGroup<'posts'> {
@@ -235,11 +279,6 @@ abstract class PostsCollationGroup implements CollationGroup<'posts'> {
     this.collations = collations
   }
 
-  sortCollationsAlpha(): Collation<'posts'>[] {
-    this.collations.sort((a, b) => a.title.localeCompare(b.title))
-    return this.collations
-  }
-
   sortCollationsLargest(): Collation<'posts'>[] {
     this.collations.sort((a, b) => b.entries.length - a.entries.length)
     return this.collations
@@ -247,9 +286,9 @@ abstract class PostsCollationGroup implements CollationGroup<'posts'> {
 
   sortCollationsMostRecent(): Collation<'posts'>[] {
     this.collations.sort((a, b) => {
-      const aDate = a.entries[a.entries.length - 1].data.published
-      const bDate = b.entries[b.entries.length - 1].data.published
-      return aDate < bDate ? 1 : -1
+      const aDate = Math.max(...a.entries.map((post) => post.data.published.getTime()))
+      const bDate = Math.max(...b.entries.map((post) => post.data.published.getTime()))
+      return bDate - aDate || a.title.localeCompare(b.title)
     })
     return this.collations
   }
@@ -282,11 +321,9 @@ abstract class PostsCollationGroup implements CollationGroup<'posts'> {
 }
 
 export class SeriesGroup extends PostsCollationGroup {
-  // Private constructor to enforce the use of the static build method
   private constructor(title: string, url: string, items: Collation<'posts'>[]) {
     super(title, url, items)
   }
-  // Factory method to create a SeriesGroup instance with async data fetching
   static async build(posts?: CollectionEntry<'posts'>[]): Promise<SeriesGroup> {
     const sortedPosts = posts || (await getSortedPosts())
     const seriesGroup = new SeriesGroup('Series', '/series', [])
@@ -301,13 +338,11 @@ export class SeriesGroup extends PostsCollationGroup {
 }
 
 export class TagsGroup extends PostsCollationGroup {
-  // Private constructor to enforce the use of the static build method
   private constructor(title: string, url: string, items: Collation<'posts'>[]) {
     super(title, url, items)
   }
 
-  // Factory method to create a SeriesGroup instance with async data fetching
-  static async build(posts?: CollectionEntry<'posts'>[]): Promise<SeriesGroup> {
+  static async build(posts?: CollectionEntry<'posts'>[]): Promise<TagsGroup> {
     const sortedPosts = posts || (await getSortedPosts())
     const tagsGroup = new TagsGroup('Tags', '/tags', [])
     sortedPosts.forEach((post) => {

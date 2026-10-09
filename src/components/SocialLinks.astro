@@ -1,105 +1,32 @@
 ---
 import type { SocialLinks } from '~/types'
-import IconGithub from '~/icons/github.svg'
-import IconMastodon from '~/icons/mastodon.svg'
-import IconTwitter from '~/icons/twitter.svg'
-import IconLinkedin from '~/icons/linkedin.svg'
-import IconBluesky from '~/icons/bluesky.svg'
-import IconEmail from '~/icons/email.svg'
-import IconRss from '~/icons/rss.svg'
-
 interface Props {
   socialLinks: SocialLinks
 }
-
 const { socialLinks } = Astro.props
+const labels = {
+  github: 'GitHub',
+  mastodon: 'Mastodon',
+  twitter: 'Twitter',
+  linkedin: 'LinkedIn',
+  bluesky: 'Bluesky',
+  email: 'Email',
+  rss: 'RSS',
+}
 ---
 
-<div class="flex w-full max-w-md items-center justify-between">
+<nav class="inline-links" aria-label="Social links">
   {
-    socialLinks.github && (
-      <a
-        href={socialLinks.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
-      >
-        <span class="sr-only">GitHub</span>
-        <IconGithub class="size-7" />
-      </a>
-    )
+    Object.entries(socialLinks)
+      .filter(([, value]) => value)
+      .map(([key, value]) => (
+        <a
+          href={
+            key === 'rss' ? '/feed' : key === 'email' ? `mailto:${value}` : String(value)
+          }
+        >
+          {labels[key as keyof typeof labels]}
+        </a>
+      ))
   }
-  {
-    socialLinks.mastodon && (
-      <a
-        href={socialLinks.mastodon}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
-      >
-        <span class="sr-only">Mastodon</span>
-        <IconMastodon class="size-7" />
-      </a>
-    )
-  }
-  {
-    socialLinks.twitter && (
-      <a
-        href={socialLinks.twitter}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
-      >
-        <span class="sr-only">Twitter</span>
-        <IconTwitter class="size-7" />
-      </a>
-    )
-  }
-  {
-    socialLinks.linkedin && (
-      <a
-        href={socialLinks.linkedin}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
-      >
-        <span class="sr-only">LinkedIn</span>
-        <IconLinkedin class="size-7" />
-      </a>
-    )
-  }
-  {
-    socialLinks.bluesky && (
-      <a
-        href={socialLinks.bluesky}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
-      >
-        <span class="sr-only">Bluesky</span>
-        <IconBluesky class="size-7" />
-      </a>
-    )
-  }
-  {
-    socialLinks.email && (
-      <a
-        href={`mailto:${socialLinks.email}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
-      >
-        <span class="sr-only">Email</span>
-        <IconEmail class="size-7" />
-      </a>
-    )
-  }
-  {
-    socialLinks.rss && (
-      <a href="/rss.xml" class="social-link">
-        <span class="sr-only">RSS</span>
-        <IconRss class="size-7" />
-      </a>
-    )
-  }
-</div>
+</nav>

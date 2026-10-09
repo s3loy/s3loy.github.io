@@ -16,12 +16,10 @@ function h(el: string, attrs: Properties = {}, children: any[] = []): P {
 
 const remarkCharacterDialogue: Plugin<[{ characters: Record<string, string> }], Root> =
   (opts) => (tree) => {
-    // Type guard to check if a string is a valid character dialogue key
     function isCharacterDialogue(s: string): s is keyof typeof opts.characters {
       return opts.characters.hasOwnProperty(s) && opts.characters[s] !== undefined
     }
 
-    // Do nothing if no characters are defined
     if (!opts.characters || Object.keys(opts.characters).length === 0) {
       return
     }
@@ -35,7 +33,6 @@ const remarkCharacterDialogue: Plugin<[{ characters: Record<string, string> }], 
       const align = node.attributes?.align ?? null
       const alignClass = align === 'left' || align === 'right' ? ` align-${align}` : ''
 
-      // Do not change prefix to AD, ADM, or similar, adblocks will block the content inside.
       const admonition = h(
         'aside',
         {

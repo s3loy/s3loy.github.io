@@ -1,27 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import { TagsGroup } from '~/utils'
-
 interface Props {
   posts: CollectionEntry<'posts'>[]
 }
-
-const { posts } = Astro.props
-const tagsGroup = await TagsGroup.build(posts)
+const group = await TagsGroup.build(Astro.props.posts)
 ---
 
-<ul class="flex flex-wrap gap-x-2 gap-y-2 my-3">
+<ul class="link-list">
   {
-    tagsGroup.sortCollationsLargest().map((tag) => (
+    group.sortCollationsLargest().map((tag) => (
       <li>
-        <a
-          href={`/archives?tag=${encodeURIComponent(tag.titleSlug)}`}
-          class="flex items-start gap-2 py-1 px-3 bg-accent/7 border-transparent hover:border-accent/20 border-1 text-foreground/90"
-        >
+        <a href={`/archives?tag=${encodeURIComponent(tag.titleSlug)}`}>
           {tag.title}
-          <span class="bg-foreground/7 text-foreground/90 px-1.5 py-0.5 text-xs font-semibold">
-            {tag.entries.length}
-          </span>
+          <span>{tag.entries.length}</span>
         </a>
       </li>
     ))
