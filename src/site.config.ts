@@ -1,7 +1,7 @@
 import type { SiteConfig } from '~/types'
 
 const config: SiteConfig = {
-  site: 'https://blog.s3loy.tech',
+  site: 'https://blog.s3loy.top',
   title: "s3loy's blog",
   description: 'Neither emo nor demo',
   author: 's3loy',
