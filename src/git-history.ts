@@ -3,6 +3,7 @@ import { promisify } from 'node:util'
 
 const execFileAsync = promisify(execFile)
 const preparations = new Map<string, Promise<boolean>>()
+const upstreamRepository = 'https://github.com/s3loy/s3loy.github.io.git'
 
 // Preserve the dates from before the directory migration and initial translations.
 export const articleDateBaseline = {
@@ -51,12 +52,34 @@ async function prepareGitHistory(cwd: string): Promise<boolean> {
     '[posts] Shallow Git checkout detected; fetching complete article history.',
   )
   try {
-    await execFileAsync('git', ['fetch', '--unshallow', '--no-tags'], options)
-    const { stdout } = await execFileAsync(
+    try {
+      await execFileAsync('git', ['fetch', '--unshallow', '--no-tags'], options)
+    } catch {
+      console.info('[posts] Default Git fetch failed; checking upstream history.')
+    }
+    let { stdout } = await execFileAsync(
       'git',
       ['rev-parse', '--is-shallow-repository'],
       options,
     )
+    if (stdout.trim() === 'true') {
+      console.info('[posts] Git history is still shallow; using the upstream repository.')
+      const { stdout: revision } = await execFileAsync(
+        'git',
+        ['rev-parse', 'HEAD'],
+        options,
+      )
+      await execFileAsync(
+        'git',
+        ['fetch', '--unshallow', '--no-tags', upstreamRepository, revision.trim()],
+        options,
+      )
+      ;({ stdout } = await execFileAsync(
+        'git',
+        ['rev-parse', '--is-shallow-repository'],
+        options,
+      ))
+    }
     if (stdout.trim() !== 'false') throw new Error('Git checkout is still shallow.')
   } catch (error) {
     throw new Error(

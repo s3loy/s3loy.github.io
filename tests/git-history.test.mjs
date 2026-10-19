@@ -5,11 +5,13 @@ import os from 'node:os'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createRequire } from 'node:module'
-import { execFileSync } from 'node:child_process'
+import { execFile, execFileSync } from 'node:child_process'
+import { promisify } from 'node:util'
 import { slug } from 'github-slugger'
 import { execute, read, root } from './helpers/runtime.mjs'
 
 const require = createRequire(import.meta.url)
+const execFileAsync = promisify(execFile)
 const source = read('src/git-history.ts')
 const article = 'src/content/posts/zh/example.md'
 const git = (cwd, ...args) =>
@@ -105,16 +107,74 @@ test('complete history needs no remote access', async (t) => {
   assert.deepEqual(logs, [])
 })
 
-test('failed shallow fetch rejects and remains failed for concurrent callers', async (t) => {
+test('failed default and upstream fetches reject and remain failed for concurrent callers', async (t) => {
   const { shallow } = fixture(t)
   git(shallow, 'remote', 'set-url', 'origin', path.join(shallow, 'missing-remote'))
-  const { ensureGitHistory, logs } = load()
+  const { ensureGitHistory, logs } = load(async (command, args, options) => {
+    if (args.includes('https://github.com/s3loy/s3loy.github.io.git'))
+      throw new Error('Upstream unavailable')
+    return execFileAsync(command, args, options)
+  })
   const preparation = ensureGitHistory(shallow)
   await assert.rejects(preparation, /Complete Git history is required/)
   assert.equal(ensureGitHistory(shallow), preparation)
   await assert.rejects(ensureGitHistory(shallow), /Complete Git history is required/)
   assert.equal(git(shallow, 'rev-parse', '--is-shallow-repository'), 'true')
   assert.equal(logs.filter((message) => message.includes('fetching')).length, 1)
+})
+
+test('a deployment cloned from a shallow mirror fetches its exact HEAD from upstream', async (t) => {
+  const { directory, origin, shallow, commit } = fixture(t)
+  const deployment = path.join(directory, 'deployment')
+  git(directory, 'clone', '--quiet', pathToFileURL(shallow).href, deployment)
+  const head = git(deployment, 'rev-parse', 'HEAD')
+  git(deployment, 'fetch', '--unshallow', '--no-tags')
+  assert.equal(git(deployment, 'rev-parse', '--is-shallow-repository'), 'true')
+  const expectedDate = date(origin)
+  fs.appendFileSync(path.join(origin, article), '\nContent after the deployed commit.\n')
+  git(origin, 'add', '.')
+  commit('Advance upstream after deployment', '2026-10-19T14:00:00+08:00')
+  assert.notEqual(git(origin, 'rev-parse', 'HEAD'), head)
+  const upstreamCalls = []
+  const { ensureGitHistory } = load(async (command, args, options) => {
+    const replacement = [...args]
+    const upstream = replacement.indexOf('https://github.com/s3loy/s3loy.github.io.git')
+    if (upstream !== -1) {
+      upstreamCalls.push([...args])
+      replacement[upstream] = pathToFileURL(origin).href
+    }
+    return execFileAsync(command, replacement, options)
+  })
+  await Promise.all(Array.from({ length: 22 }, () => ensureGitHistory(deployment)))
+  assert.equal(upstreamCalls.length, 1)
+  assert.equal(upstreamCalls[0].at(-1), head)
+  assert.equal(git(deployment, 'rev-parse', '--is-shallow-repository'), 'false')
+  assert.equal(date(deployment), expectedDate)
+  assert.equal(git(deployment, 'rev-parse', 'HEAD'), head)
+  assert.equal(
+    git(deployment, 'remote', 'get-url', 'origin'),
+    pathToFileURL(shallow).href,
+  )
+  assert.equal(git(deployment, 'status', '--porcelain'), '')
+})
+
+test('an unavailable default remote can recover from the public upstream', async (t) => {
+  const { origin, shallow } = fixture(t)
+  git(shallow, 'remote', 'set-url', 'origin', path.join(shallow, 'missing-remote'))
+  const { ensureGitHistory } = load(async (command, args, options) =>
+    execFileAsync(
+      command,
+      args.map((arg) =>
+        arg === 'https://github.com/s3loy/s3loy.github.io.git'
+          ? pathToFileURL(origin).href
+          : arg,
+      ),
+      options,
+    ),
+  )
+  await ensureGitHistory(shallow)
+  assert.equal(git(shallow, 'rev-parse', '--is-shallow-repository'), 'false')
+  assert.equal(date(shallow), date(origin))
 })
 
 test('source archive without Git metadata retains the published-date fallback', async (t) => {
