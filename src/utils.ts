@@ -12,9 +12,8 @@ import { loadShikiTheme, type ExpressiveCodeTheme } from 'astro-expressive-code'
 import { getCollection, type CollectionEntry } from 'astro:content'
 import Color from 'color'
 import { slug } from 'github-slugger'
-import { execFile } from 'node:child_process'
-import { promisify } from 'node:util'
 import { getArticleList, type ArticleLanguage } from '~/article-languages'
+import { getArticleModifiedDate } from '~/git-history'
 
 export function dateString(date: Date) {
   return date.toISOString().split('T')[0]
@@ -201,52 +200,16 @@ export async function resolveThemeColorStyles(
   return Object.fromEntries(await Promise.all(resolvedThemes)) as ThemesWithColorStyles
 }
 
-const execFileAsync = promisify(execFile)
-const modifiedDateCache = new Map<string, Date | null>()
+const modifiedDateCache = new Map<string, Date>()
 
 async function getPostModifiedDate(post: CollectionEntry<'posts'>): Promise<Date> {
   if (post.data.modified) return post.data.modified
 
   const cached = modifiedDateCache.get(post.id)
   if (cached) return cached
-  if (cached === null) return post.data.published
-
-  try {
-    const filePath = post.filePath ?? `src/content/posts/${post.id}`
-    const legacyPath = filePath
-      .replace(/\/zh\//, '/')
-      .replace(/\/en\/(.*)\.(mdx?)$/, '/$1-en.$2')
-    let { stdout } = await execFileAsync('git', [
-      'log',
-      '--follow',
-      '-1',
-      '--format=%cI',
-      '--',
-      filePath,
-    ])
-    if (!stdout.trim() && legacyPath !== filePath) {
-      ;({ stdout } = await execFileAsync('git', [
-        'log',
-        '--follow',
-        '-1',
-        '--format=%cI',
-        '--',
-        legacyPath,
-      ]))
-    }
-    const modified = new Date(stdout.trim())
-    if (!stdout.trim() || Number.isNaN(modified.getTime()))
-      throw new Error('invalid date')
-    modifiedDateCache.set(post.id, modified)
-    return modified
-  } catch (error) {
-    modifiedDateCache.set(post.id, null)
-    console.warn(
-      `[posts] Unable to derive modified date for "${post.id}"; falling back to published date.`,
-      error,
-    )
-    return post.data.published
-  }
+  const modified = await getArticleModifiedDate(post)
+  modifiedDateCache.set(post.id, modified)
+  return modified
 }
 export async function getSortedPosts(language: ArticleLanguage | 'all' = 'zh') {
   const allPosts = await getCollection('posts', ({ data }) =>

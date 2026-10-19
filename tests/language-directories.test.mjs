@@ -119,19 +119,34 @@ test('Computer Network series contains two entries, not four language editions',
   }
 })
 
-test('Chinese content retains its pre-move update date and English routes retain social cards', () => {
-  const dates = [
-    'src/content/posts/zh/Computer-Network.md',
-    'src/content/posts/Computer-Network.md',
-  ].map((file) =>
-    execFileSync('git', ['log', '--follow', '-1', '--format=%cI', '--', file], {
-      cwd: root,
-      encoding: 'utf8',
-    }).trim(),
-  )
-  const expected = new Date(dates.find(Boolean) || '2025-10-28')
-    .toISOString()
-    .slice(0, 10)
+test('existing articles retain dates from before migration and English routes retain social cards', () => {
+  const historicalDate = execFileSync(
+    'git',
+    [
+      'log',
+      '--follow',
+      '-1',
+      '--format=%cI',
+      'b1e36adafe7f9e5da4d17d075013f20c22fd3b19',
+      '--',
+      'src/content/posts/Computer-Network.md',
+    ],
+    { cwd: root, encoding: 'utf8' },
+  ).trim()
+  const subsequentDate = execFileSync(
+    'git',
+    [
+      'log',
+      '--follow',
+      '-1',
+      '--format=%cI',
+      '763699daae6f2012055a926e78f78d2fe40e63b5..HEAD',
+      '--',
+      'src/content/posts/zh/Computer-Network.md',
+    ],
+    { cwd: root, encoding: 'utf8' },
+  ).trim()
+  const expected = new Date(subsequentDate || historicalDate).toISOString().slice(0, 10)
   assert.ok(
     read('dist/posts/computer-network/index.html').includes(`updated ${expected}`),
   )
